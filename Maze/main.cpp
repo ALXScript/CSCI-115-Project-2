@@ -69,7 +69,7 @@ void init()
     glEnable(GL_BLEND);                                 //display images with transparent
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    M->loadBackgroundImage("images/bak.jpg");           // Load maze background image
+    M->loadBackgroundImage("images/bak.png");           // Load maze background image
     M->loadChestImage("images/chest.png");              // load chest image
     M->placeChest(3,3);                                 // place chest in a grid
 
