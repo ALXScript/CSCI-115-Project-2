@@ -26,7 +26,7 @@
 
 using namespace std;
 
-Maze *M = new Maze(20);                         // Set Maze grid size
+Maze *M = new Maze(10);                         // Set Maze grid size
 Player *P = new Player();                       // create player
 
 wall W[100];                                    // wall with number of bricks
@@ -69,8 +69,8 @@ void init()
     glEnable(GL_BLEND);                                 //display images with transparent
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    M->loadBackgroundImage("images/bak.png");           // Load maze background image
-    M->loadChestImage("images/chest.png");              // load chest image
+    M->loadBackgroundImage("images/bak.jpg");           // Load maze background image
+    M->loadChestImage("images/testchest.png");              // load chest image
     M->placeChest(3,3);                                 // place chest in a grid
 
     M->loadSetOfArrowsImage("images/arrwset.png");      // load set of arrows image
@@ -220,34 +220,34 @@ void Specialkeys(int key, int x, int y)
     case GLUT_KEY_UP:
          cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
          P->movePlayer("up",P->frames);
-         E[0].moveEnemy("up");
-         E[1].moveEnemy("up");
-         E[2].moveEnemy("up");
+         //E[0].moveEnemy("up");
+         //E[1].moveEnemy("up");
+         //E[2].moveEnemy("up");
     break;
 
     case GLUT_KEY_DOWN:
          cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
          P->movePlayer("down",P->frames);
-         E[0].moveEnemy("down");
-         E[1].moveEnemy("down");
-         E[2].moveEnemy("down");
+         //E[0].moveEnemy("down");
+         //E[1].moveEnemy("down");
+         //E[2].moveEnemy("down");
     break;
 
     case GLUT_KEY_LEFT:
          cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
          P->movePlayer("left",P->frames);
-         E[0].moveEnemy("left");
-         E[1].moveEnemy("left");
-         E[2].moveEnemy("left");
+         //E[0].moveEnemy("left");
+         //E[1].moveEnemy("left");
+         //E[2].moveEnemy("left");
 
     break;
 
     case GLUT_KEY_RIGHT:
          cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
          P->movePlayer("right",P->frames);
-         E[0].moveEnemy("right");
-         E[1].moveEnemy("right");
-         E[2].moveEnemy("right");
+         //E[0].moveEnemy("right");
+         //E[1].moveEnemy("right");
+         //E[2].moveEnemy("right");
     break;
 
    }
