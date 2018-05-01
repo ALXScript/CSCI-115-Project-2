@@ -203,3 +203,21 @@ loc Maze::converter(int x, int y)
        val.y = -1-unitWidth/2+(unitWidth)*y;
        return val;
 }
+<<<<<<< HEAD
+=======
+
+void Maze::createAdjList(int **arr, int a, int b) {
+	
+	MLinkList* masterLL = new MLinkList();
+	for (int i = 0; i < a; i++) {
+		linkList * temp = masterLL->addLinkList(i);
+		for (int j = 0; j < b; j++) {
+			if (arr[i][j] != 0) {
+				temp->addNode(j);
+			}
+		}
+	}
+}
+
+
+>>>>>>> 906fc632150c0700fcd8ff8486ca142f11d91dc8
