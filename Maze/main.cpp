@@ -37,7 +37,7 @@ wall W[100];                                    // wall with number of bricks
 Enemies E[10];                                  // create number of enemies
 Timer *T0 = new Timer();                        // animation timer
 
-bool activeGame;
+bool activeGame = false;                        //for making the game menu (boolean states)
 float wWidth, wHeight;                          // display window width and Height
 float xPos,yPos;                                // Viewpoar mapping
 
