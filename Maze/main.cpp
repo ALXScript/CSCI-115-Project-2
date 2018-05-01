@@ -54,7 +54,7 @@ Legend:
 */
 string lineA;
 int x;
-int matrix[19][19] = {{0}};                     //20x20 matrix for testing
+int matrix[20][20] = {{0}};                     //20x20 matrix for testing
 string filename = "maze20x20.txt";              //name of the .txt file that has the matrix in it
 ifstream fileIN;
 int colA = 0;
@@ -86,15 +86,27 @@ void readFile(){
 
     //read the data file and put in in the matrix
     while(fileIN.good()){
-        while(getline(fileIN, lineA)){
+        /*while(getline(fileIN, lineA, '\n')){
             istringstream streamA(lineA);
-            colA = 0;
-            while(streamA >> x){
+            while(streamA>>x){
                 matrix[rowA][colA] = x;
                 colA++;
             }
             rowA++;
+        }*/
+        for(int i = 0; i < 20; i++){
+            for(int j = 0; j < 20; j++){
+                fileIN >> matrix[i][j];
+            }
         }
+    }
+
+    cout << "Matrix: " << endl;
+    for(int i = 0; i < 20; i++){
+        for(int j = 0; j < 20; j++){
+            cout << "[" << i << "][" << j << "] = " << matrix[i][j] << endl;;
+        }
+        cout << endl;
     }
 }
 
@@ -126,8 +138,9 @@ void init()
     //loop to get the chest location
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
-            if(matrix[i][j] = 5){
+            if(matrix[i][j] == 5){
                 M->placeChest(i, j);
+                break;
             }
         }
     }
@@ -140,8 +153,9 @@ void init()
     //P->placePlayer(1,1);                                // Place player
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
-            if(matrix[i][j] = 2){
+            if(matrix[i][j] == 2){
                 P->placePlayer(i, j);
+                break;
             }
         }
     }
@@ -152,9 +166,10 @@ void init()
       W[i].wallInit(M->getGridSize(),"images/wall.png");// Load walls
       W[i].placeWall(i,5);                              // place each brick
     }*/
+
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
-            if(matrix[i][j] = 0){
+            if(matrix[i][j] == 0){
                 W[i].wallInit(M->getGridSize(),"images/wall.png");// Load walls
                 W[i].placeWall(i,j);                              // place each brick
             }
@@ -170,7 +185,7 @@ void init()
     }*/
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
-            if(matrix[i][j] = 3){
+            if(matrix[i][j] == 3){
                 E[i].initEnm(M->getGridSize(),4,"images/e.png"); //Load enemy image
                 E[i].placeEnemy(i, j);
             }
