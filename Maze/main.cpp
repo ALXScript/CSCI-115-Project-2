@@ -30,11 +30,16 @@
 
 using namespace std;
 
-Maze *M = new Maze(20);                         // Set Maze grid size
+int mazeSize = 20;
+int mazeSizeSquared = mazeSize * mazeSize;
+int currentWallNumber = 0;
+int currentEnemyNumber = 0;
+
+Maze *M = new Maze(mazeSize);                         // Set Maze grid size
 Player *P = new Player();                       // create player
 
-wall W[100];                                    // wall with number of bricks
-Enemies E[10];                                  // create number of enemies
+wall W[200];                                    // wall with number of bricks
+Enemies E[50];                                  // create number of enemies
 Timer *T0 = new Timer();                        // animation timer
 
 bool activeGame = false;                        //for making the game menu (boolean states)
@@ -170,8 +175,9 @@ void init()
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
             if(matrix[i][j] == 0){
-                W[i].wallInit(M->getGridSize(),"images/wall.png");// Load walls
-                W[i].placeWall(i,j);                              // place each brick
+                W[currentWallNumber].wallInit(M->getGridSize(),"images/wall.png");// Load walls
+                W[currentWallNumber].placeWall(i,j);                              // place each brick
+                currentWallNumber++;
             }
         }
     }
@@ -186,8 +192,9 @@ void init()
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
             if(matrix[i][j] == 3){
-                E[i].initEnm(M->getGridSize(),4,"images/e.png"); //Load enemy image
-                E[i].placeEnemy(i, j);
+                E[currentEnemyNumber].initEnm(M->getGridSize(),4,"images/e.png"); //Load enemy image
+                E[currentEnemyNumber].placeEnemy(i, j);
+                currentEnemyNumber++;
             }
         }
     }
