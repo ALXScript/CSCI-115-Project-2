@@ -193,4 +193,17 @@ loc Maze::converter(int x, int y)
        return val;
 }
 
+void Maze::createAdjList(int **arr, int a, int b) {
+	
+	MLinkList* masterLL = new MLinkList();
+	for (int i = 0; i < a; i++) {
+		linkList * temp = masterLL->addLinkList(i);
+		for (int j = 0; j < b; j++) {
+			if (arr[i][j] != 0) {
+				temp->addNode(j);
+			}
+		}
+	}
+}
+
 
