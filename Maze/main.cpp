@@ -26,7 +26,7 @@
 
 using namespace std;
 
-Maze *M = new Maze(10);                         // Set Maze grid size
+Maze *M = new Maze(20);                         // Set Maze grid size
 Player *P = new Player();                       // create player
 
 wall W[100];                                    // wall with number of bricks
@@ -80,13 +80,14 @@ void init()
     P->loadArrowImage("images/arr.png");                // Load arrow image
     P->placePlayer(1,1);                                // Place player
 
+    //looks like here's where we're gonna read from text file where we place the walls
     for(int i=1; i< M->getGridSize();i++)
     {
       W[i].wallInit(M->getGridSize(),"images/wall.png");// Load walls
       W[i].placeWall(i,5);                              // place each brick
     }
 
-
+    //same here, but for reading the enemy locations
     for(int i=0; i<10;i++)
     {
         E[i].initEnm(M->getGridSize(),4,"images/e.png"); //Load enemy image

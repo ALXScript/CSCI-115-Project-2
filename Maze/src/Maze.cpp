@@ -11,6 +11,7 @@ Maze::Maze()
 
 }
 
+//gets the size of the maze to generate
 Maze::Maze(int gSize)                                        // Constructor
 {
     //ctor
@@ -21,31 +22,38 @@ Maze::Maze(int gSize)                                        // Constructor
     liveSetOfArrws=true;
 }
 
+//destructor
 Maze::~Maze()
 {
     //dtor
 }
+
+//loads the image of the chest
 void Maze::loadChestImage(char* FileName)
 {
     chestTex = TextureLoader(FileName);
 }
 
+//loads the background
 void Maze::loadBackgroundImage(char* FileName)
 {
    bakTex = TextureLoader(FileName);
 }
 
+//loads the arrows
 void Maze::loadSetOfArrowsImage(char* FileName)
 {
     ArrBnchTex =  TextureLoader(FileName);
 }
 
+//places the chest in a designated location
 void Maze::placeChest(int x, int y)
 {
    chestLoc.x =  converter(x,y).x;
    chestLoc.y =  converter(x,y).y;
 }
 
+//places the arrows in a desginated location
 void Maze::placeStArrws(int x, int y)
 {
    setOfArrsLoc.x =  converter(x,y).x;
@@ -53,7 +61,7 @@ void Maze::placeStArrws(int x, int y)
 }
 
 
-
+//grabs the current location of the chest (use for collision)
 GridLoc Maze::GetChestLoc()
 {
    GridLoc val;
@@ -65,7 +73,7 @@ GridLoc Maze::GetChestLoc()
 }
 
 
-
+//grabs the current location of the arrows (use for collision)
 GridLoc Maze::GetStArrwsLoc()
 {
     GridLoc val;
@@ -76,13 +84,13 @@ GridLoc Maze::GetStArrwsLoc()
    return val;
 }
 
-
+//grabs the size of the grid
 int Maze::getGridSize()
 {
   return gridSize;
 }
 
-
+//OpenGL Draws the background
 void Maze::drawBackground()
 {
     glColor3f(1.0,1.0,1.0);
@@ -103,7 +111,7 @@ void Maze::drawBackground()
      glEnd();
 }
 
-
+//OpenGL Draws the grid
 void Maze::drawGrid()
 {
    float a;
@@ -124,6 +132,7 @@ void Maze::drawGrid()
     glEnable(GL_TEXTURE_2D);
 }
 
+//OpenGL Draws the arrows
 void Maze::drawArrows()
 {
     if(liveSetOfArrws)
@@ -153,6 +162,7 @@ void Maze::drawArrows()
     }
 }
 
+//OpenGL Draws the chest
 void Maze::drawChest()
 {
     if(liveChest){
@@ -182,6 +192,7 @@ void Maze::drawChest()
     }
 }
 
+//don't know what this does yet
 loc Maze::converter(int x, int y)
 {
        loc val;
@@ -192,5 +203,3 @@ loc Maze::converter(int x, int y)
        val.y = -1-unitWidth/2+(unitWidth)*y;
        return val;
 }
-
-
