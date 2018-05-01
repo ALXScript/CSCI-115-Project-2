@@ -11,8 +11,8 @@ void linkList::addNode(int a) {
 	}
 	else {
 		Node * p = root;
-		while (p->next = !nullptr)
-		{	
+		while (p->next != nullptr)
+		{
 			p = p->next;
 		}
 		p->next = nn;
@@ -36,21 +36,21 @@ void MLinkList::addLinkList(int a) {
 		head = nLL;
 	}
 	else {
-		Node* p = head;
-		while (p->next != nullptr) {
-			p = p->next;
+		linkList* p = head;
+		while (p->nextLL != nullptr) {
+			p = p->nextLL;
 		}
-		p->next = nLL;
+		p->nextLL = nLL;
 	}
 }
 
 bool MLinkList::isWall(int a, int b) {
-	Node * p = head;
-	while (p->next != null) {
+	linkList * p = head;
+	while (p->nextLL != nullptr) {
 		if (p->data == a) {
 			return p->isZero(b);
 		}
-		else p = p->next;
+		else p = p->nextLL;
 	}
 	if (p->data == a) {
 		return p->isZero(b);

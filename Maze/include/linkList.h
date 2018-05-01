@@ -11,27 +11,29 @@ typedef struct Node{
 } Node;
 
 class linkList {
-	
+
 private:
 		Node* root;
-		linkList* nextLL;
-		int data;
+		//linkList* nextLL;
+		//int data;
 
 public:
 		linkList(int a);
 		void addNode(int a);
 		bool isZero(int a);
+		linkList* nextLL;
+		int data;
 };
 
 class MLinkList {
 private:
-		
+
 		linkList* head;
 
 public:
 		MLinkList();
 		void addLinkList(int a);
-		void isWall(int a, int b);
+		bool isWall(int a, int b);
 
 };
 
