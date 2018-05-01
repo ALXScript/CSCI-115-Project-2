@@ -30,7 +30,7 @@ bool linkList::isZero(int a) { // checks if data is == to argument and returns t
 MLinkList::MLinkList() {
 	head = nullptr;
 }
-void MLinkList::addLinkList(int a) {
+linkList* MLinkList::addLinkList(int a) {
 	linkList* nLL = new linkList(a);
 	if (head == nullptr) {
 		head = nLL;
@@ -42,6 +42,7 @@ void MLinkList::addLinkList(int a) {
 		}
 		p->nextLL = nLL;
 	}
+	return nLL;
 }
 
 bool MLinkList::isWall(int a, int b) {

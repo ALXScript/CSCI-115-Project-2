@@ -32,7 +32,7 @@ private:
 
 public:
 		MLinkList();
-		void addLinkList(int a);
+		linkList* addLinkList(int a);
 		bool isWall(int a, int b);
 
 };
