@@ -203,8 +203,8 @@ loc Maze::converter(int x, int y)
        val.y = -1-unitWidth/2+(unitWidth)*y;
        return val;
 }
-<<<<<<< HEAD
-=======
+//<<<<<<< HEAD
+//=======
 
 void Maze::createAdjList(int **arr, int a, int b) {
 
@@ -220,4 +220,4 @@ void Maze::createAdjList(int **arr, int a, int b) {
 }
 
 
->>>>>>> 906fc632150c0700fcd8ff8486ca142f11d91dc8
+//>>>>>>> 906fc632150c0700fcd8ff8486ca142f11d91dc8
