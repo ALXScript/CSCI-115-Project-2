@@ -53,7 +53,7 @@ void Maze::placeChest(int x, int y)
    chestLoc.y =  converter(x,y).y;
 }
 
-//places the arrows in a desginated location
+//places the arrows in a designated location
 void Maze::placeStArrws(int x, int y)
 {
    setOfArrsLoc.x =  converter(x,y).x;
@@ -207,7 +207,7 @@ loc Maze::converter(int x, int y)
 =======
 
 void Maze::createAdjList(int **arr, int a, int b) {
-	
+
 	MLinkList* masterLL = new MLinkList();
 	for (int i = 0; i < a; i++) {
 		linkList * temp = masterLL->addLinkList(i);

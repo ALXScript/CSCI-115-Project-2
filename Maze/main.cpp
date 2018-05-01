@@ -22,6 +22,10 @@
 #include <wall.h>
 #include <math.h>
 
+//for reading the files
+#include <sstream>
+#include <fstream>
+
 /* GLUT callback Handlers */
 
 using namespace std;
@@ -36,6 +40,25 @@ Timer *T0 = new Timer();                        // animation timer
 float wWidth, wHeight;                          // display window width and Height
 float xPos,yPos;                                // Viewpoar mapping
 
+//global variables for reading the matrix from a file
+/*
+Legend:
+0 = Wall
+1 = Empty Space
+2 = player Spawn
+3 = enemy spawn
+4 = heart
+5 = chest
+6 = arrows (not yet implemented)
+*/
+string lineA;
+int x;
+int matrix[19][19] = {{0}};                     //20x20 matrix for testing
+string filename = "maze20x20.txt";              //name of the .txt file that has the matrix in it
+ifstream fileIN;
+int colA = 0;
+int rowA = 0;
+
 
 void display(void);                             // Main Display : this runs in a loop
 
@@ -48,6 +71,30 @@ void resize(int width, int height)              // resizing case on the window
         glViewport(0,(GLsizei) (height-width)/2,(GLsizei) width,(GLsizei) width);
     else
         glViewport((GLsizei) (width-height)/2 ,0 ,(GLsizei) height,(GLsizei) height);
+}
+
+void readFile(){
+    //open the file
+    fileIN.open(filename);
+
+    //error check
+    if(fileIN.fail()){
+        cerr << "* File not found, cannot be opened!";
+        exit(1);
+    }
+
+    //read the data file and put in in the matrix
+    while(fileIN.good()){
+        while(getline(fileIN, lineA)){
+            istringstream streamA(lineA);
+            colA = 0;
+            while(streamA >> x){
+                matrix[rowA][colA] = x;
+                colA++;
+            }
+            rowA++;
+        }
+    }
 }
 
 void init()
@@ -64,6 +111,9 @@ void init()
     glClearColor(0.0,0.0,0.0,0.0);
     gluOrtho2D(0, wWidth, 0, wHeight);
 
+    //read the file and set it in the array
+    readFile();
+
     T0->Start();                                        // set timer to 0
 
     glEnable(GL_BLEND);                                 //display images with transparent
@@ -71,28 +121,59 @@ void init()
 
     M->loadBackgroundImage("images/bak.jpg");           // Load maze background image
     M->loadChestImage("images/testchest.png");              // load chest image
-    M->placeChest(3,3);                                 // place chest in a grid
+    //M->placeChest(3,3);                                 // place chest in a grid
+    //loop to get the chest location
+    for(int i = 0; i < 20; i++){
+        for(int j = 0; j < 20; j++){
+            if(matrix[i][j] = 5){
+                M->placeChest(i, j);
+            }
+        }
+    }
 
     M->loadSetOfArrowsImage("images/arrwset.png");      // load set of arrows image
     M->placeStArrws(5,3);                               // place set of arrows
 
     P->initPlayer(M->getGridSize(),"images/p.png",6);   // initialize player pass grid size,image and number of frames
     P->loadArrowImage("images/arr.png");                // Load arrow image
-    P->placePlayer(1,1);                                // Place player
+    //P->placePlayer(1,1);                                // Place player
+    for(int i = 0; i < 20; i++){
+        for(int j = 0; j < 20; j++){
+            if(matrix[i][j] = 2){
+                P->placePlayer(i, j);
+            }
+        }
+    }
 
     //looks like here's where we're gonna read from text file where we place the walls
-    for(int i=1; i< M->getGridSize();i++)
+    /*for(int i=1; i< M->getGridSize();i++)
     {
       W[i].wallInit(M->getGridSize(),"images/wall.png");// Load walls
       W[i].placeWall(i,5);                              // place each brick
+    }*/
+    for(int i = 0; i < 20; i++){
+        for(int j = 0; j < 20; j++){
+            if(matrix[i][j] = 0){
+                W[i].wallInit(M->getGridSize(),"images/wall.png");// Load walls
+                W[i].placeWall(i,j);                              // place each brick
+            }
+        }
     }
 
     //same here, but for reading the enemy locations
-    for(int i=0; i<10;i++)
+    /*for(int i=0; i<10;i++)
     {
         E[i].initEnm(M->getGridSize(),4,"images/e.png"); //Load enemy image
         E[i].placeEnemy(float(rand()%(M->getGridSize())),float(rand()%(M->getGridSize())));
         //place enemies random x,y
+    }*/
+    for(int i = 0; i < 20; i++){
+        for(int j = 0; j < 20; j++){
+            if(matrix[i][j] = 3){
+                E[i].initEnm(M->getGridSize(),4,"images/e.png"); //Load enemy image
+                E[i].placeEnemy(i, j);
+            }
+        }
     }
 }
 
