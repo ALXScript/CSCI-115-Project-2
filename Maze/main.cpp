@@ -40,8 +40,8 @@ int maxEnemies = 50;
 Maze *M = new Maze(mazeSize);                         // Set Maze grid size
 Player *P = new Player();                       // create player
 
-wall W[200];                                    // wall with number of bricks
-Enemies E[50];                                  // create number of enemies
+wall W[400];                                    // wall with number of bricks
+Enemies E[200];                                  // create number of enemies
 Timer *T0 = new Timer();                        // animation timer
 
 bool activeGame = false;                        //for making the game menu (boolean states)
@@ -211,7 +211,7 @@ void display(void)
         glPopMatrix();
 
         //SET RESTRICTIONS FOR SPAWNING WALLS
-        for(int i=0; i<maxWall;i++)
+        for(int i=0; i<currentWallNumber;i++)
         {
            W[i].drawWall();
         }
@@ -225,7 +225,7 @@ void display(void)
         glPopMatrix();
 
         //SET RESTRICTIONS FOR SPAWNING ENEMIES
-        for(int i=0; i<maxEnemies;i++)
+        for(int i=0; i<currentEnemyNumber;i++)
         {
         E[i].drawEnemy();
         }
