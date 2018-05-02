@@ -34,6 +34,8 @@ int mazeSize = 20;
 int mazeSizeSquared = mazeSize * mazeSize;
 int currentWallNumber = 0;
 int currentEnemyNumber = 0;
+int maxWall = 200;
+int maxEnemies = 50;
 
 Maze *M = new Maze(mazeSize);                         // Set Maze grid size
 Player *P = new Player();                       // create player
@@ -208,8 +210,8 @@ void display(void)
          M->drawBackground();
         glPopMatrix();
 
-
-        for(int i=0; i<M->getGridSize();i++)
+        //SET RESTRICTIONS FOR SPAWNING WALLS
+        for(int i=0; i<maxWall;i++)
         {
            W[i].drawWall();
         }
@@ -222,7 +224,8 @@ void display(void)
             P->drawplayer();
         glPopMatrix();
 
-        for(int i=0; i<10;i++)
+        //SET RESTRICTIONS FOR SPAWNING ENEMIES
+        for(int i=0; i<maxEnemies;i++)
         {
         E[i].drawEnemy();
         }
