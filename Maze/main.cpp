@@ -206,43 +206,53 @@ void display(void)
 {
   glClear (GL_COLOR_BUFFER_BIT);        // clear display screen
 
-        glPushMatrix();
-         M->drawBackground();
-        glPopMatrix();
-
-        //SET RESTRICTIONS FOR SPAWNING WALLS
-        for(int i=0; i<currentWallNumber;i++)
+        if(activeGame == false){
+            glPushMatrix();
+            M->drawBackground();
+            glPopMatrix();
+            glutSwapBuffers();
+        }
+        else
         {
-           W[i].drawWall();
+            glPushMatrix();
+            M->drawBackground();
+            glPopMatrix();
+
+            //SET RESTRICTIONS FOR SPAWNING WALLS
+            for(int i=0; i<currentWallNumber;i++)
+            {
+            W[i].drawWall();
+            }
+
+            glPushMatrix();
+                M->drawGrid();
+            glPopMatrix();
+
+            glPushMatrix();
+                P->drawplayer();
+            glPopMatrix();
+
+            //SET RESTRICTIONS FOR SPAWNING ENEMIES
+            for(int i=0; i<currentEnemyNumber;i++)
+            {
+            E[i].drawEnemy();
+            }
+
+            glPushMatrix();
+                P->drawArrow();
+            glPopMatrix();
+
+            glPushMatrix();
+            M->drawChest();
+            glPopMatrix();
+
+            glPushMatrix();
+            M->drawArrows();
+            glPopMatrix();
+
+            glutSwapBuffers();
         }
 
-        glPushMatrix();
-            M->drawGrid();
-        glPopMatrix();
-
-        glPushMatrix();
-            P->drawplayer();
-        glPopMatrix();
-
-        //SET RESTRICTIONS FOR SPAWNING ENEMIES
-        for(int i=0; i<currentEnemyNumber;i++)
-        {
-        E[i].drawEnemy();
-        }
-
-        glPushMatrix();
-            P->drawArrow();
-        glPopMatrix();
-
-         glPushMatrix();
-           M->drawChest();
-        glPopMatrix();
-
-        glPushMatrix();
-           M->drawArrows();
-        glPopMatrix();
-
-    glutSwapBuffers();
 }
 
 
@@ -255,6 +265,9 @@ void key(unsigned char key, int x, int y)
         case ' ':
              P->shootArrow();
         break;
+        case 'n':
+            activeGame = true;
+            break;
         case 27 :                       // esc key to exit
         case 'q':
             exit(0);
