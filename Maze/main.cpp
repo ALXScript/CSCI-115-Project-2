@@ -60,12 +60,13 @@ Legend:
 6 = arrows (not yet implemented)
 */
 string lineA;
-int x;
 int matrix[20][20] = {{0}};                     //20x20 matrix for testing
 string filename = "maze20x20.txt";              //name of the .txt file that has the matrix in it
-ifstream fileIN;
-int colA = 0;
-int rowA = 0;
+ifstream fileIN;                                //for reading the file
+
+//global variables for collision detection
+int currentPlayerX;
+int currentPlayerY;
 
 
 void display(void);                             // Main Display : this runs in a loop
@@ -93,14 +94,6 @@ void readFile(){
 
     //read the data file and put in in the matrix
     while(fileIN.good()){
-        /*while(getline(fileIN, lineA, '\n')){
-            istringstream streamA(lineA);
-            while(streamA>>x){
-                matrix[rowA][colA] = x;
-                colA++;
-            }
-            rowA++;
-        }*/
         for(int i = 0; i < 20; i++){
             for(int j = 0; j < 20; j++){
                 fileIN >> matrix[i][j];
@@ -115,6 +108,53 @@ void readFile(){
         }
         cout << endl;
     }
+}
+
+bool checkPosition(char direction){
+    switch (direction)
+    {
+    case 'u':
+        currentPlayerX = P->getPlayerLoc().x;
+        currentPlayerY = P->getPlayerLoc().y;
+        if(matrix[currentPlayerX][currentPlayerY+1] == 0){
+            return false;
+        }
+        else{
+            return true;
+        }
+    break;
+    case 'd':
+        currentPlayerX = P->getPlayerLoc().x;
+        currentPlayerY = P->getPlayerLoc().y;
+        if(matrix[currentPlayerX][currentPlayerY-1] == 0){
+            return false;
+        }
+        else{
+            return true;
+        }
+    break;
+    case 'l':
+        currentPlayerX = P->getPlayerLoc().x;
+        currentPlayerY = P->getPlayerLoc().y;
+        if(matrix[currentPlayerX-1][currentPlayerY] == 0){
+            return false;
+        }
+        else{
+            return true;
+        }
+    break;
+    case 'r':
+        currentPlayerX = P->getPlayerLoc().x;
+        currentPlayerY = P->getPlayerLoc().y;
+        if(matrix[currentPlayerX+1][currentPlayerY] == 0){
+            return false;
+        }
+        else{
+            return true;
+        }
+    break;
+    }
+
 }
 
 void init()
@@ -334,41 +374,60 @@ void mouse(int btn, int state, int x, int y){
 
 void Specialkeys(int key, int x, int y)
 {
-
-    // Your Code here
     switch(key)
     {
     case GLUT_KEY_UP:
-         cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
-         P->movePlayer("up",P->frames);
-         //E[0].moveEnemy("up");
-         //E[1].moveEnemy("up");
-         //E[2].moveEnemy("up");
+        //basic collision detection
+         if(checkPosition('u') == false){
+            P->placePlayer(currentPlayerX, currentPlayerY);
+         }
+         else{
+            cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
+            P->movePlayer("up",P->frames);
+            //E[0].moveEnemy("up");
+            //E[1].moveEnemy("up");
+            //E[2].moveEnemy("up");
+         }
+
     break;
 
     case GLUT_KEY_DOWN:
-         cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
-         P->movePlayer("down",P->frames);
-         //E[0].moveEnemy("down");
-         //E[1].moveEnemy("down");
-         //E[2].moveEnemy("down");
+        if(checkPosition('d') == false){
+            P->placePlayer(currentPlayerX, currentPlayerY);
+        }
+        else{
+            cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
+            P->movePlayer("down",P->frames);
+            //E[0].moveEnemy("down");
+            //E[1].moveEnemy("down");
+            //E[2].moveEnemy("down");
+        }
     break;
 
     case GLUT_KEY_LEFT:
-         cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
-         P->movePlayer("left",P->frames);
-         //E[0].moveEnemy("left");
-         //E[1].moveEnemy("left");
-         //E[2].moveEnemy("left");
-
+        if(checkPosition('l') == false){
+            P->placePlayer(currentPlayerX, currentPlayerY);
+        }
+        else{
+            cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
+            P->movePlayer("left",P->frames);
+            //E[0].moveEnemy("left");
+            //E[1].moveEnemy("left");
+            //E[2].moveEnemy("left");
+        }
     break;
 
     case GLUT_KEY_RIGHT:
-         cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
-         P->movePlayer("right",P->frames);
-         //E[0].moveEnemy("right");
-         //E[1].moveEnemy("right");
-         //E[2].moveEnemy("right");
+        if(checkPosition('r') == false){
+            P->placePlayer(currentPlayerX, currentPlayerY);
+        }
+        else{
+            cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
+            P->movePlayer("right",P->frames);
+            //E[0].moveEnemy("right");
+            //E[1].moveEnemy("right");
+            //E[2].moveEnemy("right");
+        }
     break;
 
    }
