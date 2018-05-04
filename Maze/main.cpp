@@ -110,6 +110,8 @@ void readFile(){
     }
 }
 
+//boolean function for checking collision detection
+//NOTE: ATM JUST DETECTS WALLS NOTHING ELSE
 bool checkPosition(char direction){
     switch (direction)
     {
@@ -246,12 +248,14 @@ void display(void)
 {
   glClear (GL_COLOR_BUFFER_BIT);        // clear display screen
 
+        //Only renders the background for a new game
         if(activeGame == false){
             glPushMatrix();
             M->drawBackground();
             glPopMatrix();
             glutSwapBuffers();
         }
+        //'N' key pressed, new game made, display everything
         else
         {
             glPushMatrix();
@@ -275,7 +279,11 @@ void display(void)
             //SET RESTRICTIONS FOR SPAWNING ENEMIES
             for(int i=0; i<currentEnemyNumber;i++)
             {
-            E[i].drawEnemy();
+                //if enemy is alive, display it
+                if(E[i].live == true)
+                {
+                    E[i].drawEnemy();
+                }
             }
 
             glPushMatrix();
