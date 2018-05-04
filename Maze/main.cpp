@@ -61,7 +61,7 @@ Legend:
 */
 string lineA;
 int matrix[20][20] = {{0}};                     //20x20 matrix for testing
-string filename = "maze20x20.txt";              //name of the .txt file that has the matrix in it
+string filename = "txtFiles/maze20x20.txt";              //name of the .txt file that has the matrix in it
 ifstream fileIN;                                //for reading the file
 
 //global variables for collision detection
