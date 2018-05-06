@@ -30,48 +30,43 @@
 
 using namespace std;
 
-int mazeSize = 20;
-int mazeSizeSquared = mazeSize * mazeSize;
-int currentWallNumber = 0;
-int currentEnemyNumber = 0;
-int maxWall = 200;
-int maxEnemies = 50;
+///GLOBAL VARIABLES FOR INITIALIZATION
+int mazeSize = 20;          //For setting the Maze Grid Size
+int currentWallNumber = 0;  //For getting the max amount of walls in the txt file
+int currentEnemyNumber = 0; //For getting the max amount of enemies in the txt file
 
-Maze *M = new Maze(mazeSize);                         // Set Maze grid size
-Player *P = new Player();                       // create player
+///VARIABLES FOR INITIALIZING THE CLASSES
+Maze *M = new Maze(mazeSize);//Set Maze Grid Size
+Player *P = new Player();   //Create Player
+wall W[400];                //Wall with number of bricks
+Enemies E[200];             //Create number of enemies
+Timer *T0 = new Timer();    //Animation timer
 
-wall W[400];                                    // wall with number of bricks
-Enemies E[200];                                  // create number of enemies
-Timer *T0 = new Timer();                        // animation timer
+///GLOBAL VARIABLES FOR GAME STATES
+bool activeGame = false;    //For making the game menu (boolean states)
+bool lvl1Complete = false;  //For checking Level 1 Completion
 
-bool activeGame = false;                        //for making the game menu (boolean states)
-float wWidth, wHeight;                          // display window width and Height
-float xPos,yPos;                                // Viewpoar mapping
+///GLOBAL VARIABLES FOR THE VIEWPORT/DISPLAY WINDOWS
+float wWidth, wHeight;      // display window width and Height
+float xPos,yPos;            // Viewpoar mapping
 
-//global variables for reading the matrix from a file
-/*
-Legend:
-0 = Wall
-1 = Empty Space
-2 = player Spawn
-3 = enemy spawn
-4 = heart
-5 = chest
-6 = arrows (not yet implemented)
-*/
-string lineA;
-int matrix[20][20] = {{0}};                     //20x20 matrix for testing
-string filename = "txtFiles/maze20x20.txt";              //name of the .txt file that has the matrix in it
+///GLOBAL VARIABLES FOR READING THE MATRIX FROM A FILE
+string lineA;                                   //temp string for reading the file
+int matrix[20][20] = {{0}};                     //20x20 matrix for testing and fill all of it with 0
+string filename = "txtFiles/maze20x20.txt";     //name of the .txt file that has the matrix in it
 ifstream fileIN;                                //for reading the file
 
-//global variables for collision detection
-int currentPlayerX;
-int currentPlayerY;
+///GLOBAL VARIABLES FOR COLLISION DETECTION
+int currentPlayerX; //For holding the current player's X position
+int currentPlayerY; //For holding the current player's Y position
+int currentArrowX;  //For holding the current arrow's X position
+int currentArrowY;  //For holding the current arrow's Y position
 
+///MAIN DISPLAY: THIS RUNS IN A LOOP
+void display(void); // Main Display : this runs in a loop
 
-void display(void);                             // Main Display : this runs in a loop
-
-void resize(int width, int height)              // resizing case on the window
+//Resizing case on the window
+void resize(int width, int height)
 {
     wWidth = width;
     wHeight = height;
@@ -82,6 +77,19 @@ void resize(int width, int height)              // resizing case on the window
         glViewport((GLsizei) (width-height)/2 ,0 ,(GLsizei) height,(GLsizei) height);
 }
 
+//Function for cout-ing the matrix (for debugging)
+void showMatrix(){
+    //cout the matrix for debugging
+    cout << "Matrix: " << endl;
+    for(int i = 0; i < 20; i++){
+        for(int j = 0; j < 20; j++){
+            cout << "[" << i << "][" << j << "] = " << matrix[i][j] << endl;;
+        }
+        cout << endl;
+    }
+}
+
+//Function for reading the .txt file
 void readFile(){
     //open the file
     fileIN.open(filename);
@@ -101,64 +109,11 @@ void readFile(){
         }
     }
 
-    cout << "Matrix: " << endl;
-    for(int i = 0; i < 20; i++){
-        for(int j = 0; j < 20; j++){
-            cout << "[" << i << "][" << j << "] = " << matrix[i][j] << endl;;
-        }
-        cout << endl;
-    }
+    //show the matrix
+    showMatrix();
 }
 
-//boolean function for checking collision detection
-//NOTE: ATM JUST DETECTS WALLS NOTHING ELSE
-bool checkPosition(char direction){
-    switch (direction)
-    {
-    case 'u':
-        currentPlayerX = P->getPlayerLoc().x;
-        currentPlayerY = P->getPlayerLoc().y;
-        if(matrix[currentPlayerX][currentPlayerY+1] == 0){
-            return false;
-        }
-        else{
-            return true;
-        }
-    break;
-    case 'd':
-        currentPlayerX = P->getPlayerLoc().x;
-        currentPlayerY = P->getPlayerLoc().y;
-        if(matrix[currentPlayerX][currentPlayerY-1] == 0){
-            return false;
-        }
-        else{
-            return true;
-        }
-    break;
-    case 'l':
-        currentPlayerX = P->getPlayerLoc().x;
-        currentPlayerY = P->getPlayerLoc().y;
-        if(matrix[currentPlayerX-1][currentPlayerY] == 0){
-            return false;
-        }
-        else{
-            return true;
-        }
-    break;
-    case 'r':
-        currentPlayerX = P->getPlayerLoc().x;
-        currentPlayerY = P->getPlayerLoc().y;
-        if(matrix[currentPlayerX+1][currentPlayerY] == 0){
-            return false;
-        }
-        else{
-            return true;
-        }
-    break;
-    }
-
-}
-
+//Function for initializing the GL Window
 void init()
 {
     glEnable(GL_COLOR_MATERIAL);
@@ -183,7 +138,7 @@ void init()
 
     M->loadBackgroundImage("images/bak.jpg");           // Load maze background image
     M->loadChestImage("images/testchest.png");              // load chest image
-    //M->placeChest(3,3);                                 // place chest in a grid
+
     //loop to get the chest location
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
@@ -194,12 +149,22 @@ void init()
         }
     }
 
-    M->loadSetOfArrowsImage("images/arrwset.png");      // load set of arrows image
-    M->placeStArrws(5,3);                               // place set of arrows
+    //loading the chest image set
+    M->loadSetOfArrowsImage("images/arrwset.png");
 
+    //loop to get the arrow set location
+    for(int i = 0; i < 20; i++){
+        for(int j = 0; j < 20; j++){
+            if(matrix[i][j] == 6)
+                M->placeStArrws(i, j);
+        }
+    }
+
+    //Loading the Player
     P->initPlayer(M->getGridSize(),"images/p.png",6);   // initialize player pass grid size,image and number of frames
     P->loadArrowImage("images/arr.png");                // Load arrow image
-    //P->placePlayer(1,1);                                // Place player
+
+    //Loop to place the player
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
             if(matrix[i][j] == 2){
@@ -210,12 +175,6 @@ void init()
     }
 
     //looks like here's where we're gonna read from text file where we place the walls
-    /*for(int i=1; i< M->getGridSize();i++)
-    {
-      W[i].wallInit(M->getGridSize(),"images/wall.png");// Load walls
-      W[i].placeWall(i,5);                              // place each brick
-    }*/
-
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
             if(matrix[i][j] == 0){
@@ -226,13 +185,7 @@ void init()
         }
     }
 
-    //same here, but for reading the enemy locations
-    /*for(int i=0; i<10;i++)
-    {
-        E[i].initEnm(M->getGridSize(),4,"images/e.png"); //Load enemy image
-        E[i].placeEnemy(float(rand()%(M->getGridSize())),float(rand()%(M->getGridSize())));
-        //place enemies random x,y
-    }*/
+    //same here, but for reading/placing the enemy locations
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
             if(matrix[i][j] == 3){
@@ -303,7 +256,88 @@ void display(void)
 
 }
 
+//boolean function for checking collision detection
+//NOTE: ATM JUST DETECTS WALLS NOTHING ELSE
+bool checkPosition(char direction){
+/*
+Legend:
+0 = Wall
+1 = Empty Space (walkable)
+2 = Player Spawn
+3 = Enemy Spawn
+4 = Heart
+5 = Chest
+6 = Arrow Sets
+*/
+    //switch case for the direction
+    switch (direction)
+    {
+    //moving up
+    case 'u':
+        currentPlayerX = P->getPlayerLoc().x;
+        currentPlayerY = P->getPlayerLoc().y;
+        if(matrix[currentPlayerX][currentPlayerY+1] == 0){
+            return false;
+        }
+        else if(matrix[currentPlayerX][currentPlayerY+1] == 5){
+            init();
+            return true;
+        }
+        else{
+            return true;
+        }
+    break;
 
+    //moving down
+    case 'd':
+        currentPlayerX = P->getPlayerLoc().x;
+        currentPlayerY = P->getPlayerLoc().y;
+        if(matrix[currentPlayerX][currentPlayerY-1] == 0){
+            return false;
+        }
+        else if(matrix[currentPlayerX][currentPlayerY-1] == 5){
+            init();
+            return true;
+        }
+        else{
+            return true;
+        }
+    break;
+
+    //moving left
+    case 'l':
+        currentPlayerX = P->getPlayerLoc().x;
+        currentPlayerY = P->getPlayerLoc().y;
+        if(matrix[currentPlayerX-1][currentPlayerY] == 0){
+            return false;
+        }
+        else if(matrix[currentPlayerX-1][currentPlayerY] == 5){
+            init();
+            return true;
+        }
+        else{
+            return true;
+        }
+    break;
+
+    //moving right
+    case 'r':
+        currentPlayerX = P->getPlayerLoc().x;
+        currentPlayerY = P->getPlayerLoc().y;
+        if(matrix[currentPlayerX+1][currentPlayerY] == 0){
+            return false;
+        }
+        else if(matrix[currentPlayerX+1][currentPlayerY] == 5){
+            init();
+            return true;
+        }
+        else{
+            return true;
+        }
+    break;
+    }
+
+}
 
 
 void key(unsigned char key, int x, int y)
