@@ -186,3 +186,97 @@ GridLoc Enemies::getEnemyLoc()
     return val;
 }
 
+linkList* Enemies::createNodeList(int **arr, int a, int b){
+
+    linkList* validPts = new linkList();
+
+    for (int i = 0; i < a; i++) {
+
+		for (int j = 0; j < b; j++) {
+
+			if (arr[i][j] != 0) {
+
+                Node* tempNode = new Node(i, j);
+				validPts->addNode(tempNode);
+			}
+		}
+	}
+	return validPts;
+};
+
+//accepts linkList of valid points from matrix and creates adjacency list; basically lists of edges
+MLinkList* Enemies::createAdjList(linkList* valid) {
+
+    Node* p = valid->root;
+    MLinkList* master = new MLinkList();
+
+    while (p!= nullptr){
+
+        linkList* tempList = master->addLinkList(p);
+        Node* tempNode = valid->root;
+
+        while (tempNode!= nullptr){
+
+            if (tempNode->a == p->a && ((tempNode->b== (p->b + 1)) || (tempNode->b== (p->b -1)))){ // checks if there is a point that is adjacent above or below
+                tempList->addNode(tempNode);
+            }
+
+            else if (tempNode->b == p->b && ((tempNode->a== (p->a + 1)) || (tempNode->a== (p->a -1)))) // checks if there is a point that is adjacent to left or right
+                tempList->addNode(tempNode);
+
+            tempNode = tempNode->next;
+        }
+
+        p= p->next;
+
+    }
+	return master;
+}
+
+Node* Enemies::shortestPath(linkList* valid, MLinkList* adjList, Node* enLoc, Node* playLoc){
+
+    minHeap* sPath = new minHeap();
+    Node* visited[valid->n];
+    Node* unvisited[valid->n];
+
+
+    //this section initializes the unvisited list
+    Node* p = valid->root;
+    while(p != nullptr){
+            int i = 0;
+            unvisited[i] = p;
+            p= p->next;
+    }
+
+    //resets temp variable p, initializes the minHeap
+    p = valid->root;
+    while(p != nullptr){
+        sPath->addHeapNode(p);
+        p = p->next;
+    }
+
+    // this is the start point of the shortest path (enemies current location)
+     Node * src = enLoc; // will change to be whatever data type the input data is
+
+     // this is the destination point of the shortest path (players current location)
+     Node * dest = playLoc; //will also change to whatever input data it is
+
+     //traverses AdjList until it finds the pointer that matches the data given from enmLoc
+     linkList * l = adjList->head;
+     while(( l->x != src->a) && (l->y != src->b) ){
+        l = l->nextLL;
+     }
+
+     //once found we grab pointer of head of link list which is the vertex, initialize the source to proper dist and prev pointer
+      Node * source = l->root;
+      minHeapNode * temp = sPath->head;
+      while (temp->vertex != source){
+        temp = temp->next;
+      }
+      temp->distSrc = 0;
+      temp->prev = nullptr;
+
+      minHeapNode* start = temp;
+      sPath->updateInfo(start, adjList, visited, unvisited, valid->n);
+      return sPath->nextPos(src, dest);
+}

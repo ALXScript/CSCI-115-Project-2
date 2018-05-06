@@ -30,6 +30,13 @@ class Enemies
         float unitWidth;                    // Unit width of the grid
         int stepsPerMove;                   // Step count for animation
         bool live;                          // Status of the Enemy
+
+
+        linkList* createNodeList(int **arr, int a, int b); // creates possible path nodes
+        MLinkList* createAdjList(linkList* valid);	  //function that takes and creates matrix assuming that 0 means a wall (not sure where we would put this but its here temp
+        Node* shortestPath(linkList* valid, MLinkList* AdjList, Node* enLoc,  Node* playLoc); // accepts enemy location and player location. Will calculate Shortest path between enemy and player and return Node* containing X,Y of next move
+
+
     protected:
 
     private:

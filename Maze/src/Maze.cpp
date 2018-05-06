@@ -204,20 +204,8 @@ loc Maze::converter(int x, int y)
        return val;
 }
 //<<<<<<< HEAD
-//=======
-
-void Maze::createAdjList(int **arr, int a, int b) {
-
-	MLinkList* masterLL = new MLinkList();
-	for (int i = 0; i < a; i++) {
-		linkList * temp = masterLL->addLinkList(i);
-		for (int j = 0; j < b; j++) {
-			if (arr[i][j] != 0) {
-				temp->addNode(j);
-			}
-		}
-	}
-}
+//=======.
+//accepts matrix and determines which points are valid pathways; basically a list of vertices
 
 
 //>>>>>>> 906fc632150c0700fcd8ff8486ca142f11d91dc8

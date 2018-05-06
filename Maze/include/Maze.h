@@ -47,8 +47,6 @@ class Maze
       bool liveChest;                     // status of the chest (collected or not)
       bool liveSetOfArrws;                // status of the arrows(collected or not)
 
-	  void createAdjList(int **arr, int a, int b);	  //function that takes and creates matrix assuming that 0 means a wall (not sure where we would put this but its here temp
-
 
     protected:
 
