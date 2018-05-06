@@ -197,6 +197,8 @@ void init()
     }
 }
 
+
+
 void display(void)
 {
   glClear (GL_COLOR_BUFFER_BIT);        // clear display screen
@@ -280,7 +282,8 @@ Legend:
             return false;
         }
         else if(matrix[currentPlayerX][currentPlayerY+1] == 5){
-            init();
+            M->loadBackgroundImage("images/Victory.png");
+            activeGame = false;
             return true;
         }
         else{
@@ -296,7 +299,8 @@ Legend:
             return false;
         }
         else if(matrix[currentPlayerX][currentPlayerY-1] == 5){
-            init();
+            M->loadBackgroundImage("images/Victory.png");
+            activeGame = false;
             return true;
         }
         else{
@@ -312,7 +316,8 @@ Legend:
             return false;
         }
         else if(matrix[currentPlayerX-1][currentPlayerY] == 5){
-            init();
+            M->loadBackgroundImage("images/Victory.png");
+            activeGame = false;
             return true;
         }
         else{
@@ -328,7 +333,8 @@ Legend:
             return false;
         }
         else if(matrix[currentPlayerX+1][currentPlayerY] == 5){
-            init();
+            M->loadBackgroundImage("images/Victory.png");
+            activeGame = false;
             return true;
         }
         else{
@@ -359,6 +365,73 @@ void key(unsigned char key, int x, int y)
     glutPostRedisplay();
 }
 
+//Function for checking Arrow-Enemy collision
+int findEnemy(int arrowX, int arrowY){
+    for(int i = 0; i < currentEnemyNumber; i++){
+        if(E[i].getEnemyLoc().x == arrowX && E[i].getEnemyLoc().y == arrowY){
+            return i;
+        }
+    }
+    return -1;
+}
+
+//
+int convertDirection(char* direction){
+    if(direction == "up"){
+        return 1;
+    }
+    else if(direction == "down"){
+        return 2;
+    }
+    else if(direction == "left"){
+        return 3;
+    }
+    else if(direction == "right"){
+        return 4;
+    }
+    else{
+        return -1;
+    }
+}
+
+//Function for checking Arrow Position
+void checkArrow(){
+    char* direction = P->playerDir;
+
+    int intDirection = convertDirection(direction);
+
+    switch(intDirection){
+    case 1:
+        currentArrowX = P->getArrowLoc().x;
+        currentArrowY = P->getArrowLoc().y;
+
+        //loop through the matrix
+        for(int i = 0; i < 20; i++){
+            for(int j = 0; j < 20; j++){
+                //if the next slot belongs to an enemy
+                if(matrix[currentArrowX][currentArrowY+1] == 3){
+                    //find out which enemy it is
+                    int foundEnemy = findEnemy(currentArrowX, currentArrowY+1);
+                    //case enemy found
+                    if(foundEnemy != -1){
+                        E[foundEnemy].live = false;
+                    };
+                }
+            }
+        }
+
+    case 2:
+        break;
+    case 3:
+        break;
+    case 4:
+        break;
+    case -1:
+        break;
+    }
+}
+
+
 
  void GetOGLPos(int x, int y)
 {
@@ -385,7 +458,7 @@ void key(unsigned char key, int x, int y)
  void idle(void)
 {
 
-    //Your Code here
+    cout << "in idle" << endl;
 
     glutPostRedisplay();
 }
@@ -414,6 +487,7 @@ void mouse(int btn, int state, int x, int y){
      glutPostRedisplay();
 };
 
+//Function for key inputs
 void Specialkeys(int key, int x, int y)
 {
     switch(key)
@@ -426,6 +500,7 @@ void Specialkeys(int key, int x, int y)
          else{
             cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
             P->movePlayer("up",P->frames);
+            ///SHORTEST PATH FOR ENEMIES HERE
             //E[0].moveEnemy("up");
             //E[1].moveEnemy("up");
             //E[2].moveEnemy("up");
@@ -440,6 +515,7 @@ void Specialkeys(int key, int x, int y)
         else{
             cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
             P->movePlayer("down",P->frames);
+            ///SHORTEST PATH FOR ENEMIES HERE
             //E[0].moveEnemy("down");
             //E[1].moveEnemy("down");
             //E[2].moveEnemy("down");
@@ -453,6 +529,7 @@ void Specialkeys(int key, int x, int y)
         else{
             cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
             P->movePlayer("left",P->frames);
+            ///SHORTEST PATH FOR ENEMIES HERE
             //E[0].moveEnemy("left");
             //E[1].moveEnemy("left");
             //E[2].moveEnemy("left");
@@ -466,6 +543,7 @@ void Specialkeys(int key, int x, int y)
         else{
             cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
             P->movePlayer("right",P->frames);
+            ///SHORTEST PATH FOR ENEMIES HERE
             //E[0].moveEnemy("right");
             //E[1].moveEnemy("right");
             //E[2].moveEnemy("right");

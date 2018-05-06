@@ -60,51 +60,56 @@ if(arrowStatus){
   }
 }
 
-void Player::shootArrow()
-{   if(livePlayer){
-    if(!arrowStatus)
-    {
-      arrowStatus=true;
+//Function to shoot the arrow
+void Player::shootArrow(){
+    //Check if the player is alive
+    if(livePlayer){
+        //Check if arrow is still valid
+        if(!arrowStatus){
+            arrowStatus=true;
 
-      if(strcmp(playerDir, "left")==0)
-      {
-        arrAngle = -90;
-        arrXdir=-1;
-        arrYdir=0;
-        arrowLoc.x = plyLoc.x-unitWidth/2;
-        arrowLoc.y = plyLoc.y;
-      }
-      if(strcmp(playerDir, "right")==0)
-      {
-        arrAngle =90;
-        arrXdir=1;
-        arrYdir=0;
-        arrowLoc.x = plyLoc.x+unitWidth/2;
-        arrowLoc.y = plyLoc.y;
-      }
-      if(strcmp(playerDir, "up")==0)
-      {
-        arrXdir=0;
-        arrYdir=1;
-        arrAngle =180;
+            //go left
+            if(strcmp(playerDir, "left")==0){
+                arrAngle = -90;
+                arrXdir=-1;
+                arrYdir=0;
+                arrowLoc.x = plyLoc.x-unitWidth/2;
+                arrowLoc.y = plyLoc.y;
+            }
 
-        arrowLoc.y = plyLoc.y+unitWidth/2;
-        arrowLoc.x = plyLoc.x;
-      }
-      if(strcmp(playerDir, "down")==0)
-      {
-        arrXdir=0;
-        arrYdir=-1;
-        arrAngle= 0;
+            //go right
+            if(strcmp(playerDir, "right")==0){
+                arrAngle =90;
+                arrXdir=1;
+                arrYdir=0;
+                arrowLoc.x = plyLoc.x+unitWidth/2;
+                arrowLoc.y = plyLoc.y;
+            }
 
-        arrowLoc.y = plyLoc.y-unitWidth/2;
-        arrowLoc.x = plyLoc.x;
-      }
-     }
+            //go up
+            if(strcmp(playerDir, "up")==0){
+                arrXdir=0;
+                arrYdir=1;
+                arrAngle =180;
+
+                arrowLoc.y = plyLoc.y+unitWidth/2;
+                arrowLoc.x = plyLoc.x;
+            }
+
+            //go down
+            if(strcmp(playerDir, "down")==0){
+                arrXdir=0;
+                arrYdir=-1;
+                arrAngle= 0;
+
+                arrowLoc.y = plyLoc.y-unitWidth/2;
+                arrowLoc.x = plyLoc.x;
+            }
+        }
     }
 }
 
-
+//Function for loading the image of the arrow
 void Player::loadArrowImage(char* fileName)
 {
     arrowTex = TextureLoader(fileName);

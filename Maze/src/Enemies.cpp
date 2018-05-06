@@ -8,9 +8,8 @@
 
 using namespace std;
 
-
-
 Timer *T1 = new Timer();                             // Set Timer for animation
+
 Enemies::Enemies()
 {
     //ctor
