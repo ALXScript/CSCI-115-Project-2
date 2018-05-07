@@ -86,7 +86,7 @@ void resize(int width, int height)
         glViewport((GLsizei) (width-height)/2 ,0 ,(GLsizei) height,(GLsizei) height);
 }
 // creates possible path nodes
-linkList* createNodeList(int **arr, int a, int b){
+linkList* createNodeList(int arr[20][20], int a, int b){
 
     linkList* validPts = new linkList();
 
@@ -257,6 +257,8 @@ void init()
             }
         }
     }
+    linkList* validPts = createNodeList(matrix, 20, 20);
+    MLinkList* adjList = createAdjList(validPts);
 }
 
 
