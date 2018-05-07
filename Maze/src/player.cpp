@@ -175,6 +175,8 @@ void Player::initPlayer(int gSize,char *FileName,int frames)
     unitWidth = (float)2/gridSize;
     stepsPerMove = 1;
 
+    arrowAmount = 2;
+
     T->Start();
     plyLoc.x= -unitWidth;
     plyLoc.y= -unitWidth;

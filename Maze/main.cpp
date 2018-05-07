@@ -54,6 +54,8 @@ Timer *T0 = new Timer();    //Animation timer
 ///GLOBAL VARIABLES FOR GAME STATES
 bool activeGame = false;    //For making the game menu (boolean states)
 bool lvl1Complete = false;  //For checking Level 1 Completion
+bool allEnemiesDead = false;
+int enemiesKilled = 0;
 
 ///GLOBAL VARIABLES FOR THE VIEWPORT/DISPLAY WINDOWS
 float wWidth, wHeight;      // display window width and Height
@@ -201,7 +203,7 @@ void init()
     M->loadBackgroundImage(imageBackground);           // Load maze background image
     M->loadChestImage(imageChest);              // load chest image
 
-    //loop to get the chest location
+    //loop to place chest
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
             if(matrix[i][j] == 5){
@@ -211,7 +213,7 @@ void init()
         }
     }
 
-    //loading the chest image set
+    //loading the arrow image set
     M->loadSetOfArrowsImage(imageArrowSet);
 
     //loop to get the arrow set location
@@ -322,33 +324,46 @@ void display(void)
 
 }
 
-//boolean function for checking collision detection
-//NOTE: ATM JUST DETECTS WALLS NOTHING ELSE
-bool checkPosition(char* direction){
+//Boolean function for checking collision detection
+bool collisionDetection(char* direction){
 /*
 Legend:
 0 = Wall
 1 = Empty Space (walkable)
 2 = Player Spawn
 3 = Enemy Spawn
-4 = Heart
+4 = Enemy Position
 5 = Chest
 6 = Arrow Sets
 7 = Player current position
 */
     //moving up
     if(strcmp(direction, "up")==0){
+        //save current player location
         currentPlayerX = P->getPlayerLoc().x;
         currentPlayerY = P->getPlayerLoc().y;
+
+        //IF WALL (0)
         if(matrix[currentPlayerX][currentPlayerY+1] == 0){
             return false;
         }
+
+        //If Arrow Set
+        else if(matrix[currentPlayerX][currentPlayerY+1] == 6){
+            //add arrows to inventory
+            P->arrowAmount = P->arrowAmount + 2;
+            return true;
+        }
+
+        //IF CHEST (5)
         else if(matrix[currentPlayerX][currentPlayerY+1] == 5){
             M->loadBackgroundImage(imageVictory);
             activeGame = false;
             readFile();
             return true;
         }
+
+        //ELSE EMPTY SPACE
         else{
             return true;
         }
@@ -419,21 +434,6 @@ int findEnemy(int arrowX, int arrowY){
     return -1;
 }
 
-//char convertDirection(char* direction){
-//    if(direction == "up"){
-//        return 'u';
-//    }
-//    else if(direction == "down"){
-//        return 'd';
-//    }
-//    else if(direction == "left"){
-//        return 'l';
-//    }
-//    else if(direction == "right"){
-//        return 'r';
-//    }
-//}
-
 //
 int intConvertDirection(char* direction){
     if(direction == "up"){
@@ -452,8 +452,6 @@ int intConvertDirection(char* direction){
         return -1;
     }
 }
-
-
 
 //Function for checking Arrow Position
 void checkArrow(){
@@ -492,7 +490,6 @@ void checkArrow(){
     }
 }
 
-
 //Function for getting the OpenGL Position?
  void GetOGLPos(int x, int y){
     GLint viewport[4];
@@ -515,9 +512,23 @@ void checkArrow(){
     yPos =posY ;
 }
 
+//Function that moves the player
+void moveThePlayer(){
+    if(collisionDetection(P->playerDir) == false){
+        P->placePlayer(currentPlayerX, currentPlayerY);
+    }
+    else{
+        matrix[currentPlayerX][currentPlayerY] = 1;
+        P->movePlayer(P->playerDir,P->frames);
+        matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
+        cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
+        showMatrix();
+    }
+}
+
 //Equivalent to Unity Update Function
  void idle(void){
-    //check the state of the player
+    //check if player is dead
     if(P->livePlayer == false){
         //end the game
     }
@@ -527,7 +538,18 @@ void checkArrow(){
         //end the game
     }
 
+    //check if all of the enemies have been killed
+    for(int i = 0; i < currentEnemyNumber; i++){
+        if(E[i].live == false){
+            enemiesKilled++;
+        }
+    }
+    if(enemiesKilled == currentEnemyNumber){
+        //end the game
+    }
+
     //cout << "Player x: " << P->getPlayerLoc().x << "\tPlayer y: " << P->getPlayerLoc().y << endl;
+    cout << "Arrows: " << P->arrowAmount << endl;
 
     glutPostRedisplay();
 }
@@ -564,21 +586,15 @@ void key(unsigned char key, int x, int y)
         case ' ':
             //if in move state, space = move
             if(P->moveState == true){
-                //run collision detection
-                if(checkPosition(P->playerDir) == false){
-                    P->placePlayer(currentPlayerX, currentPlayerY);
-                }
-                else{
-                    matrix[currentPlayerX][currentPlayerY] = 1;
-                    P->movePlayer(P->playerDir,P->frames);
-                    matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
-                    cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
-                    showMatrix();
-                }
+                //move the player
+                moveThePlayer();
             }
             //if in shoot state, space = shoot
             else{
-                P->shootArrow();
+                if(P->arrowAmount > 0){
+                    P->shootArrow();
+                    P->arrowAmount = P->arrowAmount - 1;
+                }
             }
         break;
         //n = new game/start game
@@ -606,76 +622,18 @@ void Specialkeys(int key, int x, int y)
     {
     case GLUT_KEY_UP:
         P->movePlayerFace("up", P->frames);
-        //basic collision detection
-        // if(checkPosition('u') == false){
-        //    P->placePlayer(currentPlayerX, currentPlayerY);
-        // }
-        // else{
-        //    matrix[currentPlayerX][currentPlayerY] = 1;
-        //    P->movePlayer("up",P->frames);
-        //    matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
-        //    cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
-        //    showMatrix();
-            ///SHORTEST PATH FOR ENEMIES HERE
-            //E[0].moveEnemy("up");
-            //E[1].moveEnemy("up");
-            //E[2].moveEnemy("up");
-        // }
-
     break;
 
     case GLUT_KEY_DOWN:
         P->movePlayerFace("down", P->frames);
-        //if(checkPosition('d') == false){
-        //    P->placePlayer(currentPlayerX, currentPlayerY);
-        //}
-        //else{
-            //matrix[currentPlayerX][currentPlayerY] = 1;
-            //P->movePlayer("down",P->frames);
-            //matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
-            //cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
-            //showMatrix();
-            ///SHORTEST PATH FOR ENEMIES HERE
-            //E[0].moveEnemy("down");
-            //E[1].moveEnemy("down");
-            //E[2].moveEnemy("down");
-        //}
     break;
 
     case GLUT_KEY_LEFT:
         P->movePlayerFace("left", P->frames);
-        //if(checkPosition('l') == false){
-            //P->placePlayer(currentPlayerX, currentPlayerY);
-        //}
-        //else{
-            //matrix[currentPlayerX][currentPlayerY] = 1;
-            //P->movePlayer("left",P->frames);
-            //matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
-            //cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
-            //showMatrix();
-            ///SHORTEST PATH FOR ENEMIES HERE
-            //E[0].moveEnemy("left");
-            //E[1].moveEnemy("left");
-            //E[2].moveEnemy("left");
-        //}
     break;
 
     case GLUT_KEY_RIGHT:
         P->movePlayerFace("right", P->frames);
-        //if(checkPosition('r') == false){
-            //P->placePlayer(currentPlayerX, currentPlayerY);
-        //}
-        //else{
-            //matrix[currentPlayerX][currentPlayerY] = 1;
-            //P->movePlayer("right",P->frames);
-            //matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
-            //cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
-            //showMatrix();
-            ///SHORTEST PATH FOR ENEMIES HERE
-            //E[0].moveEnemy("right");
-            //E[1].moveEnemy("right");
-            //E[2].moveEnemy("right");
-        //}
     break;
 
    }
