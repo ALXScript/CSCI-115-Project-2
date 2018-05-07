@@ -9,6 +9,8 @@
 #include <iostream>
 #include <Timer.h>
 #include <player.h>
+//#include "ArrowSet.h"
+//#include <ArrowSet.h>
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -34,6 +36,7 @@ using namespace std;
 int mazeSize = 20;          //For setting the Maze Grid Size
 int currentWallNumber = 0;  //For getting the max amount of walls in the txt file
 int currentEnemyNumber = 0; //For getting the max amount of enemies in the txt file
+int currentBundleNumber = 0; //For getting the max amount of arrow bundles in the txt file
 char* imageBackground = "images/Danyu/bak.jpg";
 char* imageVictory = "images/Ours/Victory.png";
 char* imageChest = "images/Danyu/testchest.png";
@@ -50,6 +53,7 @@ Player *P = new Player();   //Create Player
 wall W[400];                //Wall with number of bricks
 Enemies E[200];             //Create number of enemies
 Timer *T0 = new Timer();    //Animation timer
+//arrowBundle A[10];
 
 ///GLOBAL VARIABLES FOR GAME STATES
 bool activeGame = false;    //For making the game menu (boolean states)
@@ -221,6 +225,10 @@ void init()
         for(int j = 0; j < 20; j++){
             if(matrix[i][j] == 5)
                 M->placeStArrws(i, j);
+                //A[currentBundleNumber].bundleInit(M->getGridSize(), imageArrowSet);
+                //A[currentBundleNumber].placeBundle(i,j);
+                //currentBundleNumber++;
+
         }
     }
 
@@ -307,17 +315,23 @@ void display(void)
                 }
             }
 
+            //draws the arrow being fired
             glPushMatrix();
                 P->drawArrow();
             glPopMatrix();
 
+            //draws the chest
             glPushMatrix();
             M->drawChest();
             glPopMatrix();
 
+            //draws the arrow sets
             glPushMatrix();
             M->drawArrows();
             glPopMatrix();
+            //for(int i = 0; i < currentBundleNumber; i++){
+            //    A[i].drawBundle();
+            //}
 
             glutSwapBuffers();
         }
@@ -357,9 +371,14 @@ Legend:
 
         //IF CHEST (4)
         else if(matrix[currentPlayerX][currentPlayerY+1] == 4){
-            M->loadBackgroundImage(imageVictory);
-            activeGame = false;
-            readFile();
+            lvl1Complete = true;
+            return true;
+        }
+
+        //IF Enemy (2)
+        else if(matrix[currentPlayerX][currentPlayerY+1] == 2){
+            //kill the player
+            P->livePlayer = false;
             return true;
         }
 
@@ -371,17 +390,36 @@ Legend:
 
     //moving down
     else if(strcmp(direction, "down")==0){
+        //save current player location
         currentPlayerX = P->getPlayerLoc().x;
         currentPlayerY = P->getPlayerLoc().y;
+
+        //IF WALL (1)
         if(matrix[currentPlayerX][currentPlayerY-1] == 1){
             return false;
         }
-        else if(matrix[currentPlayerX][currentPlayerY-1] == 4){
-            M->loadBackgroundImage(imageVictory);
-            activeGame = false;
-            readFile();
+
+        //If Arrow Set (5)
+        else if(matrix[currentPlayerX][currentPlayerY-1] == 5){
+            //add arrows to inventory
+            P->arrowAmount = P->arrowAmount + 1;
             return true;
         }
+
+        //IF CHEST (4)
+        else if(matrix[currentPlayerX][currentPlayerY-1] == 4){
+            lvl1Complete = true;
+            return true;
+        }
+
+        //IF Enemy (2)
+        else if(matrix[currentPlayerX][currentPlayerY-1] == 2){
+            //kill the player
+            P->livePlayer = false;
+            return true;
+        }
+
+        //ELSE EMPTY SPACE
         else{
             return true;
         }
@@ -389,17 +427,36 @@ Legend:
 
     //moving left
     else if(strcmp(direction, "left")==0){
+        //save current player location
         currentPlayerX = P->getPlayerLoc().x;
         currentPlayerY = P->getPlayerLoc().y;
+
+        //IF WALL (1)
         if(matrix[currentPlayerX-1][currentPlayerY] == 1){
             return false;
         }
-        else if(matrix[currentPlayerX-1][currentPlayerY] == 4){
-            M->loadBackgroundImage(imageVictory);
-            activeGame = false;
-            readFile();
+
+        //If Arrow Set (5)
+        else if(matrix[currentPlayerX-1][currentPlayerY] == 5){
+            //add arrows to inventory
+            P->arrowAmount = P->arrowAmount + 1;
             return true;
         }
+
+        //IF CHEST (4)
+        else if(matrix[currentPlayerX-1][currentPlayerY] == 4){
+            lvl1Complete = true;
+            return true;
+        }
+
+        //IF Enemy (2)
+        else if(matrix[currentPlayerX-1][currentPlayerY] == 2){
+            //kill the player
+            P->livePlayer = false;
+            return true;
+        }
+
+        //ELSE EMPTY SPACE
         else{
             return true;
         }
@@ -407,17 +464,36 @@ Legend:
 
     //moving right
     else if(strcmp(direction, "right")==0){
+        //save current player location
         currentPlayerX = P->getPlayerLoc().x;
         currentPlayerY = P->getPlayerLoc().y;
+
+        //IF WALL (1)
         if(matrix[currentPlayerX+1][currentPlayerY] == 1){
             return false;
         }
-        else if(matrix[currentPlayerX+1][currentPlayerY] == 4){
-            M->loadBackgroundImage(imageVictory);
-            activeGame = false;
-            readFile();
+
+        //If Arrow Set (5)
+        else if(matrix[currentPlayerX+1][currentPlayerY] == 5){
+            //add arrows to inventory
+            P->arrowAmount = P->arrowAmount + 1;
             return true;
         }
+
+        //IF CHEST (4)
+        else if(matrix[currentPlayerX+1][currentPlayerY] == 4){
+            lvl1Complete = true;
+            return true;
+        }
+
+        //IF Enemy (2)
+        else if(matrix[currentPlayerX+1][currentPlayerY] == 2){
+            //kill the player
+            P->livePlayer = false;
+            return true;
+        }
+
+        //ELSE EMPTY SPACE
         else{
             return true;
         }
@@ -530,7 +606,8 @@ void moveThePlayer(){
  void idle(void){
     //check if player is dead
     if(P->livePlayer == false){
-        //end the game
+        //game over
+        exit(0);
     }
 
     //check if level 1 is complete
@@ -549,7 +626,7 @@ void moveThePlayer(){
     }
 
     //cout << "Player x: " << P->getPlayerLoc().x << "\tPlayer y: " << P->getPlayerLoc().y << endl;
-    cout << "Arrows: " << P->arrowAmount << endl;
+    //cout << "Arrows: " << P->arrowAmount << endl;
 
     glutPostRedisplay();
 }

@@ -51,6 +51,9 @@
 			<Add directory="Common/inc" />
 			<Add directory="include" />
 		</Linker>
+		<Unit filename="include/ArrowSet.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="include/CommonThings.h" />
 		<Unit filename="include/Enemies.h" />
 		<Unit filename="include/Maze.h" />
@@ -59,6 +62,9 @@
 		<Unit filename="include/player.h" />
 		<Unit filename="include/wall.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/ArrowSet.cpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="src/Enemies.cpp" />
 		<Unit filename="src/Maze.cpp" />
 		<Unit filename="src/Timer.cpp" />
