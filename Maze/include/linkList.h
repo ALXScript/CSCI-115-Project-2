@@ -3,42 +3,45 @@
 
 typedef struct Node{
 	Node(int a, int b) {
-		 a = a; //number for tuple (a,b)
-		 b = b; // number for tuple (a,b)
+		 a = a;                     //number for tuple (a,b)
+		 b = b;                     // number for tuple (a,b)
          Node* next = nullptr;
          weight = 1;
 	}
-	Node (Node* n){
+	Node (Node* n){                 //constructor with another node to create copy so copy can be deleted
         a = n-> a;
         b = n-> b;
         next = n-> next;
         weight = n->weight;
 	}
-	int a;
-	int b;
-	int weight;
-	Node* next;
+	int a;                          // x value of node
+	int b;                          // y value of node
+	int weight;                     // weight of node
+	Node* next;                     // next node
 } Node;
 
+//stores the nodes adjacent to root
 class linkList{
 
 public:
-        Node* root;
-		linkList* nextLL;
-		int x;
-		int y;
-		int n;
-		int sumEdges;
+        Node* root;                 // curr node
+		linkList* nextLL;           // next list in adj list
+		int x;                      // x position of currNode
+		int y;                      // y position of currNode
+		int n;                      // number of items in list
+		int sumEdges;               //sum of edges
 
-		linkList(Node* rt);
-		linkList();
-		int listWeight();
-		void addNode(Node* nn);
-		Node* delNode(Node* dn);
+		linkList(Node* rt);         // constructor with node
+		linkList();                 // constructor without node; empty list
+		int listWeight();           //calculates weight of list;
+		void addNode(Node* nn);     // adds node
+		Node* delNode(Node* dn);    // deletes node
+		Node* lookup(int x, int y); //finds node of corresponding x,y
 
 
 };
 
+//to store Adjacency list
 class MLinkList {
 public:
 		MLinkList();
@@ -48,12 +51,13 @@ public:
         linkList* head;
 };
 
+//Node for minHeap. it stores current Node*, distance from source, and previous node.
 typedef struct minHeapNode{
-    Node* vertex;
-    Node* prev;
-    int distSrc;
-    minHeapNode* next;
-    minHeapNode(Node* vert){
+    Node* vertex;                   //curr node
+    Node* prev;                     // node that leads to current node in shortest known way
+    int distSrc;                    // nodes away from source in graph
+    minHeapNode* next;              // next stored minHeap Node
+    minHeapNode(Node* vert){        // constructor with Node*
         vertex = vert;
         prev = nullptr;
         distSrc = 999999;
@@ -62,18 +66,19 @@ typedef struct minHeapNode{
 
 }minHeapNode;
 
+//used to store info gathered by Dijkstras alg
 class minHeap{
 public:
-    minHeapNode* head;
-    minHeap();
-    void addHeapNode(Node* vert);
-    minHeapNode* retPtr(Node* srch);
-    minHeapNode* retClosestPtr(Node* pred, Node** arr, int V);
-    bool isMember(Node* point, Node** arr, int V);
-    void updateInfo(minHeapNode* t, MLinkList* adjList, Node** visited, Node** unvisited, int V);
-    void remArray(Node** arr, Node* point);
-    void addArray(Node** arr, Node* point);
-    Node* nextPos(Node* start, Node* dest);
+    minHeapNode* head;                                              //beginning of heap
+    minHeap();                                                      // constructor
+    void addHeapNode(Node* vert);                                   //adds heap node
+    minHeapNode* retPtr(Node* srch);                                // returns pointer of heapNode for corresponding Node*
+    minHeapNode* retClosestPtr(Node* pred, Node** arr, int V);      //returns closest ptr to current node
+    bool isMember(Node* point, Node** arr, int V);                  // returns bool value for if pointer is member of array
+    void updateInfo(minHeapNode* t, MLinkList* adjList, Node** visited, Node** unvisited, int V);           //updates info on in heap while dijkstras alg is running
+    void remArray(Node** arr, Node* point);                         //removes Node* from array
+    void addArray(Node** arr, Node* point);                         //adds to array
+    Node* nextPos(Node* start, Node* dest);                         //returns next position of enemy
 };
 
 #endif

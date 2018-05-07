@@ -65,7 +65,7 @@ int currentArrowY;  //For holding the current arrow's Y position
 ///MAIN DISPLAY: THIS RUNS IN A LOOP
 void display(void); // Main Display : this runs in a loop
 
-//Resizing case on the window
+///Resizing case on the window
 void resize(int width, int height)
 {
     wWidth = width;
