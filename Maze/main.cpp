@@ -380,7 +380,8 @@ void key(unsigned char key, int x, int y)
             break;
         //z = change state
         case 'z':
-            P->moveState = !P->moveState;
+            P->moveState = !(P->moveState);
+            break;
         //esc key to exit
         case 27 :
         case 'q':

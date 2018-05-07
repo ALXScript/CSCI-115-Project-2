@@ -432,13 +432,14 @@
 	<wall.h>
 	<iostream>
 
-1525652617 source:d:\!applications\github\github repositories\csci-115-project-2\maze\src\enemies.cpp
+1525658237 source:d:\!applications\github\github repositories\csci-115-project-2\maze\src\enemies.cpp
 	"Enemies.h"
 	<iostream>
 
-1525647676 d:\!applications\github\github repositories\csci-115-project-2\maze\include\enemies.h
+1525658237 d:\!applications\github\github repositories\csci-115-project-2\maze\include\enemies.h
 	"CommonThings.h"
 	"Maze.h"
+	"player.h"
 	<time.h>
 	<thread>
 	<string>
@@ -472,7 +473,7 @@
 	<GL/gl.h>
 	<GL/glu.h>
 
-1525647676 d:\!applications\github\github repositories\csci-115-project-2\maze\include\linklist.h
+1525658237 d:\!applications\github\github repositories\csci-115-project-2\maze\include\linklist.h
 
 1525658092 source:d:\!applications\github\github repositories\csci-115-project-2\maze\src\player.cpp
 	<Player.h>
@@ -504,7 +505,7 @@
 	"Timer.h"
 	<math.h>
 
-1525654146 source:d:\!applications\github\github repositories\csci-115-project-2\maze\main.cpp
+1525658325 source:d:\!applications\github\github repositories\csci-115-project-2\maze\main.cpp
 	<string.h>
 	<CommonThings.h>
 	<Maze.h>
@@ -525,7 +526,7 @@
 1525207939 source:c:\users\alex contreras\documents\github\csci-115-project-2\maze\src\linklist.cpp
 	"linkList.h"
 
-1525647676 source:d:\!applications\github\github repositories\csci-115-project-2\maze\src\linklist.cpp
+1525658237 source:d:\!applications\github\github repositories\csci-115-project-2\maze\src\linklist.cpp
 	"linkList.h"
 
 1525647676 source:d:\!applications\github\github repositories\csci-115-project-2\maze\src\maze.cpp
