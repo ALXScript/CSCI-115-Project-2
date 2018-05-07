@@ -206,7 +206,7 @@ void init()
     //loop to place chest
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
-            if(matrix[i][j] == 5){
+            if(matrix[i][j] == 4){
                 M->placeChest(i, j);
                 break;
             }
@@ -219,7 +219,7 @@ void init()
     //loop to get the arrow set location
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
-            if(matrix[i][j] == 6)
+            if(matrix[i][j] == 5)
                 M->placeStArrws(i, j);
         }
     }
@@ -231,7 +231,7 @@ void init()
     //Loop to place the player
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
-            if(matrix[i][j] == 2){
+            if(matrix[i][j] == 3){
                 P->placePlayer(i, j);
                 break;
             }
@@ -241,7 +241,7 @@ void init()
     //looks like here's where we're gonna read from text file where we place the walls
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
-            if(matrix[i][j] == 0){
+            if(matrix[i][j] == 1){
                 W[currentWallNumber].wallInit(M->getGridSize(),imageWall);// Load walls
                 W[currentWallNumber].placeWall(i,j);                              // place each brick
                 currentWallNumber++;
@@ -252,7 +252,7 @@ void init()
     //same here, but for reading/placing the enemy locations
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
-            if(matrix[i][j] == 3){
+            if(matrix[i][j] == 2){
                 E[currentEnemyNumber].initEnm(M->getGridSize(),4,imageEnemy); //Load enemy image
                 E[currentEnemyNumber].placeEnemy(i, j);
                 currentEnemyNumber++;
@@ -328,12 +328,12 @@ void display(void)
 bool collisionDetection(char* direction){
 /*
 Legend:
-0 = Wall
-1 = Empty Space (walkable)
-2 = Player Spawn
-3 = Enemy Spawn
-4 = Enemy Position
-5 = Chest
+0 = Empty Space (Walkable)
+1 = Wall (full)
+2 = Enemy
+3 = Player
+4 = Chest
+5 = Bags of Arrows
 6 = Arrow Sets
 7 = Player current position
 */
@@ -343,20 +343,20 @@ Legend:
         currentPlayerX = P->getPlayerLoc().x;
         currentPlayerY = P->getPlayerLoc().y;
 
-        //IF WALL (0)
-        if(matrix[currentPlayerX][currentPlayerY+1] == 0){
+        //IF WALL (1)
+        if(matrix[currentPlayerX][currentPlayerY+1] == 1){
             return false;
         }
 
-        //If Arrow Set
-        else if(matrix[currentPlayerX][currentPlayerY+1] == 6){
+        //If Arrow Set (5)
+        else if(matrix[currentPlayerX][currentPlayerY+1] == 5){
             //add arrows to inventory
-            P->arrowAmount = P->arrowAmount + 2;
+            P->arrowAmount = P->arrowAmount + 1;
             return true;
         }
 
-        //IF CHEST (5)
-        else if(matrix[currentPlayerX][currentPlayerY+1] == 5){
+        //IF CHEST (4)
+        else if(matrix[currentPlayerX][currentPlayerY+1] == 4){
             M->loadBackgroundImage(imageVictory);
             activeGame = false;
             readFile();
@@ -373,10 +373,10 @@ Legend:
     else if(strcmp(direction, "down")==0){
         currentPlayerX = P->getPlayerLoc().x;
         currentPlayerY = P->getPlayerLoc().y;
-        if(matrix[currentPlayerX][currentPlayerY-1] == 0){
+        if(matrix[currentPlayerX][currentPlayerY-1] == 1){
             return false;
         }
-        else if(matrix[currentPlayerX][currentPlayerY-1] == 5){
+        else if(matrix[currentPlayerX][currentPlayerY-1] == 4){
             M->loadBackgroundImage(imageVictory);
             activeGame = false;
             readFile();
@@ -391,10 +391,10 @@ Legend:
     else if(strcmp(direction, "left")==0){
         currentPlayerX = P->getPlayerLoc().x;
         currentPlayerY = P->getPlayerLoc().y;
-        if(matrix[currentPlayerX-1][currentPlayerY] == 0){
+        if(matrix[currentPlayerX-1][currentPlayerY] == 1){
             return false;
         }
-        else if(matrix[currentPlayerX-1][currentPlayerY] == 5){
+        else if(matrix[currentPlayerX-1][currentPlayerY] == 4){
             M->loadBackgroundImage(imageVictory);
             activeGame = false;
             readFile();
@@ -409,10 +409,10 @@ Legend:
     else if(strcmp(direction, "right")==0){
         currentPlayerX = P->getPlayerLoc().x;
         currentPlayerY = P->getPlayerLoc().y;
-        if(matrix[currentPlayerX+1][currentPlayerY] == 0){
+        if(matrix[currentPlayerX+1][currentPlayerY] == 1){
             return false;
         }
-        else if(matrix[currentPlayerX+1][currentPlayerY] == 5){
+        else if(matrix[currentPlayerX+1][currentPlayerY] == 4){
             M->loadBackgroundImage(imageVictory);
             activeGame = false;
             readFile();
@@ -518,9 +518,9 @@ void moveThePlayer(){
         P->placePlayer(currentPlayerX, currentPlayerY);
     }
     else{
-        matrix[currentPlayerX][currentPlayerY] = 1;
+        matrix[currentPlayerX][currentPlayerY] = 0;
         P->movePlayer(P->playerDir,P->frames);
-        matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
+        matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 3;
         cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
         showMatrix();
     }
