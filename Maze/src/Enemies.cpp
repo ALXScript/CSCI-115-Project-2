@@ -185,54 +185,6 @@ GridLoc Enemies::getEnemyLoc()
     return val;
 }
 
-// this creates a the list of valid points from matrix
-linkList* Enemies::createNodeList(int **arr, int a, int b){
-
-    linkList* validPts = new linkList();
-
-    for (int i = 0; i < a; i++) {
-
-		for (int j = 0; j < b; j++) {
-
-			if (arr[i][j] != 0) {
-
-                Node* tempNode = new Node(i, j);
-				validPts->addNode(tempNode);
-			}
-		}
-	}
-	return validPts;
-};
-
-//accepts linkList of valid points from matrix and creates adjacency list; basically lists of edges
-MLinkList* Enemies::createAdjList(linkList* valid) {
-
-    Node* p = valid->root;
-    MLinkList* master = new MLinkList();
-
-    while (p!= nullptr){
-
-        linkList* tempList = master->addLinkList(p);
-        Node* tempNode = valid->root;
-
-        while (tempNode!= nullptr){
-
-            if (tempNode->a == p->a && ((tempNode->b== (p->b + 1)) || (tempNode->b== (p->b -1)))){ // checks if there is a point that is adjacent above or below
-                tempList->addNode(tempNode);
-            }
-
-            else if (tempNode->b == p->b && ((tempNode->a== (p->a + 1)) || (tempNode->a== (p->a -1)))) // checks if there is a point that is adjacent to left or right
-                tempList->addNode(tempNode);
-
-            tempNode = tempNode->next;
-        }
-
-        p= p->next;
-
-    }
-	return master;
-}
-
 //initializes Dijkstras shortest path algorithm
 Node* Enemies::shortestPath(linkList* valid, MLinkList* adjList, Player one){
 
