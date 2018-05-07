@@ -324,7 +324,7 @@ void display(void)
 
 //boolean function for checking collision detection
 //NOTE: ATM JUST DETECTS WALLS NOTHING ELSE
-bool checkPosition(char direction){
+bool checkPosition(char* direction){
 /*
 Legend:
 0 = Wall
@@ -336,11 +336,8 @@ Legend:
 6 = Arrow Sets
 7 = Player current position
 */
-    //switch case for the direction
-    switch (direction)
-    {
     //moving up
-    case 'u':
+    if(strcmp(direction, "up")==0){
         currentPlayerX = P->getPlayerLoc().x;
         currentPlayerY = P->getPlayerLoc().y;
         if(matrix[currentPlayerX][currentPlayerY+1] == 0){
@@ -355,10 +352,10 @@ Legend:
         else{
             return true;
         }
-    break;
+    }
 
     //moving down
-    case 'd':
+    else if(strcmp(direction, "down")==0){
         currentPlayerX = P->getPlayerLoc().x;
         currentPlayerY = P->getPlayerLoc().y;
         if(matrix[currentPlayerX][currentPlayerY-1] == 0){
@@ -373,10 +370,10 @@ Legend:
         else{
             return true;
         }
-    break;
+    }
 
     //moving left
-    case 'l':
+    else if(strcmp(direction, "left")==0){
         currentPlayerX = P->getPlayerLoc().x;
         currentPlayerY = P->getPlayerLoc().y;
         if(matrix[currentPlayerX-1][currentPlayerY] == 0){
@@ -391,10 +388,10 @@ Legend:
         else{
             return true;
         }
-    break;
+    }
 
     //moving right
-    case 'r':
+    else if(strcmp(direction, "right")==0){
         currentPlayerX = P->getPlayerLoc().x;
         currentPlayerY = P->getPlayerLoc().y;
         if(matrix[currentPlayerX+1][currentPlayerY] == 0){
@@ -409,9 +406,7 @@ Legend:
         else{
             return true;
         }
-    break;
     }
-
 }
 
 //Function for checking Arrow-Enemy collision
@@ -523,8 +518,14 @@ void checkArrow(){
 //Equivalent to Unity Update Function
  void idle(void){
     //check the state of the player
-    //if moving
+    if(P->livePlayer == false){
+        //end the game
+    }
 
+    //check if level 1 is complete
+    if(lvl1Complete == true){
+        //end the game
+    }
 
     //cout << "Player x: " << P->getPlayerLoc().x << "\tPlayer y: " << P->getPlayerLoc().y << endl;
 
@@ -563,11 +564,17 @@ void key(unsigned char key, int x, int y)
         case ' ':
             //if in move state, space = move
             if(P->moveState == true){
-                matrix[currentPlayerX][currentPlayerY] = 1;
-                P->movePlayer(P->playerDir,P->frames);
-                matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
-                cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
-                showMatrix();
+                //run collision detection
+                if(checkPosition(P->playerDir) == false){
+                    P->placePlayer(currentPlayerX, currentPlayerY);
+                }
+                else{
+                    matrix[currentPlayerX][currentPlayerY] = 1;
+                    P->movePlayer(P->playerDir,P->frames);
+                    matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
+                    cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
+                    showMatrix();
+                }
             }
             //if in shoot state, space = shoot
             else{
