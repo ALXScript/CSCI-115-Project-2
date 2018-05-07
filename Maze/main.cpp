@@ -257,8 +257,8 @@ void init()
             }
         }
     }
-    linkList* validPts = createNodeList(matrix, 20, 20);
-    MLinkList* adjList = createAdjList(validPts);
+    //linkList* validPts = createNodeList(matrix, 20, 20);
+    //MLinkList* adjList = createAdjList(validPts);
 }
 
 
@@ -424,20 +424,20 @@ int findEnemy(int arrowX, int arrowY){
     return -1;
 }
 
-char convertDirection(char* direction){
-    if(direction == "up"){
-        return 'u';
-    }
-    else if(direction == "down"){
-        return 'd';
-    }
-    else if(direction == "left"){
-        return 'l';
-    }
-    else if(direction == "right"){
-        return 'r';
-    }
-}
+//char convertDirection(char* direction){
+//    if(direction == "up"){
+//        return 'u';
+//    }
+//    else if(direction == "down"){
+//        return 'd';
+//    }
+//    else if(direction == "left"){
+//        return 'l';
+//    }
+//    else if(direction == "right"){
+//        return 'r';
+//    }
+//}
 
 //
 int intConvertDirection(char* direction){
@@ -457,6 +457,8 @@ int intConvertDirection(char* direction){
         return -1;
     }
 }
+
+
 
 //Function for checking Arrow Position
 void checkArrow(){
@@ -596,73 +598,77 @@ void Specialkeys(int key, int x, int y)
     switch(key)
     {
     case GLUT_KEY_UP:
+        P->movePlayerFace("up", P->frames);
         //basic collision detection
-         if(checkPosition('u') == false){
-            P->placePlayer(currentPlayerX, currentPlayerY);
-         }
-         else{
-            matrix[currentPlayerX][currentPlayerY] = 1;
-            P->movePlayer("up",P->frames);
-            matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
-            cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
-            showMatrix();
+        // if(checkPosition('u') == false){
+        //    P->placePlayer(currentPlayerX, currentPlayerY);
+        // }
+        // else{
+        //    matrix[currentPlayerX][currentPlayerY] = 1;
+        //    P->movePlayer("up",P->frames);
+        //    matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
+        //    cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
+        //    showMatrix();
             ///SHORTEST PATH FOR ENEMIES HERE
             //E[0].moveEnemy("up");
             //E[1].moveEnemy("up");
             //E[2].moveEnemy("up");
-         }
+        // }
 
     break;
 
     case GLUT_KEY_DOWN:
-        if(checkPosition('d') == false){
-            P->placePlayer(currentPlayerX, currentPlayerY);
-        }
-        else{
-            matrix[currentPlayerX][currentPlayerY] = 1;
-            P->movePlayer("down",P->frames);
-            matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
-            cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
-            showMatrix();
+        P->movePlayerFace("down", P->frames);
+        //if(checkPosition('d') == false){
+        //    P->placePlayer(currentPlayerX, currentPlayerY);
+        //}
+        //else{
+            //matrix[currentPlayerX][currentPlayerY] = 1;
+            //P->movePlayer("down",P->frames);
+            //matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
+            //cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
+            //showMatrix();
             ///SHORTEST PATH FOR ENEMIES HERE
             //E[0].moveEnemy("down");
             //E[1].moveEnemy("down");
             //E[2].moveEnemy("down");
-        }
+        //}
     break;
 
     case GLUT_KEY_LEFT:
-        if(checkPosition('l') == false){
-            P->placePlayer(currentPlayerX, currentPlayerY);
-        }
-        else{
-            matrix[currentPlayerX][currentPlayerY] = 1;
-            P->movePlayer("left",P->frames);
-            matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
-            cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
-            showMatrix();
+        P->movePlayerFace("left", P->frames);
+        //if(checkPosition('l') == false){
+            //P->placePlayer(currentPlayerX, currentPlayerY);
+        //}
+        //else{
+            //matrix[currentPlayerX][currentPlayerY] = 1;
+            //P->movePlayer("left",P->frames);
+            //matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
+            //cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
+            //showMatrix();
             ///SHORTEST PATH FOR ENEMIES HERE
             //E[0].moveEnemy("left");
             //E[1].moveEnemy("left");
             //E[2].moveEnemy("left");
-        }
+        //}
     break;
 
     case GLUT_KEY_RIGHT:
-        if(checkPosition('r') == false){
-            P->placePlayer(currentPlayerX, currentPlayerY);
-        }
-        else{
-            matrix[currentPlayerX][currentPlayerY] = 1;
-            P->movePlayer("right",P->frames);
-            matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
-            cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
-            showMatrix();
+        P->movePlayerFace("right", P->frames);
+        //if(checkPosition('r') == false){
+            //P->placePlayer(currentPlayerX, currentPlayerY);
+        //}
+        //else{
+            //matrix[currentPlayerX][currentPlayerY] = 1;
+            //P->movePlayer("right",P->frames);
+            //matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
+            //cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
+            //showMatrix();
             ///SHORTEST PATH FOR ENEMIES HERE
             //E[0].moveEnemy("right");
             //E[1].moveEnemy("right");
             //E[2].moveEnemy("right");
-        }
+        //}
     break;
 
    }

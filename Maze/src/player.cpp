@@ -129,37 +129,36 @@ GridLoc Player::getArrowLoc()
 
 void Player::drawplayer(bool moveState, char* walking, char* firing)
 {
-    if(livePlayer)
-    {
+    if(livePlayer){
 
-   glColor3f(1.0,1.0,1.0);
+        glColor3f(1.0,1.0,1.0);
 
-   glTranslatef(plyLoc.x ,plyLoc.y,0.0);
+        glTranslatef(plyLoc.x ,plyLoc.y,0.0);
 
-   if(moveState == true){
-       plyTex = TextureLoader(walking);
-   }
-   else{
-       plyTex = TextureLoader(firing);
-   }
+        if(moveState == true){
+            plyTex = TextureLoader(walking);
+        }
+        else{
+            plyTex = TextureLoader(firing);
+        }
 
-    glBindTexture(GL_TEXTURE_2D,plyTex);
-    glScaled(1.0/(float)gridSize,1.0/(float)gridSize,1);
+        glBindTexture(GL_TEXTURE_2D,plyTex);
+        glScaled(1.0/(float)gridSize,1.0/(float)gridSize,1);
 
 
-    glBegin(GL_QUADS);
-        glTexCoord2f(xmin,ymin);
-        glVertex3f(1,1,0.0f);
+        glBegin(GL_QUADS);
+            glTexCoord2f(xmin,ymin);
+            glVertex3f(1,1,0.0f);
 
-        glTexCoord2f(xmax,ymin);
-        glVertex3f(-1,1,0.0f);
+            glTexCoord2f(xmax,ymin);
+            glVertex3f(-1,1,0.0f);
 
-        glTexCoord2f(xmax,ymax);
-        glVertex3f(-1,-1,0.0f);
+            glTexCoord2f(xmax,ymax);
+            glVertex3f(-1,-1,0.0f);
 
-        glTexCoord2f(xmin,ymax);
-        glVertex3f(1,-1,0.0f);
-     glEnd();
+            glTexCoord2f(xmin,ymax);
+            glVertex3f(1,-1,0.0f);
+        glEnd();
     }
 }
 
@@ -192,14 +191,13 @@ void Player::placePlayer(int x, int y)
     plyLoc.y =  converter(x,y).y;
 }
 
-void Player::movePlayer(char* dir, int frames)
-{
-      if(strcmp(dir, "left")==0)
-   {     playerDir = "left";
-        if(T->GetTicks()>10)
-        {
-            if(plyLoc.x>-1+unitWidth/2)
+void Player::movePlayer(char* dir, int frames){
+    if(strcmp(dir, "left")==0){
+        playerDir = "left";
+        if(T->GetTicks()>10){
+            if(plyLoc.x>-1+unitWidth/2){
                 plyLoc.x -= t;
+            }
             if(xmax>=1){
                 xmax =1/(float)frames;
                 xmin =0;
@@ -210,16 +208,14 @@ void Player::movePlayer(char* dir, int frames)
             ymax =1.0;
             T->Reset();
         }
-   }
+    }
 
-   else if(strcmp(dir, "right")==0)
-   {
+    else if(strcmp(dir, "right")==0){
         playerDir = "right";
-        if(T->GetTicks()>1)
-        {
-            if(plyLoc.x<1-unitWidth/2)
-            plyLoc.x += t;
-
+        if(T->GetTicks()>1){
+            if(plyLoc.x<1-unitWidth/2){
+                plyLoc.x += t;
+            }
             if(xmax>=1){
                 xmax =1/(float)frames;
                 xmin =0;
@@ -230,14 +226,14 @@ void Player::movePlayer(char* dir, int frames)
             ymax =0.75;
             T->Reset();
         }
-   }
+    }
 
-   else if(strcmp(dir, "up")==0)
-   {
+    else if(strcmp(dir, "up")==0){
         playerDir = "up";
-        if(T->GetTicks()>1)
-        { if(plyLoc.y< 1-unitWidth/2)
-            plyLoc.y += t;
+        if(T->GetTicks()>1){
+            if(plyLoc.y< 1-unitWidth/2){
+                plyLoc.y += t;
+            }
             if(xmax>=1){
                 xmax =1/(float)frames;
                 xmin =0;
@@ -250,15 +246,14 @@ void Player::movePlayer(char* dir, int frames)
 
             T->Reset();
         }
-   }
+    }
 
-   else if(strcmp(dir, "down")==0)
-   {
-         playerDir = "down";
-        if(T->GetTicks()>1)
-        {
-            if(plyLoc.y > -1+unitWidth/2)
+   else if(strcmp(dir, "down")==0){
+        playerDir = "down";
+        if(T->GetTicks()>1){
+            if(plyLoc.y > -1+unitWidth/2){
                 plyLoc.y -= t;
+            }
             if(xmax>=1){
                 xmax =1/(float)frames;
                 xmin =0;
@@ -272,8 +267,80 @@ void Player::movePlayer(char* dir, int frames)
    }
 }
 
-void Player::movePlayerFace(char* direction, int number){
-    
+void Player::movePlayerFace(char* dir, int frames){
+    if(strcmp(dir, "left")==0){
+        playerDir = "left";
+        //if(T->GetTicks()>10){
+            //if(plyLoc.x>-1+unitWidth/2){
+            //    plyLoc.x -= t;
+            //}
+            if(xmax>=1){
+                xmax =1/(float)frames;
+                xmin =0;
+            }
+            xmin += 1/(float)frames;
+            xmax += 1/(float)frames;
+            ymin =0.75;
+            ymax =1.0;
+        //    T->Reset();
+        //}
+    }
+
+    else if(strcmp(dir, "right")==0){
+        playerDir = "right";
+        //if(T->GetTicks()>1){
+            //if(plyLoc.x<1-unitWidth/2){
+            //    plyLoc.x += t;
+            //}
+            if(xmax>=1){
+                xmax =1/(float)frames;
+                xmin =0;
+            }
+            xmin +=1/(float)frames;
+            xmax +=1/(float)frames;
+            ymin =0.5;
+            ymax =0.75;
+        //    T->Reset();
+        //}
+    }
+
+    else if(strcmp(dir, "up")==0){
+        playerDir = "up";
+        //if(T->GetTicks()>1){
+            //if(plyLoc.y< 1-unitWidth/2){
+            //    plyLoc.y += t;
+            //}
+            if(xmax>=1){
+                xmax =1/(float)frames;
+                xmin =0;
+            }
+            xmin +=1/(float)frames;
+            xmax +=1/(float)frames;
+
+            ymin =0.25;
+            ymax =0.50;
+
+        //    T->Reset();
+        //}
+    }
+
+   else if(strcmp(dir, "down")==0){
+        playerDir = "down";
+        //if(T->GetTicks()>1){
+            //if(plyLoc.y > -1+unitWidth/2){
+            //    plyLoc.y -= t;
+            //}
+            if(xmax>=1){
+                xmax =1/(float)frames;
+                xmin =0;
+            }
+            xmin +=1/(float)frames;
+            xmax +=1/(float)frames;
+            ymin =0.0;
+            ymax =0.25;
+        //    T->Reset();
+        //}
+   }
 }
 
 GridLoc Player::getPlayerLoc()
