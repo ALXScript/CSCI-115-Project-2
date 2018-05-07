@@ -34,6 +34,15 @@ using namespace std;
 int mazeSize = 20;          //For setting the Maze Grid Size
 int currentWallNumber = 0;  //For getting the max amount of walls in the txt file
 int currentEnemyNumber = 0; //For getting the max amount of enemies in the txt file
+char* imageBackground = "images/bak.jpg";
+char* imageVictory = "images/Victory.png";
+char* imageChest = "images/testchest.png";
+char* imageArrowSet = "images/arrwset.png";
+char* imagePlayerMoving = "images/p.png";
+char* imagePlayerFire = "images/pFire.png";
+char* imageArrow = "images/arr.png";
+char* imageWall = "images/wall.png";
+char* imageEnemy = "images/e.png";
 
 ///VARIABLES FOR INITIALIZING THE CLASSES
 Maze *M = new Maze(mazeSize);//Set Maze Grid Size
@@ -81,8 +90,14 @@ void resize(int width, int height)
 void showMatrix(){
     //cout the matrix for debugging
     cout << "Matrix: " << endl;
-    for(int i = 0; i < 20; i++){
-        for(int j = 0; j < 20; j++){
+    //for(int i = 0; i < 20; i++){
+    //    for(int j = 0; j < 20; j++){
+    //        cout << "[" << i << "][" << j << "] = " << matrix[i][j] << endl;;
+    //    }
+    //    cout << endl;
+    //}
+    for(int i = 1; i < 3; i++){
+        for(int j = 0; j < 10; j++){
             cout << "[" << i << "][" << j << "] = " << matrix[i][j] << endl;;
         }
         cout << endl;
@@ -136,8 +151,8 @@ void init()
     glEnable(GL_BLEND);                                 //display images with transparent
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    M->loadBackgroundImage("images/bak.jpg");           // Load maze background image
-    M->loadChestImage("images/testchest.png");              // load chest image
+    M->loadBackgroundImage(imageBackground);           // Load maze background image
+    M->loadChestImage(imageChest);              // load chest image
 
     //loop to get the chest location
     for(int i = 0; i < 20; i++){
@@ -150,7 +165,7 @@ void init()
     }
 
     //loading the chest image set
-    M->loadSetOfArrowsImage("images/arrwset.png");
+    M->loadSetOfArrowsImage(imageArrowSet);
 
     //loop to get the arrow set location
     for(int i = 0; i < 20; i++){
@@ -161,8 +176,8 @@ void init()
     }
 
     //Loading the Player
-    P->initPlayer(M->getGridSize(),"images/p.png",6);   // initialize player pass grid size,image and number of frames
-    P->loadArrowImage("images/arr.png");                // Load arrow image
+    P->initPlayer(M->getGridSize(),imagePlayerMoving,6);   // initialize player pass grid size,image and number of frames
+    P->loadArrowImage(imageArrow);                // Load arrow image
 
     //Loop to place the player
     for(int i = 0; i < 20; i++){
@@ -178,7 +193,7 @@ void init()
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
             if(matrix[i][j] == 0){
-                W[currentWallNumber].wallInit(M->getGridSize(),"images/wall.png");// Load walls
+                W[currentWallNumber].wallInit(M->getGridSize(),imageWall);// Load walls
                 W[currentWallNumber].placeWall(i,j);                              // place each brick
                 currentWallNumber++;
             }
@@ -189,7 +204,7 @@ void init()
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
             if(matrix[i][j] == 3){
-                E[currentEnemyNumber].initEnm(M->getGridSize(),4,"images/e.png"); //Load enemy image
+                E[currentEnemyNumber].initEnm(M->getGridSize(),4,imageEnemy); //Load enemy image
                 E[currentEnemyNumber].placeEnemy(i, j);
                 currentEnemyNumber++;
             }
@@ -228,7 +243,7 @@ void display(void)
             glPopMatrix();
 
             glPushMatrix();
-                P->drawplayer();
+                P->drawplayer(P->moveState, imagePlayerMoving, imagePlayerFire);
             glPopMatrix();
 
             //SET RESTRICTIONS FOR SPAWNING ENEMIES
@@ -270,6 +285,7 @@ Legend:
 4 = Heart
 5 = Chest
 6 = Arrow Sets
+7 = Player current position
 */
     //switch case for the direction
     switch (direction)
@@ -282,8 +298,9 @@ Legend:
             return false;
         }
         else if(matrix[currentPlayerX][currentPlayerY+1] == 5){
-            M->loadBackgroundImage("images/Victory.png");
+            M->loadBackgroundImage(imageVictory);
             activeGame = false;
+            readFile();
             return true;
         }
         else{
@@ -299,8 +316,9 @@ Legend:
             return false;
         }
         else if(matrix[currentPlayerX][currentPlayerY-1] == 5){
-            M->loadBackgroundImage("images/Victory.png");
+            M->loadBackgroundImage(imageVictory);
             activeGame = false;
+            readFile();
             return true;
         }
         else{
@@ -316,8 +334,9 @@ Legend:
             return false;
         }
         else if(matrix[currentPlayerX-1][currentPlayerY] == 5){
-            M->loadBackgroundImage("images/Victory.png");
+            M->loadBackgroundImage(imageVictory);
             activeGame = false;
+            readFile();
             return true;
         }
         else{
@@ -333,8 +352,9 @@ Legend:
             return false;
         }
         else if(matrix[currentPlayerX+1][currentPlayerY] == 5){
-            M->loadBackgroundImage("images/Victory.png");
+            M->loadBackgroundImage(imageVictory);
             activeGame = false;
+            readFile();
             return true;
         }
         else{
@@ -350,13 +370,19 @@ void key(unsigned char key, int x, int y)
 {
     switch (key)
     {
+        //space = shoot or walk
         case ' ':
              P->shootArrow();
         break;
+        //n = new game/start game
         case 'n':
             activeGame = true;
             break;
-        case 27 :                       // esc key to exit
+        //z = change state
+        case 'z':
+            P->moveState = !P->moveState;
+        //esc key to exit
+        case 27 :
         case 'q':
             exit(0);
             break;
@@ -432,7 +458,7 @@ void checkArrow(){
 }
 
 
-
+//Function for getting the OpenGL Position?
  void GetOGLPos(int x, int y)
 {
     GLint viewport[4];
@@ -455,10 +481,14 @@ void checkArrow(){
     yPos =posY ;
 }
 
+//Equivalent to Unity Update Function
  void idle(void)
 {
+    //check the state of the player
+    //if moving
 
-    cout << "in idle" << endl;
+
+    //cout << "Player x: " << P->getPlayerLoc().x << "\tPlayer y: " << P->getPlayerLoc().y << endl;
 
     glutPostRedisplay();
 }
@@ -498,8 +528,11 @@ void Specialkeys(int key, int x, int y)
             P->placePlayer(currentPlayerX, currentPlayerY);
          }
          else{
+            matrix[currentPlayerX][currentPlayerY-1] = 1;
             cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
             P->movePlayer("up",P->frames);
+            matrix[currentPlayerX][currentPlayerY] = 7;
+            showMatrix();
             ///SHORTEST PATH FOR ENEMIES HERE
             //E[0].moveEnemy("up");
             //E[1].moveEnemy("up");
@@ -513,8 +546,11 @@ void Specialkeys(int key, int x, int y)
             P->placePlayer(currentPlayerX, currentPlayerY);
         }
         else{
+            matrix[currentPlayerX][currentPlayerY+1] = 1;
             cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
             P->movePlayer("down",P->frames);
+            matrix[currentPlayerX][currentPlayerY] = 7;
+            showMatrix();
             ///SHORTEST PATH FOR ENEMIES HERE
             //E[0].moveEnemy("down");
             //E[1].moveEnemy("down");
@@ -527,8 +563,11 @@ void Specialkeys(int key, int x, int y)
             P->placePlayer(currentPlayerX, currentPlayerY);
         }
         else{
+            matrix[currentPlayerX+1][currentPlayerY] = 1;
             cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
             P->movePlayer("left",P->frames);
+            matrix[currentPlayerX][currentPlayerY] = 7;
+            showMatrix();
             ///SHORTEST PATH FOR ENEMIES HERE
             //E[0].moveEnemy("left");
             //E[1].moveEnemy("left");
@@ -541,8 +580,11 @@ void Specialkeys(int key, int x, int y)
             P->placePlayer(currentPlayerX, currentPlayerY);
         }
         else{
+            matrix[currentPlayerX-1][currentPlayerY] = 1;
             cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
             P->movePlayer("right",P->frames);
+            matrix[currentPlayerX][currentPlayerY] = 7;
+            showMatrix();
             ///SHORTEST PATH FOR ENEMIES HERE
             //E[0].moveEnemy("right");
             //E[1].moveEnemy("right");

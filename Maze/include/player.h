@@ -23,7 +23,7 @@ class Player
         Player();                          // Constructor
         virtual ~Player();                 // Deconstructor
 
-        void drawplayer();                 // Draw Player image
+        void drawplayer(bool, char*, char*);// Draw Player image
         void drawArrow();                  // Draw Arrow
         void shootArrow();                 // Shoot arrow movement
 
@@ -38,6 +38,7 @@ class Player
         int frames;                        // Number of frames for animation
         char *playerDir;                   // direction of player face
 
+        bool moveState;                    // determines whether the player is in the moving state
         bool arrowStatus;                  // arrow is active or not
         bool livePlayer;                   // Player live or dead
     protected:

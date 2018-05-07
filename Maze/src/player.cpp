@@ -16,6 +16,7 @@ Player::Player()
     arrAngle =0;
     arrowStatus = false;
     livePlayer = true;
+    moveState = true;
 }
 
 Player::~Player()
@@ -126,7 +127,7 @@ GridLoc Player::getArrowLoc()
 }
 
 
-void Player::drawplayer()
+void Player::drawplayer(bool moveState, char* walking, char* firing)
 {
     if(livePlayer)
     {
@@ -134,6 +135,13 @@ void Player::drawplayer()
    glColor3f(1.0,1.0,1.0);
 
    glTranslatef(plyLoc.x ,plyLoc.y,0.0);
+
+   if(moveState == true){
+       plyTex = TextureLoader(walking);
+   }
+   else{
+       plyTex = TextureLoader(firing);
+   }
 
     glBindTexture(GL_TEXTURE_2D,plyTex);
     glScaled(1.0/(float)gridSize,1.0/(float)gridSize,1);
