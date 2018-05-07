@@ -365,33 +365,6 @@ Legend:
 
 }
 
-
-void key(unsigned char key, int x, int y)
-{
-    switch (key)
-    {
-        //space = shoot or walk
-        case ' ':
-             P->shootArrow();
-        break;
-        //n = new game/start game
-        case 'n':
-            activeGame = true;
-            break;
-        //z = change state
-        case 'z':
-            P->moveState = !(P->moveState);
-            break;
-        //esc key to exit
-        case 27 :
-        case 'q':
-            exit(0);
-            break;
-    }
-
-    glutPostRedisplay();
-}
-
 //Function for checking Arrow-Enemy collision
 int findEnemy(int arrowX, int arrowY){
     for(int i = 0; i < currentEnemyNumber; i++){
@@ -518,6 +491,39 @@ void mouse(int btn, int state, int x, int y){
      glutPostRedisplay();
 };
 
+void key(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+        //space = shoot or walk
+        case ' ':
+            //if in move state, space = move
+            if(P->moveState == true){
+
+            }
+            //if in shoot state, space = shoot
+            else{
+                P->shootArrow();
+            }
+        break;
+        //n = new game/start game
+        case 'n':
+            activeGame = true;
+            break;
+        //z = change state
+        case 'z':
+            P->moveState = !(P->moveState);
+            break;
+        //esc key to exit
+        case 27 :
+        case 'q':
+            exit(0);
+            break;
+    }
+
+    glutPostRedisplay();
+}
+
 //Function for key inputs
 void Specialkeys(int key, int x, int y)
 {
@@ -529,10 +535,10 @@ void Specialkeys(int key, int x, int y)
             P->placePlayer(currentPlayerX, currentPlayerY);
          }
          else{
-            matrix[currentPlayerX][currentPlayerY-1] = 1;
-            cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
+            matrix[currentPlayerX][currentPlayerY] = 1;
             P->movePlayer("up",P->frames);
-            matrix[currentPlayerX][currentPlayerY] = 7;
+            matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
+            cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
             showMatrix();
             ///SHORTEST PATH FOR ENEMIES HERE
             //E[0].moveEnemy("up");
@@ -547,10 +553,10 @@ void Specialkeys(int key, int x, int y)
             P->placePlayer(currentPlayerX, currentPlayerY);
         }
         else{
-            matrix[currentPlayerX][currentPlayerY+1] = 1;
-            cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
+            matrix[currentPlayerX][currentPlayerY] = 1;
             P->movePlayer("down",P->frames);
-            matrix[currentPlayerX][currentPlayerY] = 7;
+            matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
+            cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
             showMatrix();
             ///SHORTEST PATH FOR ENEMIES HERE
             //E[0].moveEnemy("down");
@@ -564,10 +570,10 @@ void Specialkeys(int key, int x, int y)
             P->placePlayer(currentPlayerX, currentPlayerY);
         }
         else{
-            matrix[currentPlayerX+1][currentPlayerY] = 1;
-            cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
+            matrix[currentPlayerX][currentPlayerY] = 1;
             P->movePlayer("left",P->frames);
-            matrix[currentPlayerX][currentPlayerY] = 7;
+            matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
+            cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
             showMatrix();
             ///SHORTEST PATH FOR ENEMIES HERE
             //E[0].moveEnemy("left");
@@ -581,10 +587,10 @@ void Specialkeys(int key, int x, int y)
             P->placePlayer(currentPlayerX, currentPlayerY);
         }
         else{
-            matrix[currentPlayerX-1][currentPlayerY] = 1;
-            cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
+            matrix[currentPlayerX][currentPlayerY] = 1;
             P->movePlayer("right",P->frames);
-            matrix[currentPlayerX][currentPlayerY] = 7;
+            matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
+            cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
             showMatrix();
             ///SHORTEST PATH FOR ENEMIES HERE
             //E[0].moveEnemy("right");
