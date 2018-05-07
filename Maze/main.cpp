@@ -85,7 +85,54 @@ void resize(int width, int height)
     else
         glViewport((GLsizei) (width-height)/2 ,0 ,(GLsizei) height,(GLsizei) height);
 }
+// creates possible path nodes
+linkList* createNodeList(int **arr, int a, int b){
 
+    linkList* validPts = new linkList();
+
+    for (int i = 0; i < a; i++) {
+
+		for (int j = 0; j < b; j++) {
+
+			if (arr[i][j] != 0) {
+
+                Node* tempNode = new Node(i, j);
+				validPts->addNode(tempNode);
+			}
+		}
+	}
+	return validPts;
+}
+
+//function that takes and creates matrix assuming that 0 means a wall (not sure where we would put this but its here temp
+MLinkList* createAdjList(linkList* valid){
+
+    Node* p = valid->root;
+    MLinkList* master = new MLinkList();
+
+    while (p!= nullptr){
+
+        linkList* tempList = master->addLinkList(p);
+        Node* tempNode = valid->root;
+
+        while (tempNode!= nullptr){
+
+            if (tempNode->a == p->a && ((tempNode->b== (p->b + 1)) || (tempNode->b== (p->b -1)))){ // checks if there is a point that is adjacent above or below
+                tempList->addNode(tempNode);
+            }
+
+            else if (tempNode->b == p->b && ((tempNode->a== (p->a + 1)) || (tempNode->a== (p->a -1)))) // checks if there is a point that is adjacent to left or right
+                tempList->addNode(tempNode);
+
+            tempNode = tempNode->next;
+        }
+
+        p= p->next;
+
+    }
+	return master;
+
+}
 //Function for cout-ing the matrix (for debugging)
 void showMatrix(){
     //cout the matrix for debugging
