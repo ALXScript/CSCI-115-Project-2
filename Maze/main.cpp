@@ -37,14 +37,14 @@ int mazeSize = 20;          //For setting the Maze Grid Size
 int currentWallNumber = 0;  //For getting the max amount of walls in the txt file
 int currentEnemyNumber = 0; //For getting the max amount of enemies in the txt file
 int currentBundleNumber = 0; //For getting the max amount of arrow bundles in the txt file
-char* imageBackground = "images/Danyu/bak.jpg";
+char* imageBackground = "images/Ours/GrassSeamless.png";
 char* imageVictory = "images/Ours/Victory.png";
 char* imageChest = "images/Danyu/testchest.png";
 char* imageArrowSet = "images/Danyu/arrwset.png";
 char* imagePlayerMoving = "images/Danyu/p.png";
 char* imagePlayerFire = "images/Ours/pFire.png";
 char* imageArrow = "images/Danyu/arr.png";
-char* imageWall = "images/Danyu/wall.png";
+char* imageWall = "images/Ours/BrickSeamless.png";
 char* imageEnemy = "images/Danyu/e.png";
 
 ///VARIABLES FOR INITIALIZING THE CLASSES
@@ -541,7 +541,7 @@ bool checkArrow(char* direction){
         for(int i = 1; i < 20; i++){
             //enemy spotted, able to fire
             if(matrix[currentArrowX][currentArrowY-i] == 2){
-                findEnemy(currentArrowX, currentArrowY+i);
+                findEnemy(currentArrowX, currentArrowY-i);
                 return true;
             }
             //wall spotted, no fire
@@ -561,7 +561,7 @@ bool checkArrow(char* direction){
         for(int i = 1; i < 20; i++){
             //enemy spotted, able to fire
             if(matrix[currentArrowX-i][currentArrowY] == 2){
-                findEnemy(currentArrowX, currentArrowY+i);
+                findEnemy(currentArrowX-i, currentArrowY);
                 return true;
             }
             else if(matrix[currentArrowX-i][currentArrowY] == 1){
@@ -580,7 +580,7 @@ bool checkArrow(char* direction){
         for(int i = 1; i < 20; i++){
             //enemy spotted, able to fire
             if(matrix[currentArrowX+i][currentArrowY] == 2){
-                findEnemy(currentArrowX, currentArrowY+i);
+                findEnemy(currentArrowX+i, currentArrowY);
                 return true;
             }
             else if(matrix[currentArrowX+i][currentArrowY] == 1){
@@ -712,7 +712,7 @@ void key(unsigned char key, int x, int y)
                         P->shootArrow();
                         P->arrowAmount = P->arrowAmount - 1;
                     }
-                    
+
                 }
             }
         break;
