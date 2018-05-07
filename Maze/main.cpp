@@ -34,15 +34,15 @@ using namespace std;
 int mazeSize = 20;          //For setting the Maze Grid Size
 int currentWallNumber = 0;  //For getting the max amount of walls in the txt file
 int currentEnemyNumber = 0; //For getting the max amount of enemies in the txt file
-char* imageBackground = "images/bak.jpg";
-char* imageVictory = "images/Victory.png";
-char* imageChest = "images/testchest.png";
-char* imageArrowSet = "images/arrwset.png";
-char* imagePlayerMoving = "images/p.png";
-char* imagePlayerFire = "images/pFire.png";
-char* imageArrow = "images/arr.png";
-char* imageWall = "images/wall.png";
-char* imageEnemy = "images/e.png";
+char* imageBackground = "images/Danyu/bak.jpg";
+char* imageVictory = "images/Ours/Victory.png";
+char* imageChest = "images/Danyu/testchest.png";
+char* imageArrowSet = "images/Danyu/arrwset.png";
+char* imagePlayerMoving = "images/Danyu/p.png";
+char* imagePlayerFire = "images/Ours/pFire.png";
+char* imageArrow = "images/Danyu/arr.png";
+char* imageWall = "images/Danyu/wall.png";
+char* imageEnemy = "images/Danyu/e.png";
 
 ///VARIABLES FOR INITIALIZING THE CLASSES
 Maze *M = new Maze(mazeSize);//Set Maze Grid Size
