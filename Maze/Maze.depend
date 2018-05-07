@@ -475,7 +475,7 @@
 
 1525658237 d:\!applications\github\github repositories\csci-115-project-2\maze\include\linklist.h
 
-1525658092 source:d:\!applications\github\github repositories\csci-115-project-2\maze\src\player.cpp
+1525658861 source:d:\!applications\github\github repositories\csci-115-project-2\maze\src\player.cpp
 	<Player.h>
 
 1525657227 d:\!applications\github\github repositories\csci-115-project-2\maze\include\player.h
@@ -505,7 +505,7 @@
 	"Timer.h"
 	<math.h>
 
-1525658548 source:d:\!applications\github\github repositories\csci-115-project-2\maze\main.cpp
+1525659855 source:d:\!applications\github\github repositories\csci-115-project-2\maze\main.cpp
 	<string.h>
 	<CommonThings.h>
 	<Maze.h>

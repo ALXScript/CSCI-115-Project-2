@@ -180,7 +180,7 @@ void Player::initPlayer(int gSize,char *FileName,int frames)
     plyLoc.x= -unitWidth;
     plyLoc.y= -unitWidth;
 
-    t= unitWidth/1;
+    t= unitWidth/stepsPerMove;
 
     plyTex = TextureLoader(FileName);
 }
