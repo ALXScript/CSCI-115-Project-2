@@ -174,13 +174,13 @@ void Player::initPlayer(int gSize,char *FileName,int frames)
     ymin =0;
 
     unitWidth = (float)2/gridSize;
-    stepsPerMove = frames;
+    stepsPerMove = 1;
 
     T->Start();
     plyLoc.x= -unitWidth;
     plyLoc.y= -unitWidth;
 
-    t= unitWidth/stepsPerMove;
+    t= unitWidth/1;
 
     plyTex = TextureLoader(FileName);
 }
