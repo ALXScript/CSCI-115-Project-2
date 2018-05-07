@@ -422,8 +422,23 @@ int findEnemy(int arrowX, int arrowY){
     return -1;
 }
 
+char convertDirection(char* direction){
+    if(direction == "up"){
+        return 'u';
+    }
+    else if(direction == "down"){
+        return 'd';
+    }
+    else if(direction == "left"){
+        return 'l';
+    }
+    else if(direction == "right"){
+        return 'r';
+    }
+}
+
 //
-int convertDirection(char* direction){
+int intConvertDirection(char* direction){
     if(direction == "up"){
         return 1;
     }
@@ -445,7 +460,7 @@ int convertDirection(char* direction){
 void checkArrow(){
     char* direction = P->playerDir;
 
-    int intDirection = convertDirection(direction);
+    int intDirection = intConvertDirection(direction);
 
     switch(intDirection){
     case 1:
@@ -480,8 +495,7 @@ void checkArrow(){
 
 
 //Function for getting the OpenGL Position?
- void GetOGLPos(int x, int y)
-{
+ void GetOGLPos(int x, int y){
     GLint viewport[4];
     GLdouble modelview[16];
     GLdouble projection[16];
@@ -503,8 +517,7 @@ void checkArrow(){
 }
 
 //Equivalent to Unity Update Function
- void idle(void)
-{
+ void idle(void){
     //check the state of the player
     //if moving
 
@@ -546,7 +559,11 @@ void key(unsigned char key, int x, int y)
         case ' ':
             //if in move state, space = move
             if(P->moveState == true){
-
+                matrix[currentPlayerX][currentPlayerY] = 1;
+                P->movePlayer(P->playerDir,P->frames);
+                matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 7;
+                cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
+                showMatrix();
             }
             //if in shoot state, space = shoot
             else{

@@ -31,6 +31,7 @@ class Player
         void placePlayer(int,int);         // place the player
         void movePlayer(char *,int);       // move Player left,right,up,down
         void loadArrowImage(char *);       // set an image for the Arrow
+        void movePlayerFace(char*, int);
 
         GridLoc getPlayerLoc();            // player current location
         GridLoc getArrowLoc();             // arrow current location

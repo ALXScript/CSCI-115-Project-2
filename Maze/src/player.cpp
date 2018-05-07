@@ -272,6 +272,10 @@ void Player::movePlayer(char* dir, int frames)
    }
 }
 
+void Player::movePlayerFace(char* direction, int number){
+    
+}
+
 GridLoc Player::getPlayerLoc()
 {
    GridLoc val;
