@@ -185,6 +185,7 @@ GridLoc Enemies::getEnemyLoc()
     return val;
 }
 
+// this creates a the list of valid points from matrix
 linkList* Enemies::createNodeList(int **arr, int a, int b){
 
     linkList* validPts = new linkList();
@@ -232,7 +233,8 @@ MLinkList* Enemies::createAdjList(linkList* valid) {
 	return master;
 }
 
-Node* Enemies::shortestPath(linkList* valid, MLinkList* adjList, Node* enLoc, Node* playLoc){
+//initializes Dijkstras shortest path algorithm
+Node* Enemies::shortestPath(linkList* valid, MLinkList* adjList, Player one){
 
     minHeap* sPath = new minHeap();
     Node* visited[valid->n];
@@ -255,14 +257,20 @@ Node* Enemies::shortestPath(linkList* valid, MLinkList* adjList, Node* enLoc, No
     }
 
     // this is the start point of the shortest path (enemies current location)
-     Node * src = enLoc; // will change to be whatever data type the input data is
+     int enmX = getEnemyLoc().x;
+     int enmY = getEnemyLoc().y;
+
+     Node* enemyNode = valid->lookup(enmX, enmY);
 
      // this is the destination point of the shortest path (players current location)
-     Node * dest = playLoc; //will also change to whatever input data it is
+     int playX = one.getPlayerLoc().x;
+     int playY = one.getPlayerLoc().y;
+
+     Node* playNode = valid->lookup(playX, playY);
 
      //traverses AdjList until it finds the pointer that matches the data given from enmLoc
      linkList * l = adjList->head;
-     while(( l->x != src->a) && (l->y != src->b) ){
+     while(( l->x != enmX) && (l->y != enmY) ){
         l = l->nextLL;
      }
 
@@ -277,5 +285,5 @@ Node* Enemies::shortestPath(linkList* valid, MLinkList* adjList, Node* enLoc, No
 
       minHeapNode* start = temp;
       sPath->updateInfo(start, adjList, visited, unvisited, valid->n);
-      return sPath->nextPos(src, dest);
+      return sPath->nextPos(enemyNode, playNode);
 }
