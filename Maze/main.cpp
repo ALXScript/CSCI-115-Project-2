@@ -501,69 +501,108 @@ Legend:
 }
 
 //Function for checking Arrow-Enemy collision
-int findEnemy(int arrowX, int arrowY){
+void findEnemy(int arrowX, int arrowY){
     for(int i = 0; i < currentEnemyNumber; i++){
         if(E[i].getEnemyLoc().x == arrowX && E[i].getEnemyLoc().y == arrowY){
-            return i;
+            E[i].live = false;
+            matrix[arrowX][arrowY] = 0;
         }
-    }
-    return -1;
-}
-
-//
-int intConvertDirection(char* direction){
-    if(direction == "up"){
-        return 1;
-    }
-    else if(direction == "down"){
-        return 2;
-    }
-    else if(direction == "left"){
-        return 3;
-    }
-    else if(direction == "right"){
-        return 4;
-    }
-    else{
-        return -1;
     }
 }
 
 //Function for checking Arrow Position
-void checkArrow(){
-    char* direction = P->playerDir;
+bool checkArrow(char* direction){
+    //shooting up
+    if(strcmp(direction, "up")==0){
 
-    int intDirection = intConvertDirection(direction);
+        currentArrowX = P->getPlayerLoc().x;
+        currentArrowY = P->getPlayerLoc().y;
 
-    switch(intDirection){
-    case 1:
-        currentArrowX = P->getArrowLoc().x;
-        currentArrowY = P->getArrowLoc().y;
-
-        //loop through the matrix
-        for(int i = 0; i < 20; i++){
-            for(int j = 0; j < 20; j++){
-                //if the next slot belongs to an enemy
-                if(matrix[currentArrowX][currentArrowY+1] == 3){
-                    //find out which enemy it is
-                    int foundEnemy = findEnemy(currentArrowX, currentArrowY+1);
-                    //case enemy found
-                    if(foundEnemy != -1){
-                        E[foundEnemy].live = false;
-                    };
-                }
+        //determine whether theres a wall or an enemy
+        for(int i = 1; i < 20; i++){
+            //enemy spotted, able to fire
+            if(matrix[currentArrowX][currentArrowY+i] == 2){
+                findEnemy(currentArrowX, currentArrowY+i);
+                return true;
+            }
+            else if(matrix[currentArrowX][currentArrowY+i] == 1){
+                return false;
             }
         }
-
-    case 2:
-        break;
-    case 3:
-        break;
-    case 4:
-        break;
-    case -1:
-        break;
     }
+
+    //shooting down
+    else if(strcmp(direction, "down")==0){
+
+        currentArrowX = P->getPlayerLoc().x;
+        currentArrowY = P->getPlayerLoc().y;
+
+        //determine whether theres a wall or an enemy
+        for(int i = 1; i < 20; i++){
+            //enemy spotted, able to fire
+            if(matrix[currentArrowX][currentArrowY-i] == 2){
+                findEnemy(currentArrowX, currentArrowY+i);
+                return true;
+            }
+            //wall spotted, no fire
+            else if(matrix[currentArrowX][currentArrowY-i] == 1){
+                return false;
+            }
+        }
+    }
+
+    //shooting left
+    else if(strcmp(direction, "left")==0){
+
+        currentArrowX = P->getPlayerLoc().x;
+        currentArrowY = P->getPlayerLoc().y;
+
+        //determine whether theres a wall or an enemy
+        for(int i = 1; i < 20; i++){
+            //enemy spotted, able to fire
+            if(matrix[currentArrowX-i][currentArrowY] == 2){
+                findEnemy(currentArrowX, currentArrowY+i);
+                return true;
+            }
+            else if(matrix[currentArrowX-i][currentArrowY] == 1){
+                return false;
+            }
+        }
+    }
+
+    //shooting right
+    else if(strcmp(direction, "right")==0){
+
+        currentArrowX = P->getPlayerLoc().x;
+        currentArrowY = P->getPlayerLoc().y;
+
+        //determine whether theres a wall or an enemy
+        for(int i = 1; i < 20; i++){
+            //enemy spotted, able to fire
+            if(matrix[currentArrowX+i][currentArrowY] == 2){
+                findEnemy(currentArrowX, currentArrowY+i);
+                return true;
+            }
+            else if(matrix[currentArrowX+i][currentArrowY] == 1){
+                return false;
+            }
+        }
+    }
+
+    ////loop through the matrix
+    //for(int i = 0; i < 20; i++){
+    //    for(int j = 0; j < 20; j++){
+    //        //if the next slot belongs to an enemy
+    //        if(matrix[currentArrowX][currentArrowY+1] == 2){
+    //            //find out which enemy it is
+    //            int foundEnemy = findEnemy(currentArrowX, currentArrowY+1);
+    //            //case enemy found
+    //            if(foundEnemy != -1){
+    //                E[foundEnemy].live = false;
+    //            };
+    //        }
+    //    }
+    //}
 }
 
 //Function for getting the OpenGL Position?
@@ -626,7 +665,7 @@ void moveThePlayer(){
     }
 
     //cout << "Player x: " << P->getPlayerLoc().x << "\tPlayer y: " << P->getPlayerLoc().y << endl;
-    //cout << "Arrows: " << P->arrowAmount << endl;
+    cout << "Arrows: " << P->arrowAmount << endl;
 
     glutPostRedisplay();
 }
@@ -669,8 +708,11 @@ void key(unsigned char key, int x, int y)
             //if in shoot state, space = shoot
             else{
                 if(P->arrowAmount > 0){
-                    P->shootArrow();
-                    P->arrowAmount = P->arrowAmount - 1;
+                    if(checkArrow(P->playerDir) == true){
+                        P->shootArrow();
+                        P->arrowAmount = P->arrowAmount - 1;
+                    }
+                    
                 }
             }
         break;
