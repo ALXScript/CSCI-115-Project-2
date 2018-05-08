@@ -52,7 +52,7 @@
 			<Add directory="include" />
 		</Linker>
 		<Unit filename="include/ArrowSet.h">
-			<Option target="&lt;{~None~}&gt;" />
+			<Option target="Debug" />
 		</Unit>
 		<Unit filename="include/CommonThings.h" />
 		<Unit filename="include/Enemies.h" />
@@ -63,7 +63,7 @@
 		<Unit filename="include/wall.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/ArrowSet.cpp">
-			<Option target="&lt;{~None~}&gt;" />
+			<Option target="Debug" />
 		</Unit>
 		<Unit filename="src/Enemies.cpp" />
 		<Unit filename="src/Maze.cpp" />

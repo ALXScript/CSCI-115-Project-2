@@ -20,14 +20,15 @@ class arrowBundle{
         void bundleInit(int, char*);
         void placeBundle(int, int);
 
+        bool valid;
         float unitWidth;
         float spin;
         int gridSize;
+        GridLoc GetBundleLoc();
 
     private:
         loc bundleBrk;
         GLuint bundleTex;
-        GridLoc GetBundleLoc;
 };
 
 #endif // ARROWSET_H_INCLUDED

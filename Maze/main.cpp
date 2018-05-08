@@ -141,21 +141,12 @@ MLinkList* createAdjList(linkList* valid){
 }
 //Function for cout-ing the matrix (for debugging)
 void showMatrix(){
-    //cout the matrix for debugging
-    //cout << "Matrix: " << endl;
-    //cout << string(10, '\n');
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
             cout << matrix[i][j] << "  ";
         }
         cout << endl;
     }
-    //for(int i = 1; i < 3; i++){
-    //    for(int j = 0; j < 10; j++){
-    //        cout << "[" << i << "][" << j << "] = " << matrix[i][j] << endl;;
-    //    }
-    //    cout << endl;
-    //}
 }
 
 //Function for reading the .txt file
@@ -205,72 +196,52 @@ void init()
     glEnable(GL_BLEND);                                 //display images with transparent
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    //Load all images
     M->loadBackgroundImage(imageBackground);           // Load maze background image
     M->loadChestImage(imageChest);              // load chest image
+    //Loading the Player
+    P->initPlayer(M->getGridSize(),imagePlayerMoving,6);   // initialize player pass grid size,image and number of frames
+    P->loadArrowImage(imageArrow);                // Load arrow image
 
-    //loop to place chest
+    //loop to place a lot of things
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
-            if(matrix[i][j] == 4){
+            //if it's a wall
+            if(matrix[i][j] == 1){
+                W[currentWallNumber].wallInit(M->getGridSize(),imageWall);// Load walls
+                W[currentWallNumber].placeWall(i,j);                              // place each brick
+                currentWallNumber++;
+            }
+
+            //If it's the enemy
+            else if(matrix[i][j] == 2){
+                E[currentEnemyNumber].initEnm(M->getGridSize(),4,imageEnemy); //Load enemy image
+                E[currentEnemyNumber].placeEnemy(i,j);
+                currentEnemyNumber++;
+            }
+
+            //If it's the player
+            else if(matrix[i][j] == 3){
+                P->placePlayer(i,j);
+            }
+
+            //if it's a chest
+            else if(matrix[i][j] == 4){
                 M->placeChest(i, j);
-                break;
+            }
+
+            else if(matrix[i][j] == 5){
+
+                A[currentBundleNumber].bundleInit(20, imageArrowSet);
+                A[currentBundleNumber].placeBundle(i,j);
+                currentBundleNumber++;
             }
         }
     }
 
     //loading the arrow image set
     //M->loadSetOfArrowsImage(imageArrowSet);
-
-    //Loading the Player
-    P->initPlayer(M->getGridSize(),imagePlayerMoving,6);   // initialize player pass grid size,image and number of frames
-    P->loadArrowImage(imageArrow);                // Load arrow image
-
-    //Loop to place the player
-    for(int i = 0; i < 20; i++){
-        for(int j = 0; j < 20; j++){
-            if(matrix[i][j] == 3){
-                P->placePlayer(i,j);
-                break;
-            }
-        }
-    }
-
-    //looks like here's where we're gonna read from text file where we place the walls
-    for(int i = 0; i < 20; i++){
-        for(int j = 0; j < 20; j++){
-            if(matrix[i][j] == 1){
-                W[currentWallNumber].wallInit(M->getGridSize(),imageWall);// Load walls
-                W[currentWallNumber].placeWall(i,j);                              // place each brick
-                currentWallNumber++;
-            }
-        }
-    }
-
-    //same here, but for reading/placing the enemy locations
-    for(int i = 0; i < 20; i++){
-        for(int j = 0; j < 20; j++){
-            if(matrix[i][j] == 2){
-                E[currentEnemyNumber].initEnm(M->getGridSize(),4,imageEnemy); //Load enemy image
-                E[currentEnemyNumber].placeEnemy(i,j);
-                currentEnemyNumber++;
-            }
-        }
-    }
-
-    //loop to get the arrow set location
-    for(int i = 0; i < 20; i++){
-        for(int j = 0; j < 20; j++){
-            if(matrix[i][j] == 5)
-             //   M->placeStArrws(i,j);
-              {
-
-                A[currentBundleNumber].bundleInit(20, imageArrowSet);
-                A[currentBundleNumber].placeBundle(i,j);
-                currentBundleNumber++;
-              }
-
-        }
-    }
+    //   M->placeStArrws(i,j);
 
     //linkList* validPts = createNodeList(matrix, 20, 20);
     //MLinkList* adjList = createAdjList(validPts);
@@ -334,13 +305,26 @@ void display(void)
          //   glPushMatrix();
         //    M->drawArrows();
            for(int i = 0; i < currentBundleNumber; i++){
-              A[i].drawBundle();
+                if(A[i].valid == true){
+                    A[i].drawBundle();
+                }
            }
          //   glPopMatrix();
 
             glutSwapBuffers();
         }
 
+}
+
+//function for collecting the arrow
+void arrowCollected(int playerX, int playerY){
+    //loop to find out which arrow set it is
+    for(int i = 0; i < currentBundleNumber; i++){
+        if(A[i].GetBundleLoc().x == playerX && A[i].GetBundleLoc().y == playerY){
+            A[i].valid = false;
+            P->arrowAmount = P->arrowAmount + 1;
+        }
+    }
 }
 
 //Boolean function for checking collision detection
@@ -352,8 +336,6 @@ bool collisionDetection(char* direction){
 3 = Player
 4 = Chest
 5 = Bags of Arrows
-6 = Arrow Sets
-7 = Player current position
 */
     //moving up
     if(strcmp(direction, "up")==0){
@@ -369,7 +351,7 @@ bool collisionDetection(char* direction){
         //If Arrow Set (5)
         else if(matrix[currentPlayerX][currentPlayerY+1] == 5){
             //add arrows to inventory
-            P->arrowAmount = P->arrowAmount + 1;
+            arrowCollected(currentPlayerX, currentPlayerY+1);
             return true;
         }
 
@@ -406,7 +388,7 @@ bool collisionDetection(char* direction){
         //If Arrow Set (5)
         else if(matrix[currentPlayerX][currentPlayerY-1] == 5){
             //add arrows to inventory
-            P->arrowAmount = P->arrowAmount + 1;
+            arrowCollected(currentPlayerX, currentPlayerY-1);
             return true;
         }
 
@@ -443,7 +425,7 @@ bool collisionDetection(char* direction){
         //If Arrow Set (5)
         else if(matrix[currentPlayerX-1][currentPlayerY] == 5){
             //add arrows to inventory
-            P->arrowAmount = P->arrowAmount + 1;
+            arrowCollected(currentPlayerX-1, currentPlayerY);
             return true;
         }
 
@@ -480,7 +462,7 @@ bool collisionDetection(char* direction){
         //If Arrow Set (5)
         else if(matrix[currentPlayerX+1][currentPlayerY] == 5){
             //add arrows to inventory
-            P->arrowAmount = P->arrowAmount + 1;
+            arrowCollected(currentPlayerX+1, currentPlayerY);
             return true;
         }
 
@@ -592,21 +574,6 @@ bool checkArrow(char* direction){
             }
         }
     }
-
-    ////loop through the matrix
-    //for(int i = 0; i < 20; i++){
-    //    for(int j = 0; j < 20; j++){
-    //        //if the next slot belongs to an enemy
-    //        if(matrix[currentArrowX][currentArrowY+1] == 2){
-    //            //find out which enemy it is
-    //            int foundEnemy = findEnemy(currentArrowX, currentArrowY+1);
-    //            //case enemy found
-    //            if(foundEnemy != -1){
-    //                E[foundEnemy].live = false;
-    //            };
-    //        }
-    //    }
-    //}
 }
 
 //Function for getting the OpenGL Position?
@@ -641,7 +608,7 @@ void moveThePlayer(){
         P->movePlayer(P->playerDir,P->frames);
         matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 3;
         cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
-        showMatrix();
+        //showMatrix();
     }
 }
 

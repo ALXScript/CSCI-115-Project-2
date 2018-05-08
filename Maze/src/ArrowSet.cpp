@@ -12,7 +12,7 @@ arrowBundle::~arrowBundle(){
 }
 
 void arrowBundle::bundleInit(int grid, char* FileName){
-
+    valid = true;
     gridSize = grid;
     unitWidth = (float)2.0/grid;
     bundleTex = TextureLoader(FileName);
@@ -55,4 +55,15 @@ void arrowBundle::placeBundle(int x, int y){
 
     bundleBrk.x = -1-unitWidth/2+(unitWidth)*x;
     bundleBrk.y = -1-unitWidth/2+(unitWidth)*y;
+}
+
+GridLoc arrowBundle::GetBundleLoc()
+{
+   GridLoc val;
+
+   val.x = (int)(ceil((bundleBrk.x +(1-unitWidth))/unitWidth));
+   val.y = (int)(ceil((bundleBrk.y +(1-unitWidth))/unitWidth));
+
+   return val;
+
 }
