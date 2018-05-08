@@ -18,11 +18,10 @@ class Enemies
     public:
         Enemies();                          // constructor
         virtual ~Enemies();                 // DeConstructor
-        void initEnm(int, int, char *);     // Initialize Enemy
-
+        void initEnm(int, int, char *);     // Initialize Enemies
         void placeEnemy(int,int);           // place enemy
         void drawEnemy();                   // Draw Enemy with Animation
-        void moveEnemy(string);             // move Enemy left,right,up,down
+        void moveEnemy(Node** valid, int sizearr,linkList* adjList, Player* one);             // move Enemy left,right,up,down
         void animate();                     // Animate sprite
         GridLoc getEnemyLoc();              // Return Enemy current grid location
 
@@ -34,7 +33,7 @@ class Enemies
 
 
 
-        Node* shortestPath(linkList* valid, MLinkList* AdjList, Player one);    // accepts enemy location and player location. Will calculate Shortest path between enemy and player and return Node* containing X,Y of next move
+        Node* shortestPath(Node** valid, int sizearr, linkList* AdjList, Player* one);    // accepts enemy location and player location. Will calculate Shortest path between enemy and player and return Node* containing X,Y of next move
 
 
     protected:

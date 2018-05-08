@@ -1,5 +1,7 @@
 #include "linkList.h"
+#include <iostream>
 
+using namespace std;
 //constructor
 linkList::linkList(){
 
@@ -15,6 +17,7 @@ linkList::linkList(Node* point) {
 	x = point-> a;
 	y = point-> b;
 	n = 1;
+	nextLL = nullptr;
 
 }
 
@@ -24,6 +27,7 @@ void linkList::addNode(Node* nn) { //checked and updated
 	if (root == nullptr) {
 		root = nn;
 		n++;
+
 	}
 
 	else {
@@ -36,6 +40,7 @@ void linkList::addNode(Node* nn) { //checked and updated
 
 		p->next = nn;
 		n++;
+
 	}
 }
 
@@ -99,57 +104,35 @@ Node* linkList::lookup(int x, int y){
 
 }
 
-// constructor for adjacency list
-MLinkList::MLinkList() {
+void linkList::updateNeighbors(Node* srch, Node* newNeighbor){
 
-	head = nullptr;
+    Node* p = root;
+    while(p!=srch){
+        p = p->next;
+    }
+    p->updateNeighbors(newNeighbor);
+
 }
 
-//adds new LL to adjacency list. point represents a point in graph
-linkList* MLinkList::addLinkList(Node* point) {
+Node** linkList::retNeighbors(Node* srch){
+    Node* p = root;
 
-	linkList* nLL = new linkList(point);
+    while(p!=srch){
+        p = p->next;
+    }
 
-	if (head == nullptr) {
-		head = nLL;
-	}
-	else {
-		linkList* p = head;
-
-		while (p->nextLL != nullptr) {
-			p = p->nextLL;
-		}
-
-		p->nextLL = nLL;
-	}
-	return nLL;
+    return p->neighbors;
 }
 
- //returns true if node is not found in adjacency list
-bool MLinkList::isWall(int a, int b) {
-
-    linkList* p = head;
-
+void linkList::printList(){
+    Node* p = root;
     while(p!= nullptr){
+        cout<<"Current List is for point: ("<< p->a << ", "<< p->b<< "). Whose Neighbors are: ";
+        p->displayN();
+        p=p->next;
 
-        if (p->x == a && p-> y == b) return false;
-        else return true;
     }
 
-}
-
-//returns list of adjacent nodes to point
-linkList* MLinkList::retLL(Node* point){
-
-    linkList* p = head;
-
-    while(p->root != point){
-        p= p->nextLL;
-    }
-
-    if (p->root == point) return p;
-
-    else return nullptr;
 }
 
 //constructor for shortest path info
@@ -218,62 +201,69 @@ linkList* MLinkList::retLL(Node* point){
  }
 
  //adds Node* to array
- void minHeap::addArray(Node** arr, Node* point){
+ void minHeap::addArray(Node** arr, Node* point, int &c){
 
-    int i = 0;
+    arr[c] = point;
+ }
 
-    while (arr[i] != 0){
-        i++;
+ bool minHeap::isEmpty(Node** arr, int sizeValPts){
+    for(int i = 0; i< sizeValPts; i++){
+        if (arr[i]!= nullptr) return false;
     }
+    return true;
 
-    arr[i] = point;
  }
 
  //returns closest vertex to argument only if it is closest (distSrc is least) and only if it has not been marked visited
- minHeapNode* minHeap::retClosestPtr(Node* pred, Node** visited, int V){
-
+ minHeapNode* minHeap::retClosestPtr(Node** visited, int V){
+    int mini= 999999;
     minHeapNode* temp = head;
     minHeapNode* toBeRet = nullptr;
 
     while(temp!=nullptr){
 
-        if (temp->prev == pred && (!isMember(temp->vertex, visited, V))){
+        if (temp->distSrc <= mini && (!isMember(temp->vertex, visited, V))){
+                    toBeRet = temp;
+                    mini= temp->distSrc;}
 
-            if (toBeRet == nullptr || (toBeRet->distSrc > temp->distSrc)){
-                toBeRet = temp;
-            }
-        }
         temp= temp->next;
     }
-    return toBeRet;
+        return toBeRet;
  }
 
 //most of the work for shortest path, works recursively by updating minHeap with info
- void minHeap::updateInfo(minHeapNode* t, MLinkList* adjList, Node** visited, Node** unvisited, int V){
+ void minHeap::updateInfo(minHeapNode* t, linkList* adjList, Node** visited, int V, Node* start, int &c){
+    if(c==V) return;
 
-    if(isMember(t->vertex, visited, V) || t == nullptr) return;
 
-    linkList* currLL = adjList->retLL(t->vertex);
+    Node* currNode = t->vertex;
+    Node** currNodeNeighbors = adjList->retNeighbors(currNode);
+
     int tempDist = t->distSrc;
-    Node* currNode = currLL->root;
+    int i = 0;
 
-    while (currNode->next!= nullptr){
+        while ( (currNodeNeighbors[i]!= nullptr) && i<4){ ///THIS WHILE LOOP RUNS INFINITELY
 
-        while (!isMember(currNode->next, visited, V)){
-                minHeapNode* tempMHN = retPtr(currNode->next);
+                if (isMember(currNodeNeighbors[i], visited, V)) i++;
 
-                if (tempMHN->distSrc > (tempDist + currNode->next->weight)){
-                    tempMHN->distSrc= (tempDist + currNode->next->weight);
-                    tempMHN->prev= currNode;
+                else{
+                    minHeapNode* tempMHN = retPtr(currNodeNeighbors[i]);
+
+                    if(tempMHN->distSrc > (tempDist + currNodeNeighbors[i]->weight)){
+                        tempMHN->distSrc= (tempDist + currNodeNeighbors[i]->weight);
+                        tempMHN->prev= currNode;
+
+                        }
+                    i++;
                 }
+
         }
 
-        currNode = currNode->next;
-    }
 
-    remArray(unvisited, t->vertex);
-    addArray(visited, t->vertex);
-    updateInfo(retClosestPtr(t->vertex, visited, V), adjList, visited, unvisited, V);
+
+    addArray(visited, t->vertex, c);
+    c++;
+    updateInfo(retClosestPtr(visited, V), adjList, visited, V, start, c);
  }
 
  //accepts the pointers for the Node of start and dest. searches through minHeap and traces back from dest to the Node after start. this returns the next location to be moved to
