@@ -54,6 +54,9 @@ wall W[400];                //Wall with number of bricks
 Enemies E[200];             //Create number of enemies
 Timer *T0 = new Timer();    //Animation timer
 arrowBundle A[10];
+linkList* adjList;
+Node** validPts;
+int sizeValPts;
 
 ///GLOBAL VARIABLES FOR GAME STATES
 bool activeGame = false;    //For making the game menu (boolean states)
@@ -92,52 +95,66 @@ void resize(int width, int height)
         glViewport((GLsizei) (width-height)/2 ,0 ,(GLsizei) height,(GLsizei) height);
 }
 // creates possible path nodes
-linkList* createNodeList(int arr[20][20], int a, int b){
+Node** createNodeList(int arr[20][20], int a, int b, int &sizesArr){ //working perfect
 
-    linkList* validPts = new linkList();
-
+    Node **validPts = new Node*[400];
     for (int i = 0; i < a; i++) {
 
 		for (int j = 0; j < b; j++) {
 
-			if (arr[i][j] != 0) {
+			if (arr[i][j] != 1) {
 
                 Node* tempNode = new Node(i, j);
-				validPts->addNode(tempNode);
+				validPts[sizesArr] = tempNode;
+
+				sizesArr++;
+
 			}
 		}
 	}
+
 	return validPts;
 }
 
 //function that takes and creates matrix assuming that 0 means a wall (not sure where we would put this but its here temp
-MLinkList* createAdjList(linkList* valid){
+//function that takes and creates matrix assuming that 0 means a wall (not sure where we would put this but its here temp
+linkList* createAdjList(Node* valid[400], int sizeArr){
 
-    Node* p = valid->root;
-    MLinkList* master = new MLinkList();
+    linkList* master = new linkList();
+    //cout<<sizeArr<<endl;
 
-    while (p!= nullptr){
+    for (int i = 0; i < sizeArr; i++){
+        Node* tempNode = valid[i]; //causing problems
+        //cout<<tempNode->a<<" ," <<tempNode->b <<endl;
 
-        linkList* tempList = master->addLinkList(p);
-        Node* tempNode = valid->root;
+        master->addNode(valid[i]);
+        for (int j = 0; j < sizeArr; j++){
+            Node* p = valid[j];
 
-        while (tempNode!= nullptr){
+            //cout<<"CURRENTLY CHECKING: "<<p->a<< " ,"<< p->b<<endl;
 
-            if (tempNode->a == p->a && ((tempNode->b== (p->b + 1)) || (tempNode->b== (p->b -1)))){ // checks if there is a point that is adjacent above or below
-                tempList->addNode(tempNode);
+            if (valid[i]->a == valid[j]->a && ((valid[i]->b == (valid[j]->b + 1)) || (valid[i]->b == (valid[j]->b -1)))){ // checks if there is a point that is adjacent above or below
+
+            //cout<<"checked first condition of nested for loop and passed"<< endl;
+
+            master->updateNeighbors(valid[i], valid[j]);
+
+            //cout<<"UPDATED NEIGHBOR OF "<<valid[i]->a<< " ,"<< valid[i]->b<< " WITH: "<< valid[j]->a<< ", "<< valid[j]->b<< endl;
             }
 
-            else if (tempNode->b == p->b && ((tempNode->a== (p->a + 1)) || (tempNode->a== (p->a -1)))) // checks if there is a point that is adjacent to left or right
-                tempList->addNode(tempNode);
+            else if (valid[i]->b == valid[j]->b && ((valid[i]->a== (valid[j]->a + 1)) || (valid[i]->a== (valid[j]->a -1)))){ // checks if there is a point that is adjacent to left or right
 
-            tempNode = tempNode->next;
+            //cout<<"checked second condition of nested for loop and passed"<< endl;
+
+            master->updateNeighbors(valid[i], valid[j]);
+
+            //cout<<"UPDATED NEIGHBOR OF "<<valid[i]->a<< " ,"<< valid[i]->b<< " WITH: "<< valid[j]->a<< ", "<< valid[j]->b<< endl;
+            }
         }
 
-        p= p->next;
-
     }
-	return master;
 
+	return master;
 }
 //Function for cout-ing the matrix (for debugging)
 void showMatrix(){
@@ -243,8 +260,8 @@ void init()
     //M->loadSetOfArrowsImage(imageArrowSet);
     //   M->placeStArrws(i,j);
 
-    //linkList* validPts = createNodeList(matrix, 20, 20);
-    //MLinkList* adjList = createAdjList(validPts);
+    validPts = createNodeList(matrix, 20, 20, sizeValPts);
+    adjList = createAdjList(validPts, sizeValPts);
 }
 
 
@@ -675,6 +692,8 @@ void key(unsigned char key, int x, int y)
             if(P->moveState == true){
                 //move the player
                 moveThePlayer();
+                E[0].moveEnemy(validPts, sizeValPts,adjList,P);
+                E[1].moveEnemy(validPts, sizeValPts, adjList,P);
             }
             //if in shoot state, space = shoot
             else{
