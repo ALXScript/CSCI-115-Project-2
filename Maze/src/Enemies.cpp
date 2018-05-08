@@ -79,13 +79,14 @@ void Enemies::placeEnemy(int x, int y)
     enmLoc.y =  -1-unitWidth/2+(unitWidth)*y;
 }
 
-void Enemies::moveEnemy(string dir)
+void Enemies::moveEnemy(Node** validPts, int sizearr, linkList* adjList,Player* one)
 {
+    Node* dest = shortestPath(validPts,sizearr,adjList,one); // shortest path is problem
   if(moveDis<=0){
-   if(dir=="up"){up=true; down=left=right=false;}
-   else if(dir=="down"){down=true; up=left=right=false;}
-   else if(dir=="left"){left=true; down=up=right=false;}
-   else if(dir=="right"){right=true; down=left=up=false;}
+   if(dest->a == getEnemyLoc().x && dest->b > getEnemyLoc().y){up=true; down=left=right=false;}
+   else if(dest->a == getEnemyLoc().x && dest->b < getEnemyLoc().y){down=true; up=left=right=false;}
+   else if(dest->b == getEnemyLoc().y && dest->a < getEnemyLoc().x){left=true; down=up=right=false;}
+   else if(dest->b == getEnemyLoc().y && dest->a > getEnemyLoc().x){right=true; down=left=up=false;}
    else{up=left=right=false;}
     }
 }
@@ -186,56 +187,44 @@ GridLoc Enemies::getEnemyLoc()
 }
 
 //initializes Dijkstras shortest path algorithm
-Node* Enemies::shortestPath(linkList* valid, MLinkList* adjList, Player one){
+Node* Enemies::shortestPath(Node** valid, int sizeArr, linkList* adjList, Player* one){
 
     minHeap* sPath = new minHeap();
-    Node* visited[valid->n];
-    Node* unvisited[valid->n];
+    Node* visited[sizeArr];
 
 
     //this section initializes the unvisited list
-    Node* p = valid->root;
-    while(p != nullptr){
-            int i = 0;
-            unvisited[i] = p;
-            p= p->next;
-    }
-
-    //resets temp variable p, initializes the minHeap
-    p = valid->root;
-    while(p != nullptr){
-        sPath->addHeapNode(p);
-        p = p->next;
+    int c = 0;
+    Node* p = valid[c];
+    while(p != nullptr && c< sizeArr){
+        sPath->addHeapNode(valid[c]);
+        c++;
     }
 
     // this is the start point of the shortest path (enemies current location)
      int enmX = getEnemyLoc().x;
      int enmY = getEnemyLoc().y;
 
-     Node* enemyNode = valid->lookup(enmX, enmY);
+     Node* enemyNode = adjList->lookup(enmX, enmY);
 
      // this is the destination point of the shortest path (players current location)
-     int playX = one.getPlayerLoc().x;
-     int playY = one.getPlayerLoc().y;
+     int playX = one->getPlayerLoc().x;
+     int playY = one->getPlayerLoc().y;
 
-     Node* playNode = valid->lookup(playX, playY);
+     Node* playNode = adjList->lookup(playX, playY);
 
-     //traverses AdjList until it finds the pointer that matches the data given from enmLoc
-     linkList * l = adjList->head;
-     while(( l->x != enmX) && (l->y != enmY) ){
-        l = l->nextLL;
-     }
-
-     //once found we grab pointer of head of link list which is the vertex, initialize the source to proper dist and prev pointer
-      Node * source = l->root;
+     //once found we grab pointer of node which is the vertex, initialize the source to proper dist and prev pointer
+      Node * source = enemyNode;
       minHeapNode * temp = sPath->head;
-      while (temp->vertex != source){
+      while (temp->vertex != source && temp!=nullptr){
         temp = temp->next;
       }
       temp->distSrc = 0;
       temp->prev = nullptr;
 
       minHeapNode* start = temp;
-      sPath->updateInfo(start, adjList, visited, unvisited, valid->n);
+      int cn = 0;
+      sPath->updateInfo(start, adjList, visited, sizeArr, source, cn);
+
       return sPath->nextPos(enemyNode, playNode);
 }

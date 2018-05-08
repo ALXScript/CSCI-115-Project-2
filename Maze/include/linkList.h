@@ -1,23 +1,60 @@
 #ifndef LINK_LIST_H
 #define LINK_LIST_H
-
+#include <iostream>
+using namespace std;
 typedef struct Node{
-	Node(int a, int b) {
-		 a = a;                     //number for tuple (a,b)
-		 b = b;                     // number for tuple (a,b)
-         Node* next = nullptr;
+
+	Node(int x, int y) {
+		 a = x;                     //number for tuple (a,b)
+		 b = y;                     // number for tuple (a,b)
+         next = nullptr;
          weight = 1;
+         initNeighbors();
 	}
+
 	Node (Node* n){                 //constructor with another node to create copy so copy can be deleted
         a = n-> a;
         b = n-> b;
         next = n-> next;
         weight = n->weight;
 	}
+
 	int a;                          // x value of node
 	int b;                          // y value of node
 	int weight;                     // weight of node
-	Node* next;                     // next node
+	Node* next;                     //next node
+	Node* neighbors[4];
+
+	void initNeighbors(){
+        for (int i= 0; i <4; i++){
+            neighbors[i]= nullptr;
+        }
+	}
+
+	void updateNeighbors(Node* newNeighbor){
+        int i = 0;
+        while(neighbors[i] != nullptr){
+            i++;
+        }
+        neighbors[i]= newNeighbor;
+	}
+
+	bool checkNeighbor(Node* srch){
+        for (int i = 0; i < 4; i++){
+            if (srch == neighbors[i]) return true;
+        }
+        return false;
+	}
+
+	void displayN(){
+        int i=0;
+        while(neighbors[i]!= nullptr && i < 4){
+            cout<<"(" <<neighbors[i]->a <<" ,"<<neighbors[i]-> b <<") ";
+            i++;
+        }
+        cout<<endl;
+
+	}
 } Node;
 
 //stores the nodes adjacent to root
@@ -37,19 +74,12 @@ public:
 		void addNode(Node* nn);     // adds node
 		Node* delNode(Node* dn);    // deletes node
 		Node* lookup(int x, int y); //finds node of corresponding x,y
-
-
+		void updateNeighbors(Node* srch, Node* newNeighbor);
+		Node** retNeighbors(Node* srch);
+        void printList();
 };
 
-//to store Adjacency list
-class MLinkList {
-public:
-		MLinkList();
-		linkList* addLinkList(Node* point);
-		linkList* retLL(Node* point);
-		bool isWall(int a, int b);
-        linkList* head;
-};
+
 
 //Node for minHeap. it stores current Node*, distance from source, and previous node.
 typedef struct minHeapNode{
@@ -73,11 +103,12 @@ public:
     minHeap();                                                      // constructor
     void addHeapNode(Node* vert);                                   //adds heap node
     minHeapNode* retPtr(Node* srch);                                // returns pointer of heapNode for corresponding Node*
-    minHeapNode* retClosestPtr(Node* pred, Node** arr, int V);      //returns closest ptr to current node
+    minHeapNode* retClosestPtr(Node** arr, int V);      //returns closest ptr to current node
     bool isMember(Node* point, Node** arr, int V);                  // returns bool value for if pointer is member of array
-    void updateInfo(minHeapNode* t, MLinkList* adjList, Node** visited, Node** unvisited, int V);           //updates info on in heap while dijkstras alg is running
+    void updateInfo(minHeapNode* t, linkList* adjList, Node** visited, int V, Node* start, int &cn);           //updates info on in heap while dijkstras alg is running
     void remArray(Node** arr, Node* point);                         //removes Node* from array
-    void addArray(Node** arr, Node* point);                         //adds to array
+    void addArray(Node** arr, Node* point, int &c);
+    bool isEmpty(Node** arr, int sizeValPts);                         //adds to array
     Node* nextPos(Node* start, Node* dest);                         //returns next position of enemy
 };
 
