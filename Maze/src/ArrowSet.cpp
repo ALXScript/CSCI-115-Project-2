@@ -12,8 +12,9 @@ arrowBundle::~arrowBundle(){
 }
 
 void arrowBundle::bundleInit(int grid, char* FileName){
+
     gridSize = grid;
-    unitWidth = (float)2/grid;
+    unitWidth = (float)2.0/grid;
     bundleTex = TextureLoader(FileName);
 }
 
@@ -22,10 +23,12 @@ void arrowBundle::drawBundle()
 {
     glColor3f(1.0,1.0,1.0);
 
-    glTranslatef(bundleBrk.x,bundleBrk.y,1.0);
     //glRotated(-spin,0,0,1);
 
     glBindTexture(GL_TEXTURE_2D,bundleTex);
+
+    glPushMatrix();
+    glTranslatef(bundleBrk.x,bundleBrk.y,0.0);
     glScaled(1.0/(float)(gridSize),1.0/(float)(gridSize),1.0);
 
     glBegin(GL_QUADS);
@@ -41,6 +44,7 @@ void arrowBundle::drawBundle()
         glTexCoord2f(1,1);
         glVertex3f(-1,-1,0.0f);
      glEnd();
+     glPopMatrix();
 }
 
 void arrowBundle::placeBundle(int x, int y){

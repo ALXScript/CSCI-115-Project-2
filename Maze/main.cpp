@@ -9,7 +9,7 @@
 #include <iostream>
 #include <Timer.h>
 #include <player.h>
-//#include "ArrowSet.h"
+#include "ArrowSet.h"
 //#include <ArrowSet.h>
 
 #ifdef __APPLE__
@@ -53,7 +53,7 @@ Player *P = new Player();   //Create Player
 wall W[400];                //Wall with number of bricks
 Enemies E[200];             //Create number of enemies
 Timer *T0 = new Timer();    //Animation timer
-//arrowBundle A[10];
+arrowBundle A[10];
 
 ///GLOBAL VARIABLES FOR GAME STATES
 bool activeGame = false;    //For making the game menu (boolean states)
@@ -219,19 +219,7 @@ void init()
     }
 
     //loading the arrow image set
-    M->loadSetOfArrowsImage(imageArrowSet);
-
-    //loop to get the arrow set location
-    for(int i = 0; i < 20; i++){
-        for(int j = 0; j < 20; j++){
-            if(matrix[i][j] == 5)
-                M->placeStArrws(i,j);
-                //A[currentBundleNumber].bundleInit(M->getGridSize(), imageArrowSet);
-                //A[currentBundleNumber].placeBundle(i,j);
-                //currentBundleNumber++;
-
-        }
-    }
+    //M->loadSetOfArrowsImage(imageArrowSet);
 
     //Loading the Player
     P->initPlayer(M->getGridSize(),imagePlayerMoving,6);   // initialize player pass grid size,image and number of frames
@@ -268,6 +256,22 @@ void init()
             }
         }
     }
+
+    //loop to get the arrow set location
+    for(int i = 0; i < 20; i++){
+        for(int j = 0; j < 20; j++){
+            if(matrix[i][j] == 5)
+             //   M->placeStArrws(i,j);
+              {
+
+                A[currentBundleNumber].bundleInit(20, imageArrowSet);
+                A[currentBundleNumber].placeBundle(i,j);
+                currentBundleNumber++;
+              }
+
+        }
+    }
+
     //linkList* validPts = createNodeList(matrix, 20, 20);
     //MLinkList* adjList = createAdjList(validPts);
 }
@@ -327,12 +331,12 @@ void display(void)
             glPopMatrix();
 
             //draws the arrow sets
-            glPushMatrix();
-            M->drawArrows();
-            glPopMatrix();
-            //for(int i = 0; i < currentBundleNumber; i++){
-            //    A[i].drawBundle();
-            //}
+         //   glPushMatrix();
+        //    M->drawArrows();
+           for(int i = 0; i < currentBundleNumber; i++){
+              A[i].drawBundle();
+           }
+         //   glPopMatrix();
 
             glutSwapBuffers();
         }

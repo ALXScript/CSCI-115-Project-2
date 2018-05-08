@@ -253,13 +253,14 @@
 	<wall.h>
 	<iostream>
 
-1525717917 source:c:\users\alex contreras\documents\github\csci-115-project-2\maze\main.cpp
+1525813123 source:c:\users\alex contreras\documents\github\csci-115-project-2\maze\main.cpp
 	<string.h>
 	<CommonThings.h>
 	<Maze.h>
 	<iostream>
 	<Timer.h>
 	<player.h>
+	"ArrowSet.h"
 	<GLUT/glut.h>
 	<GL/glut.h>
 	<stdlib.h>
@@ -326,7 +327,7 @@
 	"Timer.h"
 	<math.h>
 
-1525719430 source:c:\users\alex contreras\documents\github\csci-115-project-2\maze\src\enemies.cpp
+1525810438 source:c:\users\alex contreras\documents\github\csci-115-project-2\maze\src\enemies.cpp
 	"Enemies.h"
 	<iostream>
 
@@ -550,6 +551,20 @@
 	<math.h>
 
 1525676552 source:d:\!applications\github\github repositories\csci-115-project-2\maze\src\arrowset.cpp
+	<ArrowSet.h>
+	<iostream>
+
+1525712677 c:\users\alex contreras\documents\github\csci-115-project-2\maze\include\arrowset.h
+	"CommonThings.h"
+	<string.h>
+	<gl/gl.h>
+	<GL/glut.h>
+	<SOIL.h>
+	<iostream>
+	"Timer.h"
+	<math.h>
+
+1525813155 source:c:\users\alex contreras\documents\github\csci-115-project-2\maze\src\arrowset.cpp
 	<ArrowSet.h>
 	<iostream>
 
