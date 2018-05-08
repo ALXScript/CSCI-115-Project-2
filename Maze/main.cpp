@@ -142,19 +142,20 @@ MLinkList* createAdjList(linkList* valid){
 //Function for cout-ing the matrix (for debugging)
 void showMatrix(){
     //cout the matrix for debugging
-    cout << "Matrix: " << endl;
-    //for(int i = 0; i < 20; i++){
-    //    for(int j = 0; j < 20; j++){
+    //cout << "Matrix: " << endl;
+    //cout << string(10, '\n');
+    for(int i = 0; i < 20; i++){
+        for(int j = 0; j < 20; j++){
+            cout << matrix[i][j] << "  ";
+        }
+        cout << endl;
+    }
+    //for(int i = 1; i < 3; i++){
+    //    for(int j = 0; j < 10; j++){
     //        cout << "[" << i << "][" << j << "] = " << matrix[i][j] << endl;;
     //    }
     //    cout << endl;
     //}
-    for(int i = 1; i < 3; i++){
-        for(int j = 0; j < 10; j++){
-            cout << "[" << i << "][" << j << "] = " << matrix[i][j] << endl;;
-        }
-        cout << endl;
-    }
 }
 
 //Function for reading the .txt file
@@ -224,7 +225,7 @@ void init()
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
             if(matrix[i][j] == 5)
-                M->placeStArrws(i, j);
+                M->placeStArrws(i,j);
                 //A[currentBundleNumber].bundleInit(M->getGridSize(), imageArrowSet);
                 //A[currentBundleNumber].placeBundle(i,j);
                 //currentBundleNumber++;
@@ -240,7 +241,7 @@ void init()
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 20; j++){
             if(matrix[i][j] == 3){
-                P->placePlayer(i, j);
+                P->placePlayer(i,j);
                 break;
             }
         }
@@ -262,7 +263,7 @@ void init()
         for(int j = 0; j < 20; j++){
             if(matrix[i][j] == 2){
                 E[currentEnemyNumber].initEnm(M->getGridSize(),4,imageEnemy); //Load enemy image
-                E[currentEnemyNumber].placeEnemy(i, j);
+                E[currentEnemyNumber].placeEnemy(i,j);
                 currentEnemyNumber++;
             }
         }
@@ -341,7 +342,6 @@ void display(void)
 //Boolean function for checking collision detection
 bool collisionDetection(char* direction){
 /*
-Legend:
 0 = Empty Space (Walkable)
 1 = Wall (full)
 2 = Enemy
@@ -665,7 +665,7 @@ void moveThePlayer(){
     }
 
     //cout << "Player x: " << P->getPlayerLoc().x << "\tPlayer y: " << P->getPlayerLoc().y << endl;
-    cout << "Arrows: " << P->arrowAmount << endl;
+    //cout << "Arrows: " << P->arrowAmount << endl;
 
     glutPostRedisplay();
 }
@@ -711,6 +711,7 @@ void key(unsigned char key, int x, int y)
                     if(checkArrow(P->playerDir) == true){
                         P->shootArrow();
                         P->arrowAmount = P->arrowAmount - 1;
+                        showMatrix();
                     }
 
                 }

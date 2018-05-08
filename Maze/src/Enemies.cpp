@@ -180,7 +180,7 @@ GridLoc Enemies::getEnemyLoc()
 {
    GridLoc val;
    val.x = (int)(ceil((enmLoc.x +(1-unitWidth))/unitWidth));
-   val.y = (int)(ceil((enmLoc.y +(1-unitWidth))/unitWidth));
+   val.y = 19-(int)(ceil((enmLoc.y +(1-unitWidth))/unitWidth));
 
     return val;
 }

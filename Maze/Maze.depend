@@ -253,7 +253,7 @@
 	<wall.h>
 	<iostream>
 
-1525714967 source:c:\users\alex contreras\documents\github\csci-115-project-2\maze\main.cpp
+1525717917 source:c:\users\alex contreras\documents\github\csci-115-project-2\maze\main.cpp
 	<string.h>
 	<CommonThings.h>
 	<Maze.h>
@@ -326,20 +326,20 @@
 	"Timer.h"
 	<math.h>
 
-1525712678 source:c:\users\alex contreras\documents\github\csci-115-project-2\maze\src\enemies.cpp
+1525719430 source:c:\users\alex contreras\documents\github\csci-115-project-2\maze\src\enemies.cpp
 	"Enemies.h"
 	<iostream>
 
-1525712678 source:c:\users\alex contreras\documents\github\csci-115-project-2\maze\src\maze.cpp
+1525719387 source:c:\users\alex contreras\documents\github\csci-115-project-2\maze\src\maze.cpp
 	<Maze.h>
 
-1525712678 source:c:\users\alex contreras\documents\github\csci-115-project-2\maze\src\player.cpp
+1525719446 source:c:\users\alex contreras\documents\github\csci-115-project-2\maze\src\player.cpp
 	<Player.h>
 
 1524600347 source:c:\users\alex contreras\documents\github\csci-115-project-2\maze\src\timer.cpp
 	"Timer.h"
 
-1524600347 source:c:\users\alex contreras\documents\github\csci-115-project-2\maze\src\wall.cpp
+1525719463 source:c:\users\alex contreras\documents\github\csci-115-project-2\maze\src\wall.cpp
 	<wall.h>
 	<iostream>
 
