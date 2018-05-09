@@ -38,6 +38,7 @@ int currentWallNumber = 0;  //For getting the max amount of walls in the txt fil
 int currentEnemyNumber = 0; //For getting the max amount of enemies in the txt file
 int currentBundleNumber = 0; //For getting the max amount of arrow bundles in the txt file
 char* imageBackground = "images/Ours/GrassSeamless.png";
+char* imageMain = "images/Ours/MainScreenP.png";
 char* imageVictory = "images/Ours/Victory.png";
 char* imageChest = "images/Danyu/testchest.png";
 char* imageArrowSet = "images/Danyu/arrwset.png";
@@ -214,7 +215,7 @@ void init()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     //Load all images
-    M->loadBackgroundImage(imageBackground);           // Load maze background image
+    M->loadBackgroundImage(imageMain);           // Load maze background image
     M->loadChestImage(imageChest);              // load chest image
     //Loading the Player
     P->initPlayer(M->getGridSize(),imagePlayerMoving,6);   // initialize player pass grid size,image and number of frames
@@ -280,6 +281,7 @@ void display(void)
         //'N' key pressed, new game made, display everything
         else
         {
+            M->loadBackgroundImage(imageBackground);
             glPushMatrix();
             M->drawBackground();
             glPopMatrix();
@@ -693,7 +695,7 @@ void key(unsigned char key, int x, int y)
                 //move the player
                 moveThePlayer();
                 E[0].moveEnemy(validPts, sizeValPts,adjList,P);
-                E[1].moveEnemy(validPts, sizeValPts, adjList,P);
+                //E[1].moveEnemy(validPts, sizeValPts, adjList,P);
             }
             //if in shoot state, space = shoot
             else{
