@@ -100,16 +100,20 @@ typedef struct minHeapNode{
 class minHeap{
 public:
     minHeapNode* head;                                              //beginning of heap
-    minHeap();                                                      // constructor
+    minHeap();
+    ~minHeap();
+    void delHeap(minHeapNode* p);                                                      // constructor
     void addHeapNode(Node* vert);                                   //adds heap node
-    minHeapNode* retPtr(Node* srch);                                // returns pointer of heapNode for corresponding Node*
+    minHeapNode* retPtr(int srcha, int srchb);                                // returns pointer of heapNode for corresponding Node*
     minHeapNode* retClosestPtr(Node** arr, int V);      //returns closest ptr to current node
     bool isMember(Node* point, Node** arr, int V);                  // returns bool value for if pointer is member of array
     void updateInfo(minHeapNode* t, linkList* adjList, Node** visited, int V, Node* start, int &cn);           //updates info on in heap while dijkstras alg is running
     void remArray(Node** arr, Node* point);                         //removes Node* from array
     void addArray(Node** arr, Node* point, int &c);
     bool isEmpty(Node** arr, int sizeValPts);                         //adds to array
-    Node* nextPos(Node* start, Node* dest);                         //returns next position of enemy
+    Node* nextPos(Node* start, Node* dest);
+    void updatePtr(minHeapNode* &ex, Node*prev, int dist);
+    void cleanArray(Node** arr, int V);                         //returns next position of enemy
 };
 
 #endif

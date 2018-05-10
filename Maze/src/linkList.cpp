@@ -146,6 +146,7 @@ void linkList::printList(){
  void minHeap::addHeapNode(Node* vert){
 
     minHeapNode* nHN = new minHeapNode(vert);
+    //cout<<"ADDED NODE: "<< nHN->vertex->a<<", "<< nHN->vertex->b<< " TO MIN HEAP"<< endl;
 
     if (head == nullptr){
         head = nHN;
@@ -164,18 +165,21 @@ void linkList::printList(){
  }
 
  //returns minHeapNode
- minHeapNode* minHeap::retPtr (Node* srch){
+ minHeapNode* minHeap::retPtr (int srcha, int srchb){
 
     minHeapNode* p = head;
 
     while (p!= nullptr){
 
-        if (p->vertex == srch) return p;
-        p= p->next;
+        int curra =p->vertex->a;
+        int currb =p->vertex->b;
+        if (curra == srcha && currb== srchb){
+            return p;
+        }
+        else{
+
+                p = p->next;}
     }
-
-    return nullptr;
-
  }
 
  //returns true of minHeapNode->Node* is contained in array
@@ -235,23 +239,23 @@ void linkList::printList(){
  void minHeap::updateInfo(minHeapNode* t, linkList* adjList, Node** visited, int V, Node* start, int &c){
     if(c==V) return;
 
-
     Node* currNode = t->vertex;
     Node** currNodeNeighbors = adjList->retNeighbors(currNode);
 
     int tempDist = t->distSrc;
     int i = 0;
 
-        while ( (currNodeNeighbors[i]!= nullptr) && i<4){ ///THIS WHILE LOOP RUNS INFINITELY
+        while ( (currNodeNeighbors[i]!= nullptr) && i<4){
 
-                if (isMember(currNodeNeighbors[i], visited, V)) i++;
+                if (isMember(currNodeNeighbors[i], visited, V)){
+                i++;}
 
                 else{
-                    minHeapNode* tempMHN = retPtr(currNodeNeighbors[i]);
+
+                    minHeapNode* tempMHN = retPtr(currNodeNeighbors[i]->a, currNodeNeighbors[i]->b);
 
                     if(tempMHN->distSrc > (tempDist + currNodeNeighbors[i]->weight)){
-                        tempMHN->distSrc= (tempDist + currNodeNeighbors[i]->weight);
-                        tempMHN->prev= currNode;
+                        updatePtr(tempMHN, currNode, tempDist + currNodeNeighbors[i]-> weight);
 
                         }
                     i++;
@@ -269,13 +273,48 @@ void linkList::printList(){
  //accepts the pointers for the Node of start and dest. searches through minHeap and traces back from dest to the Node after start. this returns the next location to be moved to
  Node* minHeap::nextPos(Node* start, Node * dest){
 
-     minHeapNode* destination = retPtr(dest);
+     minHeapNode* destination = retPtr(dest->a, dest->b);
+
 
      while(destination->prev!= start){
-        destination = retPtr(destination->prev);
+
+        destination = retPtr(destination->prev->a, destination->prev->b);
+
      }
+     Node* nextStep = destination->vertex;
 
-     return destination->vertex;
+     return nextStep;
 
+ }
+
+ void minHeap::updatePtr(minHeapNode* &ex, Node* pred, int dist){
+    ex->distSrc = dist;
+    ex->prev = pred;
+
+ }
+
+ void minHeap::delHeap(minHeapNode* p){
+    if (p->next != nullptr){
+        delHeap(p->next);
+    }
+    delete p;
+ }
+
+ void minHeap::cleanArray(Node** arr, int V){
+    for (int i = 0; i<V; i++){
+        if (arr[i] != nullptr) arr[i]=nullptr;
+    }
+
+ }
+
+ minHeap::~minHeap(){
+    minHeapNode* current = head;
+    while( current != nullptr ) {
+        minHeapNode* next = current->next;
+        delete current;
+        current = next;
+    }
+    head= nullptr;
+    cout<<"Deconstructor"<<endl;
  }
 
