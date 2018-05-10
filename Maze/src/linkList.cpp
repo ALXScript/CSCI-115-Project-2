@@ -263,8 +263,6 @@ void linkList::printList(){
 
         }
 
-
-
     addArray(visited, t->vertex, c);
     c++;
     updateInfo(retClosestPtr(visited, V), adjList, visited, V, start, c);
@@ -315,7 +313,6 @@ void linkList::printList(){
         current = next;
     }
     head= nullptr;
-    cout<<"Deconstructor"<<endl;
-    
+
  }
 

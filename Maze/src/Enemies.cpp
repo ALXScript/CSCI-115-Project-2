@@ -84,7 +84,7 @@ void Enemies::moveEnemy(Node** validPts, int sizearr, linkList* adjList,Player* 
     if(getEnemyLoc().x == one->getPlayerLoc().x && getEnemyLoc().y == one->getPlayerLoc().y) return;
     Node* dest = shortestPath(validPts,sizearr,adjList,one); // shortest path is problem
     if(moveDis<=0){
-        if(dest->a == getEnemyLoc().x && dest->b > getEnemyLoc().y){up=true; down=left=right=false;}
+        if(dest->a == getEnemyLoc().x && dest->b > getEnemyLoc().y){ up=true; down=left=right=false;}
         else if(dest->a == getEnemyLoc().x && dest->b < getEnemyLoc().y){down=true; up=left=right=false;}
         else if(dest->b == getEnemyLoc().y && dest->a < getEnemyLoc().x){left=true; down=up=right=false;}
         else if(dest->b == getEnemyLoc().y && dest->a > getEnemyLoc().x){right=true; down=left=up=false;}
@@ -189,7 +189,6 @@ GridLoc Enemies::getEnemyLoc()
 
 //initializes Dijkstras shortest path algorithm
 Node* Enemies::shortestPath(Node** valid, int sizeArr, linkList* adjList, Player* one){
-    cout<<"ShortestPath"<<endl;
 
     minHeap* sPath = new minHeap();
     Node* visited[sizeArr];
@@ -227,9 +226,7 @@ Node* Enemies::shortestPath(Node** valid, int sizeArr, linkList* adjList, Player
       minHeapNode* start = temp;
       int cn = 0;
       sPath->updateInfo(start, adjList, visited, sizeArr, source, cn);
-      cout<<"UpdateInfo is Done"<< endl;
       Node* nextP = sPath->nextPos(enemyNode, playNode);
-      cout<<"NextPos Done"<<endl;
       sPath->cleanArray(visited, sizeArr);
       delete sPath;
 

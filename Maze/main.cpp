@@ -346,6 +346,15 @@ void arrowCollected(int playerX, int playerY){
     }
 }
 
+void enemyCollision(Enemies &enemy, Player* one){
+
+
+    if(enemy.getEnemyLoc().x == one->getPlayerLoc().x && enemy.getEnemyLoc().y == one->getPlayerLoc().y){
+        one->livePlayer == false;
+    }
+
+}
+
 //Boolean function for checking collision detection
 bool collisionDetection(char* direction){
 /*
@@ -693,12 +702,29 @@ void key(unsigned char key, int x, int y)
             //if in move state, space = move
             if(P->moveState == true){
                 //move the player
+                for (int i=0; i<currentEnemyNumber;i++){
+                    if (E[i].live){
+                        int enmA = E[i].getEnemyLoc().x;
+                        int enmB = E[i].getEnemyLoc().y;
+                        matrix[enmA][enmB] = 2;
+                        enemyCollision(E[i], P);
+                    }
+
+                }
+
                 moveThePlayer();
+
                 for (int i = 0; i < currentEnemyNumber; i++){
                         if(E[i].live){
+                            int enmA = E[i].getEnemyLoc().x;
+                            int enmB = E[i].getEnemyLoc().y;
                             E[i].moveEnemy(validPts, sizeValPts, adjList, P);
+                            matrix[enmA][enmB] =  0;
+                            }
+
                 }
-                    }
+
+
             }
             //if in shoot state, space = shoot
             else{
