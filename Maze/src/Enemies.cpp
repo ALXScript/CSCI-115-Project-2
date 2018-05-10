@@ -213,11 +213,9 @@ Node* Enemies::shortestPath(Node** valid, int sizeArr, linkList* adjList, Player
      int playX = one->getPlayerLoc().x;
      int playY = one->getPlayerLoc().y;
 
-     //cout<< "before getting player node" <<endl;
      Node* playNode = adjList->lookup(playX, playY);
-     //cout<<"************accessed player***************: "<< playNode->a<< " ," <<playNode->b<<endl;;
 
-     //once found we grab pointer of node which is the vertex, initialize the source to proper dist and prev pointer
+
       Node * source = enemyNode;
       minHeapNode * temp = sPath->head;
       while (temp->vertex != source && temp!=nullptr){

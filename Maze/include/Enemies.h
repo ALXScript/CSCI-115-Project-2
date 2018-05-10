@@ -5,6 +5,7 @@
 #ifndef ENEMIES_H
 #define ENEMIES_H
 
+
 #include"CommonThings.h"
 #include "Maze.h"
 #include "player.h"
@@ -12,6 +13,7 @@
 #include <thread>
 #include <string>
 #include <math.h>       /* ceil */
+#include "linkList.h"
 
 class Enemies
 {

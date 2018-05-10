@@ -694,8 +694,11 @@ void key(unsigned char key, int x, int y)
             if(P->moveState == true){
                 //move the player
                 moveThePlayer();
-                E[0].moveEnemy(validPts, sizeValPts,adjList,P);
-                //E[1].moveEnemy(validPts, sizeValPts, adjList,P);
+                for (int i = 0; i < currentEnemyNumber; i++){
+                        if(E[i].live){
+                            E[i].moveEnemy(validPts, sizeValPts, adjList, P);
+                }
+                    }
             }
             //if in shoot state, space = shoot
             else{

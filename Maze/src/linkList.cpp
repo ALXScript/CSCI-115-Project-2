@@ -316,5 +316,6 @@ void linkList::printList(){
     }
     head= nullptr;
     cout<<"Deconstructor"<<endl;
+    
  }
 
