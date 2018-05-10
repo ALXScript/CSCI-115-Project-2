@@ -81,7 +81,9 @@ void Enemies::placeEnemy(int x, int y)
 
 void Enemies::moveEnemy(Node** validPts, int sizearr, linkList* adjList,Player* one)
 {
-    if(getEnemyLoc().x == one->getPlayerLoc().x && getEnemyLoc().y == one->getPlayerLoc().y) return;
+    if(getEnemyLoc().x == one->getPlayerLoc().x && getEnemyLoc().y == one->getPlayerLoc().y){
+        one->livePlayer = false;
+        return;}
     Node* dest = shortestPath(validPts,sizearr,adjList,one); // shortest path is problem
     if(moveDis<=0){
         if(dest->a == getEnemyLoc().x && dest->b > getEnemyLoc().y){ up=true; down=left=right=false;}
@@ -90,6 +92,7 @@ void Enemies::moveEnemy(Node** validPts, int sizearr, linkList* adjList,Player* 
         else if(dest->b == getEnemyLoc().y && dest->a > getEnemyLoc().x){right=true; down=left=up=false;}
         else {up=down=left=right=false;}
         }
+    if (dest->a == one->getPlayerLoc().x && dest->b == one->getPlayerLoc().y ){ one->livePlayer = false;}
 }
 
 void Enemies::animate()

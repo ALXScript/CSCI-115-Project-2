@@ -701,17 +701,19 @@ void key(unsigned char key, int x, int y)
         case ' ':
             //if in move state, space = move
             if(P->moveState == true){
-                //move the player
+                //loop is necessary for updating current locations of enemies
                 for (int i=0; i<currentEnemyNumber;i++){
                     if (E[i].live){
                         int enmA = E[i].getEnemyLoc().x;
                         int enmB = E[i].getEnemyLoc().y;
                         matrix[enmA][enmB] = 2;
+
+                        //checks if enemy and player occupy same spot, if so then it kills player
                         enemyCollision(E[i], P);
                     }
 
                 }
-
+                //move the player
                 moveThePlayer();
 
                 for (int i = 0; i < currentEnemyNumber; i++){
@@ -734,7 +736,6 @@ void key(unsigned char key, int x, int y)
                         P->arrowAmount = P->arrowAmount - 1;
                         showMatrix();
                     }
-
                 }
             }
         break;
@@ -744,6 +745,15 @@ void key(unsigned char key, int x, int y)
             break;
         //z = change state
         case 'z':
+            //Loop is necessary for updating matrix with new locations
+            for (int i=0; i<currentEnemyNumber;i++){
+                    if (E[i].live){
+                        int enmA = E[i].getEnemyLoc().x;
+                        int enmB = E[i].getEnemyLoc().y;
+                        matrix[enmA][enmB] = 2;
+                        enemyCollision(E[i], P);
+                    }
+            }
             P->moveState = !(P->moveState);
             break;
         //esc key to exit
