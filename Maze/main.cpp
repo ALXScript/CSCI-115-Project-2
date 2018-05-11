@@ -127,6 +127,7 @@ Node** createNodeList(int arr[20][20], int a, int b, int &sizesArr){ //working p
 }
 
 //function that takes and creates matrix assuming that 0 means a wall (not sure where we would put this but its here temp
+//function that takes and creates matrix assuming that 0 means a wall (not sure where we would put this but its here temp
 linkList* createAdjList(Node* valid[400], int sizeArr){
 
     linkList* master = new linkList();
@@ -200,6 +201,20 @@ void readFile(){
 
     //show the matrix
     showMatrix();
+}
+
+void deleteAndRemake(){
+M->~Maze();
+P->~Player();
+A->~arrowBundle();
+E->~Enemies();
+
+///VARIABLES FOR INITIALIZING THE CLASSES
+Maze *M = new Maze(mazeSize);//Set Maze Grid Size
+Player *P = new Player();   //Create Player
+Enemies E[10];             //Create number of enemies
+arrowBundle A[10];
+
 }
 
 void resetGlobals(){
