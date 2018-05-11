@@ -212,7 +212,7 @@ void resetGlobals(){
  justN = true;
  firstRun = false;
  enemiesKilled = 0;
- sleepTime = 1000;
+ sleepTime = 25000;
  currentPlayerX = 0; //For holding the current player's X position
  currentPlayerY = 0; //For holding the current player's Y position
  currentArrowX = 0;  //For holding the current arrow's X position
@@ -234,31 +234,31 @@ void init()
     glClearColor(0.0,0.0,0.0,0.0);
     gluOrtho2D(0, wWidth, 0, wHeight);
 
-    cout << "\nBefore initReadFile\n";
+    //cout << "\nBefore initReadFile\n";
     //read the file and set it in the array
     readFile();
 
-    cout << "\n\nBefore Timer Start\n\n";
+    //cout << "\n\nBefore Timer Start\n\n";
     T0->Start();                                        // set timer to 0
 
     glEnable(GL_BLEND);                                 //display images with transparent
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    cout << "\n\nBefore Load background and chest\n\n";
+    //cout << "\n\nBefore Load background and chest\n\n";
     //Load all images
     M->loadBackgroundImage(imageMain);           // Load maze background image
     M->loadChestImage(imageChest);              // load chest image
 
-    cout << "\n\nBefore Init player & Load arrow image\n\n";
+    //cout << "\n\nBefore Init player & Load arrow image\n\n";
     //Loading the Player
     P->initPlayer(M->getGridSize(),imagePlayerMoving,6);   // initialize player pass grid size,image and number of frames
     P->loadArrowImage(imageArrow);                // Load arrow image
 
-    cout << "\n\nBefore loop to place matrix\n\n";
+    //cout << "\n\nBefore loop to place matrix\n\n";
     if(firstRun == true){
         //loop to place a lot of things
         for(int i = 0; i < 20; i++){
-            cout << "\n\nPlacing everything\n\n";
+            //cout << "\n\nPlacing everything\n\n";
             for(int j = 0; j < 20; j++){
                 //if it's a wall
                 if(matrix[i][j] == 1){
@@ -292,10 +292,10 @@ void init()
                 }
             }
         }
-        cout << "\n\nBefore validpts\n\n";
+        //cout << "\n\nBefore validpts\n\n";
         validPts = createNodeList(matrix, 20, 20, sizeValPts);
 
-        cout << "\n\nBefore AdjList\n\n";
+        //cout << "\n\nBefore AdjList\n\n";
         adjList = createAdjList(validPts, sizeValPts);
     }
     else{
@@ -305,7 +305,7 @@ void init()
         currentBundleNumber = 0;
          //loop to place a lot of things
         for(int i = 0; i < 20; i++){
-            cout << "\n\nPlacing everything\n\n";
+            //cout << "\n\nPlacing everything\n\n";
             for(int j = 0; j < 20; j++){
                 //if it's a wall
                 if(matrix[i][j] == 1){
