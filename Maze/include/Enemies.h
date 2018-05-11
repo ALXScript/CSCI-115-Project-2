@@ -23,7 +23,7 @@ class Enemies
         void initEnm(int, int, char *);     // Initialize Enemies
         void placeEnemy(int,int);           // place enemy
         void drawEnemy();                   // Draw Enemy with Animation
-        void moveEnemy(Node** valid, int sizearr,linkList* adjList, Player* one, int arr[20][20]);             // move Enemy left,right,up,down
+        void moveEnemy(Node** valid, int sizearr,linkList* adjList, Player* one, int arr[20][20], void idle(), bool gameStat);             // move Enemy left,right,up,down
         void animate();                     // Animate sprite
         GridLoc getEnemyLoc();              // Return Enemy current grid location
 
