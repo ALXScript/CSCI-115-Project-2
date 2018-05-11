@@ -199,8 +199,6 @@ void readFile(){
 
     fileIN.close();
 
-    //show the matrix
-    showMatrix();
 }
 
 void resetGlobals(){
@@ -236,22 +234,18 @@ if(firstRun == true){
     gluOrtho2D(0, wWidth, 0, wHeight);
 }
 
-    cout << "\nBefore initReadFile\n";
-    //read the file and set it in the array
+
     readFile();
 
-    cout << "\n\nBefore Timer Start\n\n";
-    T0->Start();                                        // set timer to 0
 
     glEnable(GL_BLEND);                                 //display images with transparent
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    cout << "\n\nBefore Load background and chest\n\n";
-    //Load all images
+
     M->loadBackgroundImage(imageMain);           // Load maze background image
     M->loadChestImage(imageChest);              // load chest image
 
-    cout << "\n\nBefore Init player & Load arrow image\n\n";
+
     //Loading the Player
     //cout << endl << endl << "BEFORE PLAYER INIT" << endl << endl;
     P->initPlayer(M->getGridSize(),imagePlayerMoving,6);   // initialize player pass grid size,image and number of frames
@@ -259,7 +253,7 @@ if(firstRun == true){
 
     //cout << endl << endl << "AFTER PLAYER INIT" << endl << endl;
 
-    cout << "\n\nBefore loop to place matrix\n\n";
+
     if(firstRun == true){
         //loop to place a lot of things
         for(int i = 0; i < 20; i++){
@@ -297,10 +291,10 @@ if(firstRun == true){
                 }
             }
         }
-        cout << "\n\nBefore validpts\n\n";
+
         validPts = createNodeList(matrix, 20, 20, sizeValPts);
 
-        cout << "\n\nBefore AdjList\n\n";
+
         adjList = createAdjList(validPts, sizeValPts);
 
         firstRun = false;
@@ -344,7 +338,7 @@ if(firstRun == true){
                 }
             }
         }
-        cout << "\nBefore Reseting Globals\n";
+
         resetGlobals();
     }
 }
@@ -355,10 +349,10 @@ void display(void)
 
         //Only renders the background for a new game
         if(activeGame == false && mainMenu == true && P->livePlayer == true && lvl1Complete == false){
-            cout << "\n\nMAIN MENU\n\n";
+
             M->loadBackgroundImage(imageMain);
             glPushMatrix();
-            //cout << "\n\nDRAWING BACKGROUND\n\n";
+
             M->drawBackground();
             glPopMatrix();
             glutSwapBuffers();
@@ -366,7 +360,7 @@ void display(void)
 
         //if you won the game, display only victory message
         else if(activeGame == false && lvl1Complete == true && P->livePlayer == true){
-            cout << "\n\nYOU WON\n\n";
+
             noInputAllowed = true;
             M->loadBackgroundImage(imageVictory);
             glPushMatrix();
@@ -381,7 +375,7 @@ void display(void)
 
         //If the player died display Game Over
         else if(activeGame == false && P->livePlayer == false){
-            cout << "\n\nYOU DIED\n\n";
+
             noInputAllowed = true;
             M->loadBackgroundImage(imageLose);
             glPushMatrix();
@@ -437,14 +431,13 @@ void display(void)
             glPopMatrix();
 
             //draws the arrow sets
-            //   glPushMatrix();
-            //   M->drawArrows();
+
             for(int i = 0; i < currentBundleNumber; i++){
                  if(A[i].valid == true){
                      A[i].drawBundle();
                  }
             }
-            //glPopMatrix();
+
 
             glutSwapBuffers();
         }
@@ -634,7 +627,7 @@ bool collisionDetection(char* direction){
 void findEnemy(int arrowX, int arrowY){
     for(int i = 0; i < currentEnemyNumber; i++){
         if(E[i].getEnemyLoc().x == arrowX && E[i].getEnemyLoc().y == arrowY && E[i].live == true){
-            cout<< endl << endl<< "Enemy: "<< i << " has been killed"<< endl;
+
             E[i].live = false;
             if (E[i].prevValMatrix!=2)matrix[arrowX][arrowY] = E[i].prevValMatrix;
             else matrix[arrowX][arrowY] = 0;
@@ -761,12 +754,10 @@ void moveThePlayer(){
         matrix[currentPlayerX][currentPlayerY] = 0;
         P->movePlayer(P->playerDir,P->frames);
         matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 3;
-        cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
-
 
         //re-enable ability to take inputs
         noInputAllowed = false;
-        //showMatrix();
+
     }
 }
 
@@ -794,11 +785,6 @@ void moveThePlayer(){
         mainMenu = true;
     }
 
-    //cout << "Player x: " << P->getPlayerLoc().x << "\tPlayer y: " << P->getPlayerLoc().y << endl;
-    //cout << "Arrows: " << P->arrowAmount << endl;
-
-    cout << "ActiveGame: " << activeGame << "   mainMenu: " << mainMenu << "  lvl1Com: " << lvl1Complete << "  All Enemies: " << allEnemiesDead << "  noInputAllowed: " << noInputAllowed << "  JustN: " << justN << "  EnKill: " << enemiesKilled << "  TotEnem: " << currentEnemyNumber << endl;
-    //cout << "\n" << matrix[6][4] << endl;
     glutPostRedisplay();
 }
 
@@ -877,7 +863,7 @@ void key(unsigned char key, int x, int y)
                             P->shootArrow();
                             P->arrowAmount = P->arrowAmount - 1;
                             noInputAllowed = false;
-                            //showMatrix();
+
                         }
                     }
                 }

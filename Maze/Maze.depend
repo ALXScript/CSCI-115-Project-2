@@ -344,7 +344,7 @@
 	<wall.h>
 	<iostream>
 
-1526030904 source:c:\users\isaac\documents\github\csci-115-project-2\maze\main.cpp
+1526031860 source:c:\users\isaac\documents\github\csci-115-project-2\maze\main.cpp
 	<string.h>
 	<CommonThings.h>
 	<Maze.h>
@@ -426,7 +426,7 @@
 1525571091 source:c:\users\isaac\documents\github\csci-115-project-2\maze\src\maze.cpp
 	<Maze.h>
 
-1526031446 source:c:\users\isaac\documents\github\csci-115-project-2\maze\src\player.cpp
+1526032305 source:c:\users\isaac\documents\github\csci-115-project-2\maze\src\player.cpp
 	<Player.h>
 
 1525141731 source:c:\users\isaac\documents\github\csci-115-project-2\maze\src\timer.cpp
