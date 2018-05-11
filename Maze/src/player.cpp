@@ -184,6 +184,7 @@ void Player::initPlayer(int gSize,char *FileName,int frames)
     t= unitWidth/stepsPerMove;
 
     plyTex = TextureLoader(FileName);
+    livePlayer = true;
 }
 
 

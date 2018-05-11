@@ -28,6 +28,9 @@
 #include <sstream>
 #include <fstream>
 
+//for giving a small amount of break to read any important info
+#include <windows.h>
+
 /* GLUT callback Handlers */
 
 using namespace std;
@@ -40,6 +43,7 @@ int currentBundleNumber = 0; //For getting the max amount of arrow bundles in th
 char* imageBackground = "images/Ours/GrassSeamless.png";
 char* imageMain = "images/Ours/MainScreenP.png";
 char* imageVictory = "images/Ours/Victory.png";
+char* imageLose = "images/Ours/Loss.png";
 char* imageChest = "images/Danyu/testchest.png";
 char* imageArrowSet = "images/Danyu/arrwset.png";
 char* imagePlayerMoving = "images/Danyu/p.png";
@@ -61,9 +65,14 @@ int sizeValPts;
 
 ///GLOBAL VARIABLES FOR GAME STATES
 bool activeGame = false;    //For making the game menu (boolean states)
+bool mainMenu = true;
 bool lvl1Complete = false;  //For checking Level 1 Completion
-bool allEnemiesDead = false;
+bool allEnemiesDead = false;//For checking if all the enemies have been killed
+bool noInputAllowed = false;
+bool justN = true;
+bool firstRun = true;
 int enemiesKilled = 0;
+int sleepTime = 1000;
 
 ///GLOBAL VARIABLES FOR THE VIEWPORT/DISPLAY WINDOWS
 float wWidth, wHeight;      // display window width and Height
@@ -157,6 +166,7 @@ linkList* createAdjList(Node* valid[400], int sizeArr){
 
 	return master;
 }
+
 //Function for cout-ing the matrix (for debugging)
 void showMatrix(){
     for(int i = 0; i < 20; i++){
@@ -187,8 +197,26 @@ void readFile(){
         }
     }
 
+    fileIN.close();
+
     //show the matrix
     showMatrix();
+}
+
+void resetGlobals(){
+ activeGame = false;    //For making the game menu (boolean states)
+ mainMenu = true;
+ lvl1Complete = false;  //For checking Level 1 Completion
+ allEnemiesDead = false;//For checking if all the enemies have been killed
+ noInputAllowed = true;
+ justN = true;
+ firstRun = false;
+ enemiesKilled = 0;
+ sleepTime = 25000;
+ currentPlayerX = 0; //For holding the current player's X position
+ currentPlayerY = 0; //For holding the current player's Y position
+ currentArrowX = 0;  //For holding the current arrow's X position
+ currentArrowY = 0;  //For holding the current arrow's Y position
 }
 
 //Function for initializing the GL Window
@@ -206,80 +234,157 @@ void init()
     glClearColor(0.0,0.0,0.0,0.0);
     gluOrtho2D(0, wWidth, 0, wHeight);
 
+    //cout << "\nBefore initReadFile\n";
     //read the file and set it in the array
     readFile();
 
+    //cout << "\n\nBefore Timer Start\n\n";
     T0->Start();                                        // set timer to 0
 
     glEnable(GL_BLEND);                                 //display images with transparent
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    //cout << "\n\nBefore Load background and chest\n\n";
     //Load all images
     M->loadBackgroundImage(imageMain);           // Load maze background image
     M->loadChestImage(imageChest);              // load chest image
+
+    //cout << "\n\nBefore Init player & Load arrow image\n\n";
     //Loading the Player
     P->initPlayer(M->getGridSize(),imagePlayerMoving,6);   // initialize player pass grid size,image and number of frames
     P->loadArrowImage(imageArrow);                // Load arrow image
 
-    //loop to place a lot of things
-    for(int i = 0; i < 20; i++){
-        for(int j = 0; j < 20; j++){
-            //if it's a wall
-            if(matrix[i][j] == 1){
-                W[currentWallNumber].wallInit(M->getGridSize(),imageWall);// Load walls
-                W[currentWallNumber].placeWall(i,j);                              // place each brick
-                currentWallNumber++;
-            }
+    //cout << "\n\nBefore loop to place matrix\n\n";
+    if(firstRun == true){
+        //loop to place a lot of things
+        for(int i = 0; i < 20; i++){
+            //cout << "\n\nPlacing everything\n\n";
+            for(int j = 0; j < 20; j++){
+                //if it's a wall
+                if(matrix[i][j] == 1){
+                    W[currentWallNumber].wallInit(M->getGridSize(),imageWall);// Load walls
+                    W[currentWallNumber].placeWall(i,j);                              // place each brick
+                    currentWallNumber++;
+                }
 
-            //If it's the enemy
-            else if(matrix[i][j] == 2){
-                E[currentEnemyNumber].initEnm(M->getGridSize(),4,imageEnemy); //Load enemy image
-                E[currentEnemyNumber].placeEnemy(i,j);
-                currentEnemyNumber++;
-            }
+                //If it's the enemy
+                else if(matrix[i][j] == 2){
+                    E[currentEnemyNumber].initEnm(M->getGridSize(),4,imageEnemy); //Load enemy image
+                    E[currentEnemyNumber].placeEnemy(i,j);
+                    currentEnemyNumber++;
+                }
 
-            //If it's the player
-            else if(matrix[i][j] == 3){
-                P->placePlayer(i,j);
-            }
+                //If it's the player
+                else if(matrix[i][j] == 3){
+                    P->placePlayer(i,j);
+                }
 
-            //if it's a chest
-            else if(matrix[i][j] == 4){
-                M->placeChest(i, j);
-            }
+                //if it's a chest
+                else if(matrix[i][j] == 4){
+                    M->placeChest(i, j);
+                }
 
-            else if(matrix[i][j] == 5){
+                else if(matrix[i][j] == 5){
 
-                A[currentBundleNumber].bundleInit(20, imageArrowSet);
-                A[currentBundleNumber].placeBundle(i,j);
-                currentBundleNumber++;
+                    A[currentBundleNumber].bundleInit(20, imageArrowSet);
+                    A[currentBundleNumber].placeBundle(i,j);
+                    currentBundleNumber++;
+                }
             }
         }
+        //cout << "\n\nBefore validpts\n\n";
+        validPts = createNodeList(matrix, 20, 20, sizeValPts);
+
+        //cout << "\n\nBefore AdjList\n\n";
+        adjList = createAdjList(validPts, sizeValPts);
     }
+    else{
+        P->livePlayer = true;
+        currentWallNumber = 0;
+        currentEnemyNumber = 0;
+        currentBundleNumber = 0;
+         //loop to place a lot of things
+        for(int i = 0; i < 20; i++){
+            //cout << "\n\nPlacing everything\n\n";
+            for(int j = 0; j < 20; j++){
+                //if it's a wall
+                if(matrix[i][j] == 1){
+                    W[currentWallNumber].placeWall(i,j);                              // place each brick
+                    currentWallNumber++;
+                }
 
-    //loading the arrow image set
-    //M->loadSetOfArrowsImage(imageArrowSet);
-    //   M->placeStArrws(i,j);
+                //If it's the enemy
+                else if(matrix[i][j] == 2){
+                    E[currentEnemyNumber].live = true;
+                    E[currentEnemyNumber].placeEnemy(i,j);
+                    currentEnemyNumber++;
+                }
 
-    validPts = createNodeList(matrix, 20, 20, sizeValPts);
-    adjList = createAdjList(validPts, sizeValPts);
+                //If it's the player
+                else if(matrix[i][j] == 3){
+                    P->placePlayer(i,j);
+                }
+
+                //if it's a chest
+                else if(matrix[i][j] == 4){
+                    M->placeChest(i, j);
+                }
+
+                else if(matrix[i][j] == 5){
+                    A[currentBundleNumber].valid = true;
+                    A[currentBundleNumber].placeBundle(i,j);
+                    currentBundleNumber++;
+                }
+            }
+        }
+
+        resetGlobals();
+    }
 }
-
-
 
 void display(void)
 {
   glClear (GL_COLOR_BUFFER_BIT);        // clear display screen
 
         //Only renders the background for a new game
-        if(activeGame == false){
+        if(activeGame == false && mainMenu == true){
+            M->loadBackgroundImage(imageMain);
             glPushMatrix();
             M->drawBackground();
             glPopMatrix();
             glutSwapBuffers();
         }
+
+        //if you won the game, display only victory message
+        else if(activeGame == false && lvl1Complete == true){
+            noInputAllowed = true;
+            M->loadBackgroundImage(imageVictory);
+            glPushMatrix();
+            M->drawBackground();
+            glPopMatrix();
+            glutSwapBuffers();
+
+            Sleep(sleepTime);
+
+            init();
+        }
+
+        //If the player died display Game Over
+        else if(activeGame == false && P->livePlayer == false){
+            noInputAllowed = true;
+            M->loadBackgroundImage(imageLose);
+            glPushMatrix();
+            M->drawBackground();
+            glPopMatrix();
+            glutSwapBuffers();
+
+            Sleep(sleepTime);
+
+            init();
+        }
+
         //'N' key pressed, new game made, display everything
-        else
+        else if(activeGame == true)
         {
             M->loadBackgroundImage(imageBackground);
             glPushMatrix();
@@ -289,7 +394,7 @@ void display(void)
             //SET RESTRICTIONS FOR SPAWNING WALLS
             for(int i=0; i<currentWallNumber;i++)
             {
-            W[i].drawWall();
+                W[i].drawWall();
             }
 
             glPushMatrix();
@@ -317,18 +422,18 @@ void display(void)
 
             //draws the chest
             glPushMatrix();
-            M->drawChest();
+                M->drawChest();
             glPopMatrix();
 
             //draws the arrow sets
-         //   glPushMatrix();
-        //    M->drawArrows();
-           for(int i = 0; i < currentBundleNumber; i++){
-                if(A[i].valid == true){
-                    A[i].drawBundle();
-                }
-           }
-         //   glPopMatrix();
+            //   glPushMatrix();
+            //   M->drawArrows();
+            for(int i = 0; i < currentBundleNumber; i++){
+                 if(A[i].valid == true){
+                     A[i].drawBundle();
+                 }
+            }
+            //glPopMatrix();
 
             glutSwapBuffers();
         }
@@ -628,14 +733,30 @@ bool checkArrow(char* direction){
 
 //Function that moves the player
 void moveThePlayer(){
+    //if there is an invalid spot, do not move the player
     if(collisionDetection(P->playerDir) == false){
         P->placePlayer(currentPlayerX, currentPlayerY);
     }
+    //else move the player and the enemies
     else{
+        //change ability to take input to false
+        noInputAllowed = true;
+
+        //moves the player
         matrix[currentPlayerX][currentPlayerY] = 0;
         P->movePlayer(P->playerDir,P->frames);
         matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 3;
         cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
+
+        //moves the enemies
+        for (int i = 0; i < currentEnemyNumber; i++){
+            if(E[i].live){
+                E[i].moveEnemy(validPts, sizeValPts, adjList, P);
+            }
+        }
+
+        //re-enable ability to take inputs
+        noInputAllowed = false;
         //showMatrix();
     }
 }
@@ -645,12 +766,15 @@ void moveThePlayer(){
     //check if player is dead
     if(P->livePlayer == false){
         //game over
-        exit(0);
+        activeGame = false;
+        mainMenu = true;
     }
 
     //check if level 1 is complete
     if(lvl1Complete == true){
         //end the game
+        activeGame = false;
+        mainMenu = true;
     }
 
     //check if all of the enemies have been killed
@@ -661,10 +785,15 @@ void moveThePlayer(){
     }
     if(enemiesKilled == currentEnemyNumber){
         //end the game
+        activeGame = false;
+        lvl1Complete = true;
+        mainMenu = true;
     }
 
     //cout << "Player x: " << P->getPlayerLoc().x << "\tPlayer y: " << P->getPlayerLoc().y << endl;
     //cout << "Arrows: " << P->arrowAmount << endl;
+
+    cout << "ActiveGame: " << activeGame << "   mainMenu: " << mainMenu << "  lvl1Com: " << lvl1Complete << "  All Enemies: " << allEnemiesDead << "  noInputAllowed: " << noInputAllowed << "  JustN: " << justN << endl;
 
     glutPostRedisplay();
 }
@@ -697,70 +826,78 @@ void key(unsigned char key, int x, int y)
 {
     switch (key)
     {
-        //space = shoot or walk
-        case ' ':
-            //if in move state, space = move
-            if(P->moveState == true){
-                //loop is necessary for updating current locations of enemies
-                for (int i=0; i<currentEnemyNumber;i++){
-                    if (E[i].live){
-                        int enmA = E[i].getEnemyLoc().x;
-                        int enmB = E[i].getEnemyLoc().y;
-                        matrix[enmA][enmB] = 2;
-
-                        //checks if enemy and player occupy same spot, if so then it kills player
-                        enemyCollision(E[i], P);
+        if(noInputAllowed == true && justN == true){
+            //n = new game/start game
+            case 'n':
+                activeGame = true;
+                mainMenu = false;
+                justN = false;
+                break;
+        }
+        else if(noInputAllowed == false){
+            //space = shoot or walk
+            case ' ':
+                //if in move state, space = move
+                if(P->moveState == true){
+                    //loop is necessary for updating current locations of enemies
+                    for (int i=0; i<currentEnemyNumber;i++){
+                        if (E[i].live){
+                            int enmA = E[i].getEnemyLoc().x;
+                            int enmB = E[i].getEnemyLoc().y;
+                            matrix[enmA][enmB] = 2;
+                            //checks if enemy and player occupy same spot, if so then it kills player
+                            enemyCollision(E[i], P);
+                        }
                     }
 
-                }
-                //move the player
-                moveThePlayer();
+                    //move the player
+                    moveThePlayer();
 
-                for (int i = 0; i < currentEnemyNumber; i++){
+                    for (int i = 0; i < currentEnemyNumber; i++){
                         if(E[i].live){
                             int enmA = E[i].getEnemyLoc().x;
                             int enmB = E[i].getEnemyLoc().y;
                             E[i].moveEnemy(validPts, sizeValPts, adjList, P);
                             matrix[enmA][enmB] =  0;
-                            }
-
-                }
-
-
-            }
-            //if in shoot state, space = shoot
-            else{
-                if(P->arrowAmount > 0){
-                    if(checkArrow(P->playerDir) == true){
-                        P->shootArrow();
-                        P->arrowAmount = P->arrowAmount - 1;
-                        showMatrix();
+                        }
                     }
                 }
-            }
-        break;
-        //n = new game/start game
-        case 'n':
-            activeGame = true;
-            break;
-        //z = change state
-        case 'z':
-            //Loop is necessary for updating matrix with new locations
-            for (int i=0; i<currentEnemyNumber;i++){
+
+                //if in shoot state, space = shoot
+                else{
+                    if(P->arrowAmount > 0){
+                        if(checkArrow(P->playerDir) == true){
+                            noInputAllowed = true;
+                            P->shootArrow();
+                            P->arrowAmount = P->arrowAmount - 1;
+                            noInputAllowed = false;
+                            //showMatrix();
+                        }
+                    }
+                }
+                break;
+
+            //z = change state
+            case 'z':
+                //Loop is necessary for updating matrix with new locations
+                for (int i=0; i<currentEnemyNumber;i++){
                     if (E[i].live){
                         int enmA = E[i].getEnemyLoc().x;
                         int enmB = E[i].getEnemyLoc().y;
                         matrix[enmA][enmB] = 2;
                         enemyCollision(E[i], P);
                     }
-            }
-            P->moveState = !(P->moveState);
-            break;
+                }
+                P->moveState = !(P->moveState);
+                break;
+        }
+
         //esc key to exit
         case 27 :
         case 'q':
             exit(0);
             break;
+
     }
 
     glutPostRedisplay();
@@ -769,25 +906,27 @@ void key(unsigned char key, int x, int y)
 //Function for key inputs
 void Specialkeys(int key, int x, int y)
 {
-    switch(key)
-    {
-    case GLUT_KEY_UP:
-        P->movePlayerFace("up", P->frames);
-    break;
+    if(noInputAllowed == false){
+        switch(key)
+        {
+        case GLUT_KEY_UP:
+            P->movePlayerFace("up", P->frames);
+        break;
 
-    case GLUT_KEY_DOWN:
-        P->movePlayerFace("down", P->frames);
-    break;
+        case GLUT_KEY_DOWN:
+            P->movePlayerFace("down", P->frames);
+        break;
 
-    case GLUT_KEY_LEFT:
-        P->movePlayerFace("left", P->frames);
-    break;
+        case GLUT_KEY_LEFT:
+            P->movePlayerFace("left", P->frames);
+        break;
 
-    case GLUT_KEY_RIGHT:
-        P->movePlayerFace("right", P->frames);
-    break;
+        case GLUT_KEY_RIGHT:
+            P->movePlayerFace("right", P->frames);
+        break;
+        }
+    }
 
-   }
   glutPostRedisplay();
 }
 

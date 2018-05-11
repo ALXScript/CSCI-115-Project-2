@@ -39,6 +39,7 @@ void Enemies::initEnm(int grid,int numFrames, char * FileName)
     t = (float)(2.0/grid)/frames;
     unitWidth = (float)2.0/gridSize;
     enmTex = TextureLoader(FileName);
+    live = true;
 }
 
 
