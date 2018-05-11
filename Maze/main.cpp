@@ -69,6 +69,7 @@ bool mainMenu = true;
 bool lvl1Complete = false;  //For checking Level 1 Completion
 bool allEnemiesDead = false;//For checking if all the enemies have been killed
 bool noInputAllowed = false;
+bool justN = true;
 bool firstRun = true;
 int enemiesKilled = 0;
 int sleepTime = 1000;
@@ -166,7 +167,6 @@ linkList* createAdjList(Node* valid[400], int sizeArr){
 	return master;
 }
 
-
 //Function for cout-ing the matrix (for debugging)
 void showMatrix(){
     for(int i = 0; i < 20; i++){
@@ -208,7 +208,8 @@ void resetGlobals(){
  mainMenu = true;
  lvl1Complete = false;  //For checking Level 1 Completion
  allEnemiesDead = false;//For checking if all the enemies have been killed
- noInputAllowed = false;
+ noInputAllowed = true;
+ justN = true;
  firstRun = false;
  enemiesKilled = 0;
  sleepTime = 1000;
@@ -339,14 +340,7 @@ void init()
 
         resetGlobals();
     }
-
-
-
-    //cout << "\n\nBefore reallowing inputs";
-    //noInputAllowed = false;
 }
-
-
 
 void display(void)
 {
@@ -360,6 +354,7 @@ void display(void)
             glPopMatrix();
             glutSwapBuffers();
         }
+
         //if you won the game, display only victory message
         else if(activeGame == false && lvl1Complete == true){
             noInputAllowed = true;
@@ -369,10 +364,11 @@ void display(void)
             glPopMatrix();
             glutSwapBuffers();
 
-            //Sleep(sleepTime);
+            Sleep(sleepTime);
 
             init();
         }
+
         //If the player died display Game Over
         else if(activeGame == false && P->livePlayer == false){
             noInputAllowed = true;
@@ -386,6 +382,7 @@ void display(void)
 
             init();
         }
+
         //'N' key pressed, new game made, display everything
         else if(activeGame == true)
         {
@@ -770,7 +767,6 @@ void moveThePlayer(){
     if(P->livePlayer == false){
         //game over
         activeGame = false;
-        //firstRun = false;
         mainMenu = true;
     }
 
@@ -778,7 +774,6 @@ void moveThePlayer(){
     if(lvl1Complete == true){
         //end the game
         activeGame = false;
-        //firstRun = false;
         mainMenu = true;
     }
 
@@ -792,12 +787,13 @@ void moveThePlayer(){
         //end the game
         activeGame = false;
         lvl1Complete = true;
-        //firstRun = false;
         mainMenu = true;
     }
 
     //cout << "Player x: " << P->getPlayerLoc().x << "\tPlayer y: " << P->getPlayerLoc().y << endl;
     //cout << "Arrows: " << P->arrowAmount << endl;
+
+    cout << "ActiveGame: " << activeGame << "   mainMenu: " << mainMenu << "  lvl1Com: " << lvl1Complete << "  All Enemies: " << allEnemiesDead << "  noInputAllowed: " << noInputAllowed << "  JustN: " << justN << endl;
 
     glutPostRedisplay();
 }
@@ -828,17 +824,45 @@ void mouse(int btn, int state, int x, int y){
 
 void key(unsigned char key, int x, int y)
 {
-<<<<<<< HEAD
-    if(noInputAllowed == false){
-        switch (key)
-        {
+    switch (key)
+    {
+        if(noInputAllowed == true && justN == true){
+            //n = new game/start game
+            case 'n':
+                activeGame = true;
+                mainMenu = false;
+                justN = false;
+                break;
+        }
+        else if(noInputAllowed == false){
             //space = shoot or walk
             case ' ':
                 //if in move state, space = move
                 if(P->moveState == true){
+                    //loop is necessary for updating current locations of enemies
+                    for (int i=0; i<currentEnemyNumber;i++){
+                        if (E[i].live){
+                            int enmA = E[i].getEnemyLoc().x;
+                            int enmB = E[i].getEnemyLoc().y;
+                            matrix[enmA][enmB] = 2;
+                            //checks if enemy and player occupy same spot, if so then it kills player
+                            enemyCollision(E[i], P);
+                        }
+                    }
+
                     //move the player
                     moveThePlayer();
+
+                    for (int i = 0; i < currentEnemyNumber; i++){
+                        if(E[i].live){
+                            int enmA = E[i].getEnemyLoc().x;
+                            int enmB = E[i].getEnemyLoc().y;
+                            E[i].moveEnemy(validPts, sizeValPts, adjList, P);
+                            matrix[enmA][enmB] =  0;
+                        }
+                    }
                 }
+
                 //if in shoot state, space = shoot
                 else{
                     if(P->arrowAmount > 0){
@@ -849,82 +873,33 @@ void key(unsigned char key, int x, int y)
                             noInputAllowed = false;
                             //showMatrix();
                         }
-=======
-    switch (key)
-    {
-        //space = shoot or walk
-        case ' ':
-            //if in move state, space = move
-            if(P->moveState == true){
-                //loop is necessary for updating current locations of enemies
+                    }
+                }
+                break;
+
+            //z = change state
+            case 'z':
+                //Loop is necessary for updating matrix with new locations
                 for (int i=0; i<currentEnemyNumber;i++){
                     if (E[i].live){
                         int enmA = E[i].getEnemyLoc().x;
                         int enmB = E[i].getEnemyLoc().y;
                         matrix[enmA][enmB] = 2;
-
-                        //checks if enemy and player occupy same spot, if so then it kills player
                         enemyCollision(E[i], P);
                     }
-
                 }
-                //move the player
-                moveThePlayer();
-
-                for (int i = 0; i < currentEnemyNumber; i++){
-                        if(E[i].live){
-                            int enmA = E[i].getEnemyLoc().x;
-                            int enmB = E[i].getEnemyLoc().y;
-                            E[i].moveEnemy(validPts, sizeValPts, adjList, P);
-                            matrix[enmA][enmB] =  0;
-                            }
-
-                }
-
-
-            }
-            //if in shoot state, space = shoot
-            else{
-                if(P->arrowAmount > 0){
-                    if(checkArrow(P->playerDir) == true){
-                        P->shootArrow();
-                        P->arrowAmount = P->arrowAmount - 1;
-                        showMatrix();
->>>>>>> 0a862d11d9d677224433adfdc8b2e87f78900b65
-                    }
-                }
-            break;
-<<<<<<< HEAD
-            //n = new game/start game
-            case 'n':
-                activeGame = true;
-                mainMenu = false;
-=======
-        //z = change state
-        case 'z':
-            //Loop is necessary for updating matrix with new locations
-            for (int i=0; i<currentEnemyNumber;i++){
-                    if (E[i].live){
-                        int enmA = E[i].getEnemyLoc().x;
-                        int enmB = E[i].getEnemyLoc().y;
-                        matrix[enmA][enmB] = 2;
-                        enemyCollision(E[i], P);
-                    }
-            }
-            P->moveState = !(P->moveState);
->>>>>>> 0a862d11d9d677224433adfdc8b2e87f78900b65
-            break;
-            //z     = change state
-            case 'z':
                 P->moveState = !(P->moveState);
                 break;
-            //esc key to exit
-            case 27 :
-            case 'q':
-                exit(0);
-            break;
         }
+
+        //esc key to exit
+        case 27 :
+        case 'q':
+            exit(0);
+            break;
+
     }
+
     glutPostRedisplay();
 }
 
