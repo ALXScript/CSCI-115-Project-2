@@ -510,7 +510,11 @@
 	"Timer.h"
 	<math.h>
 
+<<<<<<< HEAD
 1526025525 source:d:\!applications\github\github repositories\csci-115-project-2\maze\main.cpp
+=======
+1526018034 source:d:\!applications\github\github repositories\csci-115-project-2\maze\main.cpp
+>>>>>>> parent of 9e2c532... Back to Menu Works Now!!!
 	<string.h>
 	<CommonThings.h>
 	<Maze.h>
