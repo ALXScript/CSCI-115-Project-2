@@ -214,6 +214,9 @@ void resetGlobals(){
  currentPlayerY = 0; //For holding the current player's Y position
  currentArrowX = 0;  //For holding the current arrow's X position
  currentArrowY = 0;  //For holding the current arrow's Y position
+
+ P->moveState = true;
+ P->movePlayerFace("down", P->frames);
 }
 
 //Function for initializing the GL Window
