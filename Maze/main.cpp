@@ -622,7 +622,7 @@ bool collisionDetection(char* direction){
 //Function for checking Arrow-Enemy collision
 void findEnemy(int arrowX, int arrowY){
     for(int i = 0; i < currentEnemyNumber; i++){
-        if(E[i].getEnemyLoc().x == arrowX && E[i].getEnemyLoc().y == arrowY){
+        if(E[i].getEnemyLoc().x == arrowX && E[i].getEnemyLoc().y == arrowY && E[i].live == true){
             cout<< endl << endl<< "Enemy: "<< i << " has been killed"<< endl;
             E[i].live = false;
             matrix[arrowX][arrowY] = E[i].prevValMatrix;
@@ -785,7 +785,7 @@ void moveThePlayer(){
     //cout << "Player x: " << P->getPlayerLoc().x << "\tPlayer y: " << P->getPlayerLoc().y << endl;
     //cout << "Arrows: " << P->arrowAmount << endl;
 
-    cout << "ActiveGame: " << activeGame << "   mainMenu: " << mainMenu << "  lvl1Com: " << lvl1Complete << "  All Enemies: " << allEnemiesDead << "  noInputAllowed: " << noInputAllowed << "  JustN: " << justN << endl;
+    cout << "ActiveGame: " << activeGame << "   mainMenu: " << mainMenu << "  lvl1Com: " << lvl1Complete << "  All Enemies: " << allEnemiesDead << "  noInputAllowed: " << noInputAllowed << "  JustN: " << justN << "  EnKill: " << enemiesKilled << "  TotEnem: " << currentEnemyNumber << endl;
 
     glutPostRedisplay();
 }
