@@ -44,11 +44,11 @@ char* imageBackground = "images/Ours/GrassSeamless.png";
 char* imageMain = "images/Ours/MainScreenP.png";
 char* imageVictory = "images/Ours/Victory.png";
 char* imageLose = "images/Ours/Loss.png";
-char* imageChest = "images/Danyu/testchest.png";
-char* imageArrowSet = "images/Danyu/arrwset.png";
+char* imageChest = "images/Ours/testchest.png";
+char* imageArrowSet = "images/Ours/arrwset.png";
 char* imagePlayerMoving = "images/Danyu/p.png";
 char* imagePlayerFire = "images/Ours/pFire.png";
-char* imageArrow = "images/Danyu/arr.png";
+char* imageArrow = "images/Ours/arr.png";
 char* imageWall = "images/Ours/BrickSeamless.png";
 char* imageEnemy = "images/Danyu/e.png";
 
@@ -221,6 +221,8 @@ void resetGlobals(){
 //Function for initializing the GL Window
 void init()
 {
+if(firstRun == true){
+
     glEnable(GL_COLOR_MATERIAL);
 
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -230,8 +232,9 @@ void init()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glClearColor(0.0,0.0,0.0,0.0);
+    glClearColor(0.0,255.0,0.0,0.0);
     gluOrtho2D(0, wWidth, 0, wHeight);
+}
 
     cout << "\nBefore initReadFile\n";
     //read the file and set it in the array
@@ -355,6 +358,7 @@ void display(void)
             cout << "\n\nMAIN MENU\n\n";
             M->loadBackgroundImage(imageMain);
             glPushMatrix();
+            //cout << "\n\nDRAWING BACKGROUND\n\n";
             M->drawBackground();
             glPopMatrix();
             glutSwapBuffers();
@@ -794,7 +798,7 @@ void moveThePlayer(){
     //cout << "Arrows: " << P->arrowAmount << endl;
 
     cout << "ActiveGame: " << activeGame << "   mainMenu: " << mainMenu << "  lvl1Com: " << lvl1Complete << "  All Enemies: " << allEnemiesDead << "  noInputAllowed: " << noInputAllowed << "  JustN: " << justN << "  EnKill: " << enemiesKilled << "  TotEnem: " << currentEnemyNumber << endl;
-    cout << "\n" << matrix[6][4] << endl;
+    //cout << "\n" << matrix[6][4] << endl;
     glutPostRedisplay();
 }
 
@@ -832,6 +836,7 @@ void key(unsigned char key, int x, int y)
                 activeGame = true;
                 mainMenu = false;
                 justN = false;
+                noInputAllowed = false;
                 break;
         }
         else if(noInputAllowed == false){
