@@ -454,6 +454,15 @@ void arrowCollected(int playerX, int playerY){
     }
 }
 
+void enemyCollision(Enemies &enemy, Player* one){
+
+
+    if(enemy.getEnemyLoc().x == one->getPlayerLoc().x && enemy.getEnemyLoc().y == one->getPlayerLoc().y){
+        one->livePlayer == false;
+    }
+
+}
+
 //Boolean function for checking collision detection
 bool collisionDetection(char* direction){
 /*
@@ -819,6 +828,7 @@ void mouse(int btn, int state, int x, int y){
 
 void key(unsigned char key, int x, int y)
 {
+<<<<<<< HEAD
     if(noInputAllowed == false){
         switch (key)
         {
@@ -839,13 +849,70 @@ void key(unsigned char key, int x, int y)
                             noInputAllowed = false;
                             //showMatrix();
                         }
+=======
+    switch (key)
+    {
+        //space = shoot or walk
+        case ' ':
+            //if in move state, space = move
+            if(P->moveState == true){
+                //loop is necessary for updating current locations of enemies
+                for (int i=0; i<currentEnemyNumber;i++){
+                    if (E[i].live){
+                        int enmA = E[i].getEnemyLoc().x;
+                        int enmB = E[i].getEnemyLoc().y;
+                        matrix[enmA][enmB] = 2;
+
+                        //checks if enemy and player occupy same spot, if so then it kills player
+                        enemyCollision(E[i], P);
+                    }
+
+                }
+                //move the player
+                moveThePlayer();
+
+                for (int i = 0; i < currentEnemyNumber; i++){
+                        if(E[i].live){
+                            int enmA = E[i].getEnemyLoc().x;
+                            int enmB = E[i].getEnemyLoc().y;
+                            E[i].moveEnemy(validPts, sizeValPts, adjList, P);
+                            matrix[enmA][enmB] =  0;
+                            }
+
+                }
+
+
+            }
+            //if in shoot state, space = shoot
+            else{
+                if(P->arrowAmount > 0){
+                    if(checkArrow(P->playerDir) == true){
+                        P->shootArrow();
+                        P->arrowAmount = P->arrowAmount - 1;
+                        showMatrix();
+>>>>>>> 0a862d11d9d677224433adfdc8b2e87f78900b65
                     }
                 }
             break;
+<<<<<<< HEAD
             //n = new game/start game
             case 'n':
                 activeGame = true;
                 mainMenu = false;
+=======
+        //z = change state
+        case 'z':
+            //Loop is necessary for updating matrix with new locations
+            for (int i=0; i<currentEnemyNumber;i++){
+                    if (E[i].live){
+                        int enmA = E[i].getEnemyLoc().x;
+                        int enmB = E[i].getEnemyLoc().y;
+                        matrix[enmA][enmB] = 2;
+                        enemyCollision(E[i], P);
+                    }
+            }
+            P->moveState = !(P->moveState);
+>>>>>>> 0a862d11d9d677224433adfdc8b2e87f78900b65
             break;
             //z     = change state
             case 'z':
