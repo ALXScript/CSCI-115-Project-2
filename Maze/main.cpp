@@ -843,7 +843,7 @@ void key(unsigned char key, int x, int y)
             //space = shoot or walk
             case ' ':
                 //if in move state, space = move
-                if(P->moveState == true){
+                if(P->moveState == true ){
                     //loop is necessary for updating current locations of enemies
                     for (int i=0; i<currentEnemyNumber;i++){
                         if (E[i].live){
@@ -854,10 +854,14 @@ void key(unsigned char key, int x, int y)
                         //checks if enemy and player occupy same spot, if so then it kills player
                             enemyCollision(E[i], P);
                         }
+                        }
 
                     }
                 //move the player
                     moveThePlayer();
+                    idle();
+
+                    if (activeGame){
 
                     for (int i = 0; i < currentEnemyNumber; i++){
                         if(E[i].live){
@@ -867,8 +871,10 @@ void key(unsigned char key, int x, int y)
                             E[i].moveEnemy(validPts, sizeValPts, adjList, P, matrix);
                             }
                     }
-                }
+                    }
 
+
+            }
                 //if in shoot state, space = shoot
                 else{
                     if(P->arrowAmount > 0){
@@ -880,7 +886,7 @@ void key(unsigned char key, int x, int y)
                             //showMatrix();
                         }
                     }
-                }
+
                 break;
 
             //z = change state
