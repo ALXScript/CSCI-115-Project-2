@@ -632,7 +632,8 @@ void findEnemy(int arrowX, int arrowY){
         if(E[i].getEnemyLoc().x == arrowX && E[i].getEnemyLoc().y == arrowY && E[i].live == true){
             cout<< endl << endl<< "Enemy: "<< i << " has been killed"<< endl;
             E[i].live = false;
-            matrix[arrowX][arrowY] = E[i].prevValMatrix;
+            if (E[i].prevValMatrix!=2)matrix[arrowX][arrowY] = E[i].prevValMatrix;
+            else matrix[arrowX][arrowY] = 0;
             enemiesKilled++;
         }
     }
