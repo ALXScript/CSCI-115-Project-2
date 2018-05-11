@@ -484,7 +484,6 @@ void enemyCollision(Enemies &enemy, Player* one){
 
     if(enemy.getEnemyLoc().x == one->getPlayerLoc().x && enemy.getEnemyLoc().y == one->getPlayerLoc().y && activeGame == true){
         one->livePlayer == false;
-
     }
 
 }
@@ -871,32 +870,21 @@ void key(unsigned char key, int x, int y)
 
                             //checks if enemy and player occupy same spot, if so then it kills player
                             enemyCollision(E[i], P);
-                            idle();
-                            if (activeGame == false) break;
                         }
                     }
 
                     //move the player
                     moveThePlayer();
 
-                    for (int i=0; i< currentEnemyNumber;i++){
-                        if (E[i].shortestPath(validPts,sizeValPts,adjList,P)->a == P->getPlayerLoc().x && E[i].shortestPath(validPts,sizeValPts,adjList,P)->b == P->getPlayerLoc().y ){
-                            P->livePlayer == false;
-                            idle();
-                        }
-
-                    }
                     idle();
-                    if (activeGame==false) break;
 
                     if (activeGame){
                         for (int i = 0; i < currentEnemyNumber; i++){
-
-                            if(E[i].live && P->livePlayer == true){
+                                if(E[i].live){
                                 int enmA = E[i].getEnemyLoc().x;
                                 int enmB = E[i].getEnemyLoc().y;
                                 matrix[enmA][enmB]= E[i].prevValMatrix;
-                                E[i].moveEnemy(validPts, sizeValPts, adjList, P, matrix, idle, activeGame);
+                                E[i].moveEnemy(validPts, sizeValPts, adjList, P, matrix);
                             }
                         }
                     }
