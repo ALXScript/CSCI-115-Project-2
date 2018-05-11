@@ -623,11 +623,14 @@ bool collisionDetection(char* direction){
 void findEnemy(int arrowX, int arrowY){
     for(int i = 0; i < currentEnemyNumber; i++){
         if(E[i].getEnemyLoc().x == arrowX && E[i].getEnemyLoc().y == arrowY){
+            cout<< endl << endl<< "Enemy: "<< i << " has been killed"<< endl;
             E[i].live = false;
-            matrix[arrowX][arrowY] = 0;
+            matrix[arrowX][arrowY] = E[i].prevValMatrix;
+            enemiesKilled++;
         }
     }
 }
+
 
 //Function for checking Arrow Position
 bool checkArrow(char* direction){
@@ -748,12 +751,6 @@ void moveThePlayer(){
         matrix[P->getPlayerLoc().x][P->getPlayerLoc().y] = 3;
         cout<< P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
 
-        //moves the enemies
-        for (int i = 0; i < currentEnemyNumber; i++){
-            if(E[i].live){
-                E[i].moveEnemy(validPts, sizeValPts, adjList, P);
-            }
-        }
 
         //re-enable ability to take inputs
         noInputAllowed = false;
@@ -777,12 +774,7 @@ void moveThePlayer(){
         mainMenu = true;
     }
 
-    //check if all of the enemies have been killed
-    for(int i = 0; i < currentEnemyNumber; i++){
-        if(E[i].live == false){
-            enemiesKilled++;
-        }
-    }
+
     if(enemiesKilled == currentEnemyNumber){
         //end the game
         activeGame = false;
@@ -845,22 +837,25 @@ void key(unsigned char key, int x, int y)
                             int enmA = E[i].getEnemyLoc().x;
                             int enmB = E[i].getEnemyLoc().y;
                             matrix[enmA][enmB] = 2;
-                            //checks if enemy and player occupy same spot, if so then it kills player
+
+                        //checks if enemy and player occupy same spot, if so then it kills player
                             enemyCollision(E[i], P);
                         }
-                    }
 
-                    //move the player
+                    }
+                //move the player
                     moveThePlayer();
 
                     for (int i = 0; i < currentEnemyNumber; i++){
-                        if(E[i].live){
-                            int enmA = E[i].getEnemyLoc().x;
-                            int enmB = E[i].getEnemyLoc().y;
-                            E[i].moveEnemy(validPts, sizeValPts, adjList, P);
-                            matrix[enmA][enmB] =  0;
-                        }
+                            if(E[i].live){
+                                int enmA = E[i].getEnemyLoc().x;
+                                int enmB = E[i].getEnemyLoc().y;
+                                matrix[enmA][enmB]= E[i].prevValMatrix;
+                                E[i].moveEnemy(validPts, sizeValPts, adjList, P, matrix);
+                                }
                     }
+
+
                 }
 
                 //if in shoot state, space = shoot

@@ -15,7 +15,7 @@ Enemies::Enemies()
     //ctor
     enmLoc.x=0;
     enmLoc.y=0;
-
+    prevValMatrix = 0;
     xmax =1;
     ymax =0.25;
     xmin =0;
@@ -80,12 +80,13 @@ void Enemies::placeEnemy(int x, int y)
     enmLoc.y =  -1-unitWidth/2+(unitWidth)*y;
 }
 
-void Enemies::moveEnemy(Node** validPts, int sizearr, linkList* adjList,Player* one)
+void Enemies::moveEnemy(Node** validPts, int sizearr, linkList* adjList,Player* one, int arr[20][20])
 {
     if(getEnemyLoc().x == one->getPlayerLoc().x && getEnemyLoc().y == one->getPlayerLoc().y){
         one->livePlayer = false;
         return;}
-    Node* dest = shortestPath(validPts,sizearr,adjList,one); // shortest path is problem
+    Node* dest = shortestPath(validPts,sizearr,adjList,one);
+    prevValMatrix = arr[dest->a][dest->b];
     if(moveDis<=0){
         if(dest->a == getEnemyLoc().x && dest->b > getEnemyLoc().y){ up=true; down=left=right=false;}
         else if(dest->a == getEnemyLoc().x && dest->b < getEnemyLoc().y){down=true; up=left=right=false;}
