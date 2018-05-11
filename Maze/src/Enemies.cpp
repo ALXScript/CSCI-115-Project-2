@@ -80,23 +80,21 @@ void Enemies::placeEnemy(int x, int y)
     enmLoc.y =  -1-unitWidth/2+(unitWidth)*y;
 }
 
-void Enemies::moveEnemy(Node** validPts, int sizearr, linkList* adjList,Player* one, int arr[20][20]){
-    if (getEnemyLoc().x == one->getPlayerLoc().x && getEnemyLoc().y == one->getPlayerLoc().y){
+void Enemies::moveEnemy(Node** validPts, int sizearr, linkList* adjList,Player* one, int arr[20][20])
+{
+    if(getEnemyLoc().x == one->getPlayerLoc().x && getEnemyLoc().y == one->getPlayerLoc().y){
         one->livePlayer = false;
         return;}
     Node* dest = shortestPath(validPts,sizearr,adjList,one);
-
     prevValMatrix = arr[dest->a][dest->b];
-    if (dest->a == one->getPlayerLoc().x && dest->b == one->getPlayerLoc().y ){
-        one->livePlayer = false;}
-    if(moveDis<=0 && one->livePlayer==true){
+    if(moveDis<=0){
         if(dest->a == getEnemyLoc().x && dest->b > getEnemyLoc().y){ up=true; down=left=right=false;}
         else if(dest->a == getEnemyLoc().x && dest->b < getEnemyLoc().y){down=true; up=left=right=false;}
         else if(dest->b == getEnemyLoc().y && dest->a < getEnemyLoc().x){left=true; down=up=right=false;}
         else if(dest->b == getEnemyLoc().y && dest->a > getEnemyLoc().x){right=true; down=left=up=false;}
         else {up=down=left=right=false;}
         }
-
+    if (dest->a == one->getPlayerLoc().x && dest->b == one->getPlayerLoc().y ){ one->livePlayer = false;}
 }
 
 void Enemies::animate()

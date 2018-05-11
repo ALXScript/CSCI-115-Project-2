@@ -44,11 +44,11 @@ char* imageBackground = "images/Ours/GrassSeamless.png";
 char* imageMain = "images/Ours/MainScreenP.png";
 char* imageVictory = "images/Ours/Victory.png";
 char* imageLose = "images/Ours/Loss.png";
-char* imageChest = "images/Danyu/testchest.png";
-char* imageArrowSet = "images/Danyu/arrwset.png";
+char* imageChest = "images/Ours/testchest.png";
+char* imageArrowSet = "images/Ours/arrwset.png";
 char* imagePlayerMoving = "images/Danyu/p.png";
 char* imagePlayerFire = "images/Ours/pFire.png";
-char* imageArrow = "images/Danyu/arr.png";
+char* imageArrow = "images/Ours/arr.png";
 char* imageWall = "images/Ours/BrickSeamless.png";
 char* imageEnemy = "images/Danyu/e.png";
 
@@ -221,19 +221,9 @@ void resetGlobals(){
 //Function for initializing the GL Window
 void init()
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    if(firstRun == true){
-
-        glEnable(GL_COLOR_MATERIAL);
-=======
-    glEnable(GL_COLOR_MATERIAL);
->>>>>>> parent of 9e2c532... Back to Menu Works Now!!!
-=======
 if(firstRun == true){
 
     glEnable(GL_COLOR_MATERIAL);
->>>>>>> parent of 5331ffe... movement machine fixed
 
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     glShadeModel(GL_SMOOTH);
@@ -242,20 +232,9 @@ if(firstRun == true){
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        glClearColor(0.0,255.0,0.0,0.0);
-        gluOrtho2D(0, wWidth, 0, wHeight);
-    }
-=======
-    glClearColor(0.0,0.0,0.0,0.0);
-    gluOrtho2D(0, wWidth, 0, wHeight);
->>>>>>> parent of 9e2c532... Back to Menu Works Now!!!
-=======
     glClearColor(0.0,255.0,0.0,0.0);
     gluOrtho2D(0, wWidth, 0, wHeight);
 }
->>>>>>> parent of 5331ffe... movement machine fixed
 
     cout << "\nBefore initReadFile\n";
     //read the file and set it in the array
@@ -379,6 +358,7 @@ void display(void)
             cout << "\n\nMAIN MENU\n\n";
             M->loadBackgroundImage(imageMain);
             glPushMatrix();
+            //cout << "\n\nDRAWING BACKGROUND\n\n";
             M->drawBackground();
             glPopMatrix();
             glutSwapBuffers();
@@ -485,7 +465,7 @@ void arrowCollected(int playerX, int playerY){
 void enemyCollision(Enemies &enemy, Player* one){
 
 
-    if(enemy.getEnemyLoc().x == one->getPlayerLoc().x && enemy.getEnemyLoc().y == one->getPlayerLoc().y && activeGame == true){
+    if(enemy.getEnemyLoc().x == one->getPlayerLoc().x && enemy.getEnemyLoc().y == one->getPlayerLoc().y){
         one->livePlayer == false;
     }
 
@@ -818,7 +798,7 @@ void moveThePlayer(){
     //cout << "Arrows: " << P->arrowAmount << endl;
 
     cout << "ActiveGame: " << activeGame << "   mainMenu: " << mainMenu << "  lvl1Com: " << lvl1Complete << "  All Enemies: " << allEnemiesDead << "  noInputAllowed: " << noInputAllowed << "  JustN: " << justN << "  EnKill: " << enemiesKilled << "  TotEnem: " << currentEnemyNumber << endl;
-    cout << "\n" << matrix[6][4] << endl;
+    //cout << "\n" << matrix[6][4] << endl;
     glutPostRedisplay();
 }
 
@@ -856,13 +836,14 @@ void key(unsigned char key, int x, int y)
                 activeGame = true;
                 mainMenu = false;
                 justN = false;
+                noInputAllowed = false;
                 break;
         }
         else if(noInputAllowed == false){
             //space = shoot or walk
             case ' ':
                 //if in move state, space = move
-                if(P->moveState == true ){
+                if(P->moveState == true){
                     //loop is necessary for updating current locations of enemies
                     for (int i=0; i<currentEnemyNumber;i++){
                         if (E[i].live){
@@ -873,23 +854,10 @@ void key(unsigned char key, int x, int y)
                         //checks if enemy and player occupy same spot, if so then it kills player
                             enemyCollision(E[i], P);
                         }
-                        }
 
                     }
                 //move the player
                     moveThePlayer();
-
-                    idle();
-
-                    if (activeGame){
-<<<<<<< HEAD
-                        for (int i = 0; i < currentEnemyNumber; i++){
-                                if(E[i].live){
-                                int enmA = E[i].getEnemyLoc().x;
-                                int enmB = E[i].getEnemyLoc().y;
-                                matrix[enmA][enmB]= E[i].prevValMatrix;
-                                E[i].moveEnemy(validPts, sizeValPts, adjList, P, matrix);
-=======
 
                     for (int i = 0; i < currentEnemyNumber; i++){
                         if(E[i].live){
@@ -897,13 +865,10 @@ void key(unsigned char key, int x, int y)
                             int enmB = E[i].getEnemyLoc().y;
                             matrix[enmA][enmB]= E[i].prevValMatrix;
                             E[i].moveEnemy(validPts, sizeValPts, adjList, P, matrix);
->>>>>>> parent of 5331ffe... movement machine fixed
                             }
                     }
-                    }
+                }
 
-
-            }
                 //if in shoot state, space = shoot
                 else{
                     if(P->arrowAmount > 0){
@@ -915,7 +880,7 @@ void key(unsigned char key, int x, int y)
                             //showMatrix();
                         }
                     }
-
+                }
                 break;
 
             //z = change state

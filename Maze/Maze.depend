@@ -344,7 +344,7 @@
 	<wall.h>
 	<iostream>
 
-1526030011 source:c:\users\isaac\documents\github\csci-115-project-2\maze\main.cpp
+1526018313 source:c:\users\isaac\documents\github\csci-115-project-2\maze\main.cpp
 	<string.h>
 	<CommonThings.h>
 	<Maze.h>
@@ -399,7 +399,7 @@
 	"Timer.h"
 	<math.h>
 
-1526029591 c:\users\isaac\documents\github\csci-115-project-2\maze\include\enemies.h
+1526009025 c:\users\isaac\documents\github\csci-115-project-2\maze\include\enemies.h
 	"CommonThings.h"
 	"Maze.h"
 	"player.h"
@@ -419,7 +419,7 @@
 	"Timer.h"
 	<math.h>
 
-1526029744 source:c:\users\isaac\documents\github\csci-115-project-2\maze\src\enemies.cpp
+1526012883 source:c:\users\isaac\documents\github\csci-115-project-2\maze\src\enemies.cpp
 	"Enemies.h"
 	<iostream>
 
@@ -510,15 +510,7 @@
 	"Timer.h"
 	<math.h>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-1526025525 source:d:\!applications\github\github repositories\csci-115-project-2\maze\main.cpp
-=======
-1526018034 source:d:\!applications\github\github repositories\csci-115-project-2\maze\main.cpp
->>>>>>> parent of 9e2c532... Back to Menu Works Now!!!
-=======
 1526023245 source:d:\!applications\github\github repositories\csci-115-project-2\maze\main.cpp
->>>>>>> parent of 5331ffe... movement machine fixed
 	<string.h>
 	<CommonThings.h>
 	<Maze.h>
@@ -551,7 +543,7 @@
 1525926963 c:\users\isaac\documents\github\csci-115-project-2\maze\include\linklist.h
 	<iostream>
 
-1526028995 source:c:\users\isaac\documents\github\csci-115-project-2\maze\src\linklist.cpp
+1525926963 source:c:\users\isaac\documents\github\csci-115-project-2\maze\src\linklist.cpp
 	"linkList.h"
 	<iostream>
 
@@ -596,4 +588,117 @@
 	<iostream>
 	"Timer.h"
 	<math.h>
+
+1526030593 source:c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\main.cpp
+	<string.h>
+	<CommonThings.h>
+	<Maze.h>
+	<iostream>
+	<Timer.h>
+	<player.h>
+	"ArrowSet.h"
+	<GLUT/glut.h>
+	<GL/glut.h>
+	<stdlib.h>
+	<Enemies.h>
+	<wall.h>
+	<math.h>
+	<sstream>
+	<fstream>
+	<windows.h>
+
+1526030594 c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\include\commonthings.h
+	<GL/gl.h>
+	<SOIL.h>
+	<iostream>
+	"Timer.h"
+
+1526030593 c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\common\inc\soil.h
+
+1526030594 c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\include\timer.h
+	<time.h>
+
+1526030594 c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\include\maze.h
+	"CommonThings.h"
+	<string.h>
+	<gl/gl.h>
+	<GL/glut.h>
+	<SOIL.h>
+	<iostream>
+	"Timer.h"
+	<math.h>
+
+1526030593 c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\common\inc\gl\glut.h
+	<windows.h>
+	<stdlib.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1526030594 c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\include\player.h
+	"CommonThings.h"
+	<string.h>
+	<gl/gl.h>
+	<GL/glut.h>
+	<SOIL.h>
+	<iostream>
+	"Timer.h"
+	<math.h>
+
+1526030594 c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\include\arrowset.h
+	"CommonThings.h"
+	<string.h>
+	<gl/gl.h>
+	<GL/glut.h>
+	<SOIL.h>
+	<iostream>
+	"Timer.h"
+	<math.h>
+
+1526030594 c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\include\enemies.h
+	"CommonThings.h"
+	"Maze.h"
+	"player.h"
+	<time.h>
+	<thread>
+	<string>
+	<math.h>
+	"linkList.h"
+
+1526030594 c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\include\linklist.h
+	<iostream>
+
+1526030594 c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\include\wall.h
+	"CommonThings.h"
+	<string.h>
+	<gl/gl.h>
+	<GL/glut.h>
+	<SOIL.h>
+	<iostream>
+	"Timer.h"
+	<math.h>
+
+1526030595 source:c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\src\arrowset.cpp
+	<ArrowSet.h>
+	<iostream>
+
+1526030595 source:c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\src\enemies.cpp
+	"Enemies.h"
+	<iostream>
+
+1526030595 source:c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\src\linklist.cpp
+	"linkList.h"
+	<iostream>
+
+1526030595 source:c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\src\maze.cpp
+	<Maze.h>
+
+1526030595 source:c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\src\player.cpp
+	<Player.h>
+
+1526030595 source:c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\src\timer.cpp
+	"Timer.h"
+
+1526030595 source:c:\users\ninte\downloads\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\csci-115-project-2-9e2c532f704194fe742be216fb6b9db60232debf\maze\src\wall.cpp
+	<wall.h>
+	<iostream>
 
