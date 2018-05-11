@@ -203,6 +203,20 @@ void readFile(){
     showMatrix();
 }
 
+void deleteAndRemake(){
+M->~Maze();
+P->~Player();
+A->~arrowBundle();
+E->~Enemies();
+
+///VARIABLES FOR INITIALIZING THE CLASSES
+Maze *M = new Maze(mazeSize);//Set Maze Grid Size
+Player *P = new Player();   //Create Player
+Enemies E[10];             //Create number of enemies
+arrowBundle A[10];
+
+}
+
 void resetGlobals(){
  activeGame = false;    //For making the game menu (boolean states)
  mainMenu = true;
@@ -216,25 +230,28 @@ void resetGlobals(){
  currentPlayerY = 0; //For holding the current player's Y position
  currentArrowX = 0;  //For holding the current arrow's X position
  currentArrowY = 0;  //For holding the current arrow's Y position
+
+ P->moveState = true;
+ P->movePlayerFace("down", P->frames);
 }
 
 //Function for initializing the GL Window
 void init()
 {
-if(firstRun == true){
+    if(firstRun == true){
 
-    glEnable(GL_COLOR_MATERIAL);
+        glEnable(GL_COLOR_MATERIAL);
 
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-    glShadeModel(GL_SMOOTH);
-    glEnable(GL_LINE_SMOOTH);
-    glEnable(GL_POLYGON_SMOOTH);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+        glShadeModel(GL_SMOOTH);
+        glEnable(GL_LINE_SMOOTH);
+        glEnable(GL_POLYGON_SMOOTH);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
 
-    glClearColor(0.0,255.0,0.0,0.0);
-    gluOrtho2D(0, wWidth, 0, wHeight);
-}
+        glClearColor(0.0,255.0,0.0,0.0);
+        gluOrtho2D(0, wWidth, 0, wHeight);
+    }
 
     cout << "\nBefore initReadFile\n";
     //read the file and set it in the array
@@ -851,30 +868,26 @@ void key(unsigned char key, int x, int y)
                             int enmB = E[i].getEnemyLoc().y;
                             matrix[enmA][enmB] = 2;
 
-                        //checks if enemy and player occupy same spot, if so then it kills player
+                            //checks if enemy and player occupy same spot, if so then it kills player
                             enemyCollision(E[i], P);
                         }
-                        }
-
                     }
-                //move the player
+
+                    //move the player
                     moveThePlayer();
                     idle();
 
                     if (activeGame){
-
-                    for (int i = 0; i < currentEnemyNumber; i++){
-                        if(E[i].live){
-                            int enmA = E[i].getEnemyLoc().x;
-                            int enmB = E[i].getEnemyLoc().y;
-                            matrix[enmA][enmB]= E[i].prevValMatrix;
-                            E[i].moveEnemy(validPts, sizeValPts, adjList, P, matrix);
+                        for (int i = 0; i < currentEnemyNumber; i++){
+                            if(E[i].live){
+                                int enmA = E[i].getEnemyLoc().x;
+                                int enmB = E[i].getEnemyLoc().y;
+                                matrix[enmA][enmB]= E[i].prevValMatrix;
+                                E[i].moveEnemy(validPts, sizeValPts, adjList, P, matrix);
                             }
+                        }
                     }
-                    }
-
-
-            }
+                }
                 //if in shoot state, space = shoot
                 else{
                     if(P->arrowAmount > 0){
@@ -886,7 +899,7 @@ void key(unsigned char key, int x, int y)
                             //showMatrix();
                         }
                     }
-
+                }
                 break;
 
             //z = change state
