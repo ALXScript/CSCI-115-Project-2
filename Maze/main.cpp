@@ -793,7 +793,7 @@ void moveThePlayer(){
     //cout << "Arrows: " << P->arrowAmount << endl;
 
     cout << "ActiveGame: " << activeGame << "   mainMenu: " << mainMenu << "  lvl1Com: " << lvl1Complete << "  All Enemies: " << allEnemiesDead << "  noInputAllowed: " << noInputAllowed << "  JustN: " << justN << "  EnKill: " << enemiesKilled << "  TotEnem: " << currentEnemyNumber << endl;
-
+    cout << "\n" << matrix[6][4] << endl;
     glutPostRedisplay();
 }
 
@@ -854,15 +854,13 @@ void key(unsigned char key, int x, int y)
                     moveThePlayer();
 
                     for (int i = 0; i < currentEnemyNumber; i++){
-                            if(E[i].live){
-                                int enmA = E[i].getEnemyLoc().x;
-                                int enmB = E[i].getEnemyLoc().y;
-                                matrix[enmA][enmB]= E[i].prevValMatrix;
-                                E[i].moveEnemy(validPts, sizeValPts, adjList, P, matrix);
-                                }
+                        if(E[i].live){
+                            int enmA = E[i].getEnemyLoc().x;
+                            int enmB = E[i].getEnemyLoc().y;
+                            matrix[enmA][enmB]= E[i].prevValMatrix;
+                            E[i].moveEnemy(validPts, sizeValPts, adjList, P, matrix);
+                            }
                     }
-
-
                 }
 
                 //if in shoot state, space = shoot
